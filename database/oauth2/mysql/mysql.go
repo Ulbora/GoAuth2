@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	 "fmt"
+	 "github.com/Ulbora/oauth2server/domain"
 )
 var db *sql.DB
 var err error
