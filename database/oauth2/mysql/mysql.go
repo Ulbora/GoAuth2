@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	 "fmt"
-	 //"github.com/Ulbora/oauth2server/domain"
+	// "github.com/Ulbora/oauth2server/domain"
 )
 var db *sql.DB
 var err error
@@ -24,6 +24,9 @@ func Initialize() int{
 	return returnCode
 }
 
+//func (c Client) AddClient(){
+	//c.name = "thet"
+//}
 
 func CloseDb() int {
 	rtn := 1
