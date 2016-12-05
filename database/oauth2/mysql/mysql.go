@@ -1,11 +1,11 @@
-package oauth2server
+package oauth2mysql
 
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	 "fmt"
-	 "UlboraOauth2Server/domain"
-	 //"github.com/Ulbora/oauth2server/domain"
+	 "github.com/Ulbora/oauth2server/domain"
+	 
 )
 
 
@@ -28,10 +28,7 @@ func Initialize() int{
 	return returnCode
 }
 
-//func (c Client) AddClient(){
-func AddClient() string{
-	c:= new(domain.Client)
-	c.SetName("admin")
+func AddClient(c *domain.Client) string{
 	fmt.Println(c.Name())
 	rtn := c.Name()
 	return rtn

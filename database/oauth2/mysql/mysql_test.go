@@ -1,7 +1,8 @@
-package oauth2server
+package oauth2mysql
 
 import (
 	"testing"
+	"github.com/Ulbora/oauth2server/domain"
 )
 
 func TestInitialize(t *testing.T) {
@@ -21,8 +22,10 @@ func TestAddClient(t *testing.T) {
 		t.Skip("skipping test in short mode.")
 	}
 	t.Log("Closing MySql database")
+	c:= new(domain.Client)
+	c.SetName("admin");
 	expected := "admin"
-	actual := AddClient()
+	actual := AddClient(c)
 	if actual != expected {
 		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
 	}
