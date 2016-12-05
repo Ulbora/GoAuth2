@@ -13,3 +13,11 @@ type Client struct{
 	email string
 	enabled bool
 }
+
+func (c Client) Name() string{
+	return c.name
+}
+
+func (c *Client) SetName(name string){
+	c.name = name
+}

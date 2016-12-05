@@ -1,4 +1,4 @@
-package oauth2mysql
+package oauth2server
 
 import (
 	"testing"
@@ -15,6 +15,20 @@ func TestInitialize(t *testing.T) {
 		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
 	}
 }
+
+func TestAddClient(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
+	}
+	t.Log("Closing MySql database")
+	expected := "admin"
+	actual := AddClient()
+	if actual != expected {
+		t.Errorf("Test failed, expected: '%s', got:  '%s'", expected, actual)
+	}
+}
+
+
 
 func TestCloseDb(t *testing.T) {
 	if testing.Short() {
