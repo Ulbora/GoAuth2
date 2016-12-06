@@ -8,8 +8,6 @@ import (
 	 
 )
 
-
-
 var db *sql.DB
 var err error
 var returnCode int = 0
@@ -29,8 +27,11 @@ func Initialize() int{
 }
 
 func AddClient(c *domain.Client) string{
-	fmt.Println(c.Name())
+	//fmt.Println(c.Name())
+	fmt.Println(c.Name)
+	//rtn := c.Name()
 	rtn := c.Name()
+	
 	return rtn
 }
 
