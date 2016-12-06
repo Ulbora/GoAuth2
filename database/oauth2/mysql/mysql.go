@@ -30,7 +30,7 @@ func AddClient(c *domain.Client) string{
 	//fmt.Println(c.Name())
 	fmt.Println(c.Name)
 	//rtn := c.Name()
-	rtn := c.Name()
+	rtn := c.Name
 	
 	return rtn
 }

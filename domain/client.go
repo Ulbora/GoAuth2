@@ -1,18 +1,17 @@
 package domain
 
-import (
+import ()
 
-)
-
-type Client struct{
-	ClientId uint64
-	Secret string
+type Client struct {
+	ClientId    uint64
+	Secret      string
 	RedirectUrl string
-	Name string
-	WebSite string
-	Email string
-	Enabled bool
+	Name        string
+	WebSite     string
+	Email       string
+	Enabled     bool
 }
+
 /*
 func (c Client) ClientId() uint64{
 	return c.clientId
