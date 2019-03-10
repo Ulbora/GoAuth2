@@ -27,14 +27,14 @@ import (
 	"strconv"
 	//"encoding/json"
 	db "github.com/Ulbora/dbinterface"
-	mdb "github.com/Ulbora/dbinterface/mysql"
+	mdb "github.com/Ulbora/dbinterface_mysql"
 	"github.com/gorilla/mux"
 )
 
 //GO111MODULE=on go mod init github.com/Ulbora/GoAuth2
 func main() {
 	var dbi db.Database
-	var mydb mdb.MyDB
+	var mydb mdb.MyDBMock
 	dbi = &mydb
 
 	dbi.Connect()

@@ -1,0 +1,8 @@
+github.com/Ulbora/dbinterface v1.0.3 h1:To53y2igWp5p/SkFX4zubWQOQJ6DF4KbPRWFVHeRD2I=
+github.com/Ulbora/dbinterface v1.0.3/go.mod h1:msBriehF2JgLgSpNWq2Yc3MKy3/Rn9aChefibmW1xWM=
+github.com/Ulbora/dbinterface_mysql v1.0.1 h1:IhqPqZBykuvJH+ZrORv6Lr6dboQov1R782lzFT4JH9w=
+github.com/Ulbora/dbinterface_mysql v1.0.1/go.mod h1:dmm97S7ttcRVcAan/7S403+g8ywFf51XknV+j2SMcwg=
+github.com/go-sql-driver/mysql v1.4.1 h1:g24URVg0OFbNUTx9qqY1IRZ9D9z3iPyi5zKhQZpNwpA=
+github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+github.com/gorilla/mux v1.7.0 h1:tOSd0UKHQd6urX6ApfOn4XdBMY6Sh1MfxV3kmaazO+U=
+github.com/gorilla/mux v1.7.0/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
