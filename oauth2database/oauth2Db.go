@@ -24,7 +24,7 @@ package oauth2database
 type Oauth2DB interface {
 	AddClient(client *Client, uris *[]ClientRedirectURI) (bool, int64)
 	UpdateClient(client *Client) bool
-	GetClient(clientID int64)
+	GetClient(clientID int64) *Client
 	GetClients() *[]Client
 	SearchClients(name string) *[]Client
 	DeleteClient(clientID int64) bool

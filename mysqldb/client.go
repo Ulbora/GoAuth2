@@ -20,35 +20,47 @@ package mysqldb
 
 */
 import (
-	odb "/oauth2database"
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
 //AddClient AddClient
 func (d *MySQLDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectURI) (bool, int64) {
-
+	var suc = false
+	var id int64
+	return suc, id
 }
 
 //UpdateClient UpdateClient
-func (d *MySQLDB) UpdateClient() {
+func (d *MySQLDB) UpdateClient(client *odb.Client) bool {
+	var suc = false
 
+	return suc
 }
 
 //GetClient GetClient
-func (d *MySQLDB) GetClient() {
+func (d *MySQLDB) GetClient(clientID int64) *odb.Client {
+	var rtn odb.Client
 
+	return &rtn
 }
 
 //GetClients GetClients
-func (d *MySQLDB) GetClients() {
+func (d *MySQLDB) GetClients() *[]odb.Client {
+	var rtn []odb.Client
 
+	return &rtn
 }
 
 //SearchClients SearchClients
-func (d *MySQLDB) SearchClients() {
+func (d *MySQLDB) SearchClients(name string) *[]odb.Client {
+	var rtn []odb.Client
 
+	return &rtn
 }
 
 //DeleteClient DeleteClient
-func (d *MySQLDB) DeleteClient() {
+func (d *MySQLDB) DeleteClient(clientID int64) bool {
+	var suc = false
 
+	return suc
 }
