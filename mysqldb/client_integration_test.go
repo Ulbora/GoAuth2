@@ -1,3 +1,5 @@
+// +build integration
+
 package mysqldb
 
 import (
@@ -11,6 +13,7 @@ import (
 
 var dbb db.Database
 var odbb odb.Oauth2DB
+var cid int64
 
 func TestMySQLDB_Connect(t *testing.T) {
 
@@ -68,9 +71,17 @@ func TestMySQLDB_AddClient(t *testing.T) {
 
 	fmt.Println("before db add")
 	res, id := odbb.AddClient(&c, &uis)
+	cid = id
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
+		t.Fail()
+	}
+}
+
+func TestMySQLDB_DeleteClient(t *testing.T) {
+	suc := odbb.DeleteClient(cid)
+	if !suc {
 		t.Fail()
 	}
 }

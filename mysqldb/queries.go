@@ -23,6 +23,8 @@ package mysqldb
 const (
 	oauthTest    = "select count(*) from client "
 	insertClient = "insert into client (secret, name, web_site, email, enabled, paid) values(?, ?, ?, ?, ?, ?)"
+	deleteClient = "DELETE FROM client WHERE client_id = ? "
 
-	insertRedirectURI = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
+	insertRedirectURI    = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
+	deleteAllRedirectURI = "DELETE FROM client_redirect_uri WHERE client_id = ? "
 )

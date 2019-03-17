@@ -21,13 +21,13 @@ package mysqldb
 */
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
-	"log"
+	//"log"
 )
 
 //AddClient AddClient
 func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectURI) (bool, int64) {
-	//var suc = false
-	log.Println("in add client")
+	var suc = false
+	//log.Println("in add client")
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
@@ -35,13 +35,12 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 	tx := d.DB.BeginTransaction()
 	var a []interface{}
 	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
-	suc, id := tx.Insert(insertClient, a...)
-	if suc && id > 0 {
+	succ, id := tx.Insert(insertClient, a...)
+	if succ && id > 0 {
 		if uris != nil && len(*uris) > 0 {
 			for _, u := range *uris {
 				var au []interface{}
 				au = append(au, u.URI, id)
-
 				u.ClientID = id
 				rsus, rid := tx.Insert(insertRedirectURI, au...)
 				if !rsus || rid <= 0 {
@@ -56,6 +55,7 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 		tx.Rollback()
 	}
 	if !fail {
+		suc = true
 		tx.Commit()
 	}
 	return suc, id
@@ -92,6 +92,30 @@ func (d *MySQLOauthDB) SearchClients(name string) *[]odb.Client {
 //DeleteClient DeleteClient
 func (d *MySQLOauthDB) DeleteClient(clientID int64) bool {
 	var suc = false
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var fail = false
+	tx := d.DB.BeginTransaction()
+	var au []interface{}
+	au = append(au, clientID)
+	usuc := tx.Delete(deleteAllRedirectURI, au...)
+	if usuc {
+		var a []interface{}
+		a = append(a, clientID)
+		sucu := tx.Delete(deleteClient, a...)
+		if !sucu {
+			fail = true
+			tx.Rollback()
+		}
+	} else {
+		fail = true
+		tx.Rollback()
+	}
+	if !fail {
+		suc = true
+		tx.Commit()
+	}
 
 	return suc
 }
