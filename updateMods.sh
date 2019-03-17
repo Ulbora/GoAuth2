@@ -1,1 +1,2 @@
-GO111MODULE=on go get -u
+# GO111MODULE=on go get -u
+go get -u
