@@ -21,45 +21,76 @@ package mysqldb
 */
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	"log"
 )
 
 //AddClient AddClient
-func (d *MySQLDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectURI) (bool, int64) {
-	var suc = false
-	var id int64
+func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectURI) (bool, int64) {
+	//var suc = false
+	log.Println("in add client")
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var fail = false
+	tx := d.DB.BeginTransaction()
+	var a []interface{}
+	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
+	suc, id := tx.Insert(insertClient, a...)
+	if suc && id > 0 {
+		if uris != nil && len(*uris) > 0 {
+			for _, u := range *uris {
+				var au []interface{}
+				au = append(au, u.URI, id)
+
+				u.ClientID = id
+				rsus, rid := tx.Insert(insertRedirectURI, au...)
+				if !rsus || rid <= 0 {
+					tx.Rollback()
+					fail = true
+					break
+				}
+			}
+		}
+	} else {
+		fail = true
+		tx.Rollback()
+	}
+	if !fail {
+		tx.Commit()
+	}
 	return suc, id
 }
 
 //UpdateClient UpdateClient
-func (d *MySQLDB) UpdateClient(client *odb.Client) bool {
+func (d *MySQLOauthDB) UpdateClient(client *odb.Client) bool {
 	var suc = false
 
 	return suc
 }
 
 //GetClient GetClient
-func (d *MySQLDB) GetClient(clientID int64) *odb.Client {
+func (d *MySQLOauthDB) GetClient(clientID int64) *odb.Client {
 	var rtn odb.Client
 
 	return &rtn
 }
 
 //GetClients GetClients
-func (d *MySQLDB) GetClients() *[]odb.Client {
+func (d *MySQLOauthDB) GetClients() *[]odb.Client {
 	var rtn []odb.Client
 
 	return &rtn
 }
 
 //SearchClients SearchClients
-func (d *MySQLDB) SearchClients(name string) *[]odb.Client {
+func (d *MySQLOauthDB) SearchClients(name string) *[]odb.Client {
 	var rtn []odb.Client
 
 	return &rtn
 }
 
 //DeleteClient DeleteClient
-func (d *MySQLDB) DeleteClient(clientID int64) bool {
+func (d *MySQLOauthDB) DeleteClient(clientID int64) bool {
 	var suc = false
 
 	return suc

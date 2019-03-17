@@ -20,34 +20,14 @@ package mysqldb
 
 */
 import (
-	dbi "github.com/Ulbora/dbinterface"
-	"log"
-	"strconv"
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	//"log"
 )
 
-//MySQLOauthDB MySQLOauthDB
-type MySQLOauthDB struct {
-	DB dbi.Database
-}
+//AddClientRedirectURI AddClientRedirectURI
+func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
+	var suc = false
+	var id int64
 
-func (d *MySQLOauthDB) testConnection() bool {
-	log.Println("in testConnection")
-	var rtn = false
-	var a []interface{}
-	log.Println("d.DB: ", d.DB)
-	rowPtr := d.DB.Test(oauthTest, a...)
-	log.Println("after testConnection test")
-	if len(rowPtr.Row) != 0 {
-		foundRow := rowPtr.Row
-		int64Val, err := strconv.ParseInt(foundRow[0], 10, 0)
-		//log.Print("Records found during test ")
-		//log.Println("Records found during test :", int64Val)
-		if err != nil {
-			log.Print(err)
-		}
-		if int64Val >= 0 {
-			rtn = true
-		}
-	}
-	return rtn
+	return suc, id
 }

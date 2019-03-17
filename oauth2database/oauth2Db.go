@@ -28,6 +28,8 @@ type Oauth2DB interface {
 	GetClients() *[]Client
 	SearchClients(name string) *[]Client
 	DeleteClient(clientID int64) bool
+
+	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
 }
 
 //Client Client

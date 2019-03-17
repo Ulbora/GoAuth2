@@ -19,35 +19,10 @@ package mysqldb
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-import (
-	dbi "github.com/Ulbora/dbinterface"
-	"log"
-	"strconv"
+
+const (
+	oauthTest    = "select count(*) from client "
+	insertClient = "insert into client (secret, name, web_site, email, enabled, paid) values(?, ?, ?, ?, ?, ?)"
+
+	insertRedirectURI = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
 )
-
-//MySQLOauthDB MySQLOauthDB
-type MySQLOauthDB struct {
-	DB dbi.Database
-}
-
-func (d *MySQLOauthDB) testConnection() bool {
-	log.Println("in testConnection")
-	var rtn = false
-	var a []interface{}
-	log.Println("d.DB: ", d.DB)
-	rowPtr := d.DB.Test(oauthTest, a...)
-	log.Println("after testConnection test")
-	if len(rowPtr.Row) != 0 {
-		foundRow := rowPtr.Row
-		int64Val, err := strconv.ParseInt(foundRow[0], 10, 0)
-		//log.Print("Records found during test ")
-		//log.Println("Records found during test :", int64Val)
-		if err != nil {
-			log.Print(err)
-		}
-		if int64Val >= 0 {
-			rtn = true
-		}
-	}
-	return rtn
-}

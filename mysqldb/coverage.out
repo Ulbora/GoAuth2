@@ -1,0 +1,24 @@
+mode: set
+github.com/Ulbora/GoAuth2/mysqldb/client.go:28.99,31.25 2 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:34.2,39.19 6 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:58.2,58.11 1 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:61.2,61.16 1 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:31.25,33.3 1 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:39.19,40.36 1 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:40.36,41.28 1 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:41.28,47.26 5 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:47.26,50.11 3 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:54.8,57.3 2 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:58.11,60.3 1 1
+github.com/Ulbora/GoAuth2/mysqldb/client.go:65.62,69.2 2 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:72.62,76.2 2 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:79.51,83.2 2 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:86.65,90.2 2 0
+github.com/Ulbora/GoAuth2/mysqldb/client.go:93.58,97.2 2 0
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:33.46,40.26 7 1
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:52.2,52.12 1 1
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:40.26,45.17 3 1
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:48.3,48.20 1 1
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:45.17,47.4 1 0
+github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:48.20,50.4 1 1
+github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:28.86,33.2 3 0
