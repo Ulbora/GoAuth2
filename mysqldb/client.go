@@ -63,8 +63,12 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 
 //UpdateClient UpdateClient
 func (d *MySQLOauthDB) UpdateClient(client *odb.Client) bool {
-	var suc = false
-
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid, client.ClientID)
+	suc := d.DB.Update(updateClient, a...)
 	return suc
 }
 

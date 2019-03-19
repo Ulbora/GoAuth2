@@ -1,6 +1,6 @@
-// +build integration
-
 package mysqldb
+
+// +bbuild integration move to top
 
 import (
 	"fmt"
@@ -14,6 +14,7 @@ import (
 var dbb db.Database
 var odbb odb.Oauth2DB
 var cid int64
+var cid2 int64
 
 func TestMySQLDB_Connect(t *testing.T) {
 
@@ -49,12 +50,14 @@ func TestMySQLDB_AddClientNullUri(t *testing.T) {
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
 		t.Fail()
+	} else {
+		cid = id
 	}
 }
 
 func TestMySQLDB_AddClient(t *testing.T) {
 	var c odb.Client
-	c.Secret = "12345"
+	c.Secret = "1234567"
 	c.Name = "tester"
 	c.Email = "bob@bob.com"
 	c.WebSite = "www.bob.com"
@@ -71,7 +74,7 @@ func TestMySQLDB_AddClient(t *testing.T) {
 
 	fmt.Println("before db add")
 	res, id := odbb.AddClient(&c, &uis)
-	cid = id
+	cid2 = id
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
@@ -79,8 +82,30 @@ func TestMySQLDB_AddClient(t *testing.T) {
 	}
 }
 
+func TestMySQLDB_UpdateClient(t *testing.T) {
+	var c odb.Client
+	c.Secret = "555555"
+	c.Name = "tester5"
+	c.Email = "bob5@bob.com"
+	c.WebSite = "www.bob.com"
+	c.Enabled = false
+	c.Paid = false
+	c.ClientID = cid
+	suc := odbb.UpdateClient(&c)
+	if !suc {
+		t.Fail()
+	}
+}
+
 func TestMySQLDB_DeleteClient(t *testing.T) {
 	suc := odbb.DeleteClient(cid)
+	if !suc {
+		t.Fail()
+	}
+}
+
+func TestMySQLDB_DeleteClient2(t *testing.T) {
+	suc := odbb.DeleteClient(cid2)
 	if !suc {
 		t.Fail()
 	}

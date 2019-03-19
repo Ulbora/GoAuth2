@@ -23,6 +23,8 @@ package mysqldb
 const (
 	oauthTest    = "select count(*) from client "
 	insertClient = "insert into client (secret, name, web_site, email, enabled, paid) values(?, ?, ?, ?, ?, ?)"
+	updateClient = " UPDATE client SET secret = ?, name = ?, web_site = ?, email = ?, " +
+		" enabled = ?, paid = ? WHERE client_id = ? "
 	deleteClient = "DELETE FROM client WHERE client_id = ? "
 
 	insertRedirectURI    = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
