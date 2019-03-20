@@ -1,5 +1,13 @@
 language: go
+dist: trusty
 
 go:
 - 1.12.x
 - master
+
+addons:
+  sonarcloud:
+    organization: "ulboralabs" # the key of the org you chose at step #3    
+script:
+  # other script steps might be done before running the actual analysis
+  - sonar-scanner
