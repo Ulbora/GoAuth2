@@ -1,6 +1,6 @@
-package mysqldb
+// +build integration move to top
 
-// +bbuild integration move to top
+package mysqldb
 
 import (
 	"fmt"
