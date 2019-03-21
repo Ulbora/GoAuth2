@@ -21,7 +21,9 @@ package mysqldb
 */
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	dbtx "github.com/Ulbora/dbinterface"
 	//"log"
+	"strconv"
 )
 
 //AddClient AddClient
@@ -37,19 +39,20 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
 	succ, id := tx.Insert(insertClient, a...)
 	if succ && id > 0 {
-		if uris != nil && len(*uris) > 0 {
-			for _, u := range *uris {
-				var au []interface{}
-				au = append(au, u.URI, id)
-				u.ClientID = id
-				rsus, rid := tx.Insert(insertRedirectURI, au...)
-				if !rsus || rid <= 0 {
-					tx.Rollback()
-					fail = true
-					break
-				}
-			}
-		}
+		fail = addURIs(tx, id, uris)
+		// if uris != nil && len(*uris) > 0 {
+		// 	for _, u := range *uris {
+		// 		var au []interface{}
+		// 		au = append(au, u.URI, id)
+		// 		u.ClientID = id
+		// 		rsus, rid := tx.Insert(insertRedirectURI, au...)
+		// 		if !rsus || rid <= 0 {
+		// 			tx.Rollback()
+		// 			fail = true
+		// 			break
+		// 		}
+		// 	}
+		// }
 	} else {
 		fail = true
 		tx.Rollback()
@@ -59,6 +62,24 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 		tx.Commit()
 	}
 	return suc, id
+}
+
+func addURIs(tx dbtx.Transaction, id int64, uris *[]odb.ClientRedirectURI) bool {
+	var fail = false
+	if uris != nil && len(*uris) > 0 {
+		for _, u := range *uris {
+			var au []interface{}
+			au = append(au, u.URI, id)
+			u.ClientID = id
+			rsus, rid := tx.Insert(insertRedirectURI, au...)
+			if !rsus || rid <= 0 {
+				tx.Rollback()
+				fail = true
+				break
+			}
+		}
+	}
+	return fail
 }
 
 //UpdateClient UpdateClient
@@ -74,22 +95,85 @@ func (d *MySQLOauthDB) UpdateClient(client *odb.Client) bool {
 
 //GetClient GetClient
 func (d *MySQLOauthDB) GetClient(clientID int64) *odb.Client {
-	var rtn odb.Client
+	var rtn *odb.Client
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, clientID)
+	row := d.DB.Get(getClientByID, a...)
+	if row != nil && len(row.Row) != 0 {
+		foundRow := row.Row
+		rtn = parseClientRow(&foundRow)
+		// 	int64Val, err := strconv.ParseInt(foundRow[0], 10, 64)
+		// 	if err == nil {
+		// 		rtn.ClientID = int64Val
+		// 		rtn.Secret = foundRow[1]
+		// 		rtn.Name = foundRow[2]
+		// 		rtn.WebSite = foundRow[3]
+		// 		rtn.Email = foundRow[4]
+		// 		rtn.Enabled, _ = strconv.ParseBool(foundRow[5])
+		// 		rtn.Paid, _ = strconv.ParseBool(foundRow[6])
+		//}
+	}
 
-	return &rtn
+	return rtn
 }
 
 //GetClients GetClients
 func (d *MySQLOauthDB) GetClients() *[]odb.Client {
 	var rtn []odb.Client
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	rows := d.DB.GetList(getClientsAll, a...)
+	if rows != nil && len(rows.Rows) != 0 {
+		foundRows := rows.Rows
+		for r := range foundRows {
+			foundRow := foundRows[r]
+			rowContent := parseClientRow(&foundRow)
+			rtn = append(rtn, *rowContent)
+		}
 
+	}
+
+	return &rtn
+}
+
+func parseClientRow(foundRow *[]string) *odb.Client {
+	var rtn odb.Client
+	int64Val, err := strconv.ParseInt((*foundRow)[0], 10, 64)
+	if err == nil {
+		rtn.ClientID = int64Val
+		rtn.Secret = (*foundRow)[1]
+		rtn.Name = (*foundRow)[2]
+		rtn.WebSite = (*foundRow)[3]
+		rtn.Email = (*foundRow)[4]
+		rtn.Enabled, _ = strconv.ParseBool((*foundRow)[5])
+		rtn.Paid, _ = strconv.ParseBool((*foundRow)[6])
+	}
 	return &rtn
 }
 
 //SearchClients SearchClients
 func (d *MySQLOauthDB) SearchClients(name string) *[]odb.Client {
 	var rtn []odb.Client
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, name)
+	rows := d.DB.GetList(searchClientByName, a...)
+	if rows != nil && len(rows.Rows) != 0 {
+		foundRows := rows.Rows
+		for r := range foundRows {
+			foundRow := foundRows[r]
+			rowContent := parseClientRow(&foundRow)
+			rtn = append(rtn, *rowContent)
+		}
 
+	}
 	return &rtn
 }
 

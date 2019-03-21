@@ -1,5 +1,3 @@
-// +build integration move to top
-
 package mysqldb
 
 import (
@@ -19,11 +17,46 @@ var cid2 int64
 func TestMySQLDB_Connect(t *testing.T) {
 
 	//var db db.Database
-	var mydb mdb.MyDB
+	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"
 	mydb.User = "admin"
 	mydb.Password = "admin"
 	mydb.Database = "ulbora_oauth2_server"
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+	mydb.MockInsertSuccess1 = false
+	mydb.MockInsertID1 = 2
+
+	mydb.MockInsertSuccess2 = true
+	mydb.MockInsertID2 = 4
+
+	mydb.MockInsertSuccess3 = true
+	mydb.MockInsertID3 = 4
+
+	mydb.MockInsertSuccess4 = false
+	mydb.MockInsertID4 = 4
+
+	mydb.MockUpdateSuccess1 = true
+
+	var mGetRow db.DbRow
+	mGetRow.Row = []string{"1", "1235", "tester5", "some site", "some email", "true", "false"}
+	mydb.MockRow1 = &mGetRow
+
+	var rows [][]string
+	row1 := []string{"1", "1235", "tester5", "some site", "some email", "true", "false"}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+	mydb.MockRows2 = &dbrows
+	//mGetRows.Rows[0] = []string{"1", "1235", "tester5", "some site", "some email", "true", "false"}
+
+	mydb.MockDeleteSuccess1 = true
+	mydb.MockDeleteSuccess2 = true
+	mydb.MockDeleteSuccess3 = true
+	mydb.MockDeleteSuccess4 = true
+
 	dbb = &mydb
 
 	var moadb MySQLOauthDB
@@ -48,7 +81,7 @@ func TestMySQLDB_AddClientNullUri(t *testing.T) {
 	res, id := odbb.AddClient(&c, nil)
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
-	if !res || id == 0 {
+	if res || id == 0 {
 		t.Fail()
 	} else {
 		cid = id
@@ -77,7 +110,7 @@ func TestMySQLDB_AddClient(t *testing.T) {
 	cid2 = id
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
-	if !res || id == 0 {
+	if res || id == 0 {
 		t.Fail()
 	}
 }

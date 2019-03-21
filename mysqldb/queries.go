@@ -21,12 +21,19 @@ package mysqldb
 */
 
 const (
-	oauthTest    = "select count(*) from client "
+	oauthTest = "select count(*) from client "
+
+	//Client queries
 	insertClient = "insert into client (secret, name, web_site, email, enabled, paid) values(?, ?, ?, ?, ?, ?)"
 	updateClient = " UPDATE client SET secret = ?, name = ?, web_site = ?, email = ?, " +
 		" enabled = ?, paid = ? WHERE client_id = ? "
+	getClientByID      = "SELECT client_id, secret, name, web_site, email, enabled, paid FROM client WHERE client_id = ?"
+	getClientsAll      = "SELECT client_id, secret, name, web_site, email, enabled, paid FROM client "
+	searchClientByName = "SELECT c.client_id, c.secret, c.name, c.web_site, c.email, c.enabled, c.paid " +
+		"FROM client c where c.name like ? "
 	deleteClient = "DELETE FROM client WHERE client_id = ? "
 
+	//Redirect URI queries
 	insertRedirectURI    = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
 	deleteAllRedirectURI = "DELETE FROM client_redirect_uri WHERE client_id = ? "
 )

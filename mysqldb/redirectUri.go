@@ -26,8 +26,14 @@ import (
 
 //AddClientRedirectURI AddClientRedirectURI
 func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
-	var suc = false
-	var id int64
+	//var suc = false
+	//var id int64
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, ru.URI, ru.ClientID)
+	suc, id := d.DB.Insert(insertRedirectURI, a...)
 
 	return suc, id
 }
