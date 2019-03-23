@@ -11,10 +11,10 @@ import (
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
-var dbb_uri db.Database
-var odbb_uri odb.Oauth2DB
+var dbbUri db.Database
+var odbbUri odb.Oauth2DB
 var rdid int64
-var cid_uri int64
+var cidUri int64
 
 func TestMySQLOauthDB_Connect(t *testing.T) {
 
@@ -24,14 +24,14 @@ func TestMySQLOauthDB_Connect(t *testing.T) {
 	mydb.User = "admin"
 	mydb.Password = "admin"
 	mydb.Database = "ulbora_oauth2_server"
-	dbb_uri = &mydb
+	dbbUri = &mydb
 
 	var moadb MySQLOauthDB
-	moadb.DB = dbb_uri
+	moadb.DB = dbbUri
 
-	odbb_uri = &moadb
+	odbbUri = &moadb
 
-	dbb_uri.Connect()
+	dbbUri.Connect()
 
 }
 
@@ -45,27 +45,27 @@ func TestMySQLOauthDB_AddClientNullUri(t *testing.T) {
 	c.Paid = false
 
 	fmt.Println("before db add")
-	res, id := odbb_uri.AddClient(&c, nil)
+	res, id := odbbUri.AddClient(&c, nil)
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
 		t.Fail()
 	} else {
-		cid_uri = id
+		cidUri = id
 	}
 }
 func TestMySQLOauthDB_AddClientRedirectURI(t *testing.T) {
 	var ur odb.ClientRedirectURI
-	ur.ClientID = cid_uri
+	ur.ClientID = cidUri
 	ur.URI = "someuri"
-	res, id := odbb_uri.AddClientRedirectURI(&ur)
+	res, id := odbbUri.AddClientRedirectURI(&ur)
 	if !res || id <= 0 {
 		t.Fail()
 	}
 }
 
 func TestMySQLOauthDB_DeleteClient(t *testing.T) {
-	suc := odbb_uri.DeleteClient(cid_uri)
+	suc := odbbUri.DeleteClient(cidUri)
 	if !suc {
 		t.Fail()
 	}

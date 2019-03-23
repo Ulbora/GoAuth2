@@ -9,10 +9,10 @@ import (
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
-var dbb_3 db.Database
-var odbb_3 odb.Oauth2DB
-var cid_3 int64
-var cid2_3 int64
+var dbb3 db.Database
+var odbb3 odb.Oauth2DB
+var cid3 int64
+var cid23 int64
 
 func TestMySQLDB3_Connect(t *testing.T) {
 
@@ -57,14 +57,14 @@ func TestMySQLDB3_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess3 = false
 	mydb.MockDeleteSuccess4 = true
 
-	dbb_3 = &mydb
+	dbb3 = &mydb
 
 	var moadb MySQLOauthDB
-	moadb.DB = dbb_3
+	moadb.DB = dbb3
 
-	odbb_3 = &moadb
+	odbb3 = &moadb
 
-	dbb_3.Connect()
+	dbb3.Connect()
 
 }
 
@@ -163,7 +163,7 @@ func TestMySQLDB3_Connect(t *testing.T) {
 // }
 
 func TestMySQLDB3_DeleteClient(t *testing.T) {
-	suc := odbb_3.DeleteClient(cid_3)
+	suc := odbb3.DeleteClient(cid3)
 	if suc {
 		t.Fail()
 	}

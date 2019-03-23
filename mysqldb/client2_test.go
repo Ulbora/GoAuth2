@@ -9,10 +9,10 @@ import (
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
-var dbb_2 db.Database
-var odbb_2 odb.Oauth2DB
-var cid_2 int64
-var cid2_2 int64
+var dbb2 db.Database
+var odbb2 odb.Oauth2DB
+var cid2b int64
+var cid22 int64
 
 func TestMySQLDB2_Connect(t *testing.T) {
 
@@ -57,14 +57,14 @@ func TestMySQLDB2_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess3 = false
 	mydb.MockDeleteSuccess4 = true
 
-	dbb_2 = &mydb
+	dbb2 = &mydb
 
 	var moadb MySQLOauthDB
-	moadb.DB = dbb_2
+	moadb.DB = dbb2
 
-	odbb_2 = &moadb
+	odbb2 = &moadb
 
-	dbb_2.Connect()
+	dbb2.Connect()
 
 }
 
@@ -106,8 +106,8 @@ func TestMySQLDB2_AddClient(t *testing.T) {
 	uis = append(uis, u2)
 
 	fmt.Println("before db add")
-	res, id := odbb_2.AddClient(&c, &uis)
-	cid_2 = id
+	res, id := odbb2.AddClient(&c, &uis)
+	cid2b = id
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
@@ -163,14 +163,14 @@ func TestMySQLDB2_AddClient(t *testing.T) {
 // }
 
 func TestMySQLDB2_DeleteClient(t *testing.T) {
-	suc := odbb_2.DeleteClient(cid_2)
+	suc := odbb2.DeleteClient(cid2b)
 	if suc {
 		t.Fail()
 	}
 }
 
 func TestMySQLDB2_DeleteClient2(t *testing.T) {
-	suc := odbb_2.DeleteClient(cid_2)
+	suc := odbb2.DeleteClient(cid2b)
 	if suc {
 		t.Fail()
 	}

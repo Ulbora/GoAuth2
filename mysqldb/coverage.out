@@ -1,4 +1,7 @@
 mode: set
+github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:28.86,31.25 1 1
+github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:34.2,38.16 4 1
+github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:31.25,33.3 1 1
 github.com/Ulbora/GoAuth2/mysqldb/client.go:30.99,33.25 2 1
 github.com/Ulbora/GoAuth2/mysqldb/client.go:36.2,41.20 6 1
 github.com/Ulbora/GoAuth2/mysqldb/client.go:60.2,60.11 1 1
@@ -50,6 +53,3 @@ github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:40.26,45.17 3 1
 github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:48.3,48.20 1 1
 github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:45.17,47.4 1 1
 github.com/Ulbora/GoAuth2/mysqldb/oauthDb.go:48.20,50.4 1 1
-github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:28.86,31.25 1 1
-github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:34.2,38.16 4 1
-github.com/Ulbora/GoAuth2/mysqldb/redirectUri.go:31.25,33.3 1 1

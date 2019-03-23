@@ -11,12 +11,12 @@ import (
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
-var dbb db.Database
-var odbb odb.Oauth2DB
-var cid int64
-var cid2 int64
+var dbbi db.Database
+var odbbi odb.Oauth2DB
+var cidi int64
+var cid2i int64
 
-func TestMySQLDB_Connect(t *testing.T) {
+func TestMySQLDBi_Connect(t *testing.T) {
 
 	//var db db.Database
 	var mydb mdb.MyDB
@@ -24,18 +24,18 @@ func TestMySQLDB_Connect(t *testing.T) {
 	mydb.User = "admin"
 	mydb.Password = "admin"
 	mydb.Database = "ulbora_oauth2_server"
-	dbb = &mydb
+	dbbi = &mydb
 
 	var moadb MySQLOauthDB
-	moadb.DB = dbb
+	moadb.DB = dbbi
 
-	odbb = &moadb
+	odbbi = &moadb
 
-	dbb.Connect()
+	dbbi.Connect()
 
 }
 
-func TestMySQLDB_AddClientNullUri(t *testing.T) {
+func TestMySQLDBi_AddClientNullUri(t *testing.T) {
 	var c odb.Client
 	c.Secret = "12345"
 	c.Name = "tester"
@@ -45,17 +45,17 @@ func TestMySQLDB_AddClientNullUri(t *testing.T) {
 	c.Paid = false
 
 	fmt.Println("before db add")
-	res, id := odbb.AddClient(&c, nil)
+	res, id := odbbi.AddClient(&c, nil)
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
 		t.Fail()
 	} else {
-		cid = id
+		cidi = id
 	}
 }
 
-func TestMySQLDB_AddClient(t *testing.T) {
+func TestMySQLDBi_AddClient(t *testing.T) {
 	var c odb.Client
 	c.Secret = "1234567"
 	c.Name = "tester"
@@ -73,8 +73,8 @@ func TestMySQLDB_AddClient(t *testing.T) {
 	uis = append(uis, u2)
 
 	fmt.Println("before db add")
-	res, id := odbb.AddClient(&c, &uis)
-	cid2 = id
+	res, id := odbbi.AddClient(&c, &uis)
+	cid2i = id
 	fmt.Println("res: ", res)
 	fmt.Println("id: ", id)
 	if !res || id == 0 {
@@ -82,7 +82,7 @@ func TestMySQLDB_AddClient(t *testing.T) {
 	}
 }
 
-func TestMySQLDB_UpdateClient(t *testing.T) {
+func TestMySQLDBi_UpdateClient(t *testing.T) {
 	var c odb.Client
 	c.Secret = "555555"
 	c.Name = "tester5"
@@ -90,23 +90,23 @@ func TestMySQLDB_UpdateClient(t *testing.T) {
 	c.WebSite = "www.bob.com"
 	c.Enabled = false
 	c.Paid = false
-	c.ClientID = cid
-	suc := odbb.UpdateClient(&c)
+	c.ClientID = cidi
+	suc := odbbi.UpdateClient(&c)
 	if !suc {
 		t.Fail()
 	}
 }
 
-func TestMySQLDB_GetClient(t *testing.T) {
-	c := odbb.GetClient(cid)
+func TestMySQLDBi_GetClient(t *testing.T) {
+	c := odbbi.GetClient(cidi)
 	fmt.Println("client found: ", c)
 	if c.Name != "tester5" {
 		t.Fail()
 	}
 }
 
-func TestMySQLDB_GetClients(t *testing.T) {
-	cs := odbb.GetClients()
+func TestMySQLDBi_GetClients(t *testing.T) {
+	cs := odbbi.GetClients()
 	fmt.Println("client found: ", cs)
 	for _, c := range *cs {
 		fmt.Println("client found in getClients: ", c)
@@ -117,8 +117,8 @@ func TestMySQLDB_GetClients(t *testing.T) {
 
 }
 
-func TestMySQLDB_SearchClients(t *testing.T) {
-	cs := odbb.SearchClients("tester")
+func TestMySQLDBi_SearchClients(t *testing.T) {
+	cs := odbbi.SearchClients("tester")
 	fmt.Println("client found in search: ", cs)
 	for _, c := range *cs {
 		fmt.Println("client found in searchClients: ", c)
@@ -129,15 +129,15 @@ func TestMySQLDB_SearchClients(t *testing.T) {
 
 }
 
-func TestMySQLDB_DeleteClient(t *testing.T) {
-	suc := odbb.DeleteClient(cid)
+func TestMySQLDBi_DeleteClient(t *testing.T) {
+	suc := odbbi.DeleteClient(cidi)
 	if !suc {
 		t.Fail()
 	}
 }
 
-func TestMySQLDB_DeleteClient2(t *testing.T) {
-	suc := odbb.DeleteClient(cid2)
+func TestMySQLDBi_DeleteClient2(t *testing.T) {
+	suc := odbbi.DeleteClient(cid2i)
 	if !suc {
 		t.Fail()
 	}
