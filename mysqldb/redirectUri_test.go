@@ -9,10 +9,10 @@ import (
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
-var dbb_uri2 db.Database
-var odbb_uri2 odb.Oauth2DB
+var dbbUri2 db.Database
+var odbbUri2 odb.Oauth2DB
 var rdid2 int64
-var cid_uri2 int64
+var cidUri2 int64
 
 func TestMySQLOauthDB2_Connect(t *testing.T) {
 
@@ -22,7 +22,7 @@ func TestMySQLOauthDB2_Connect(t *testing.T) {
 	mydb.User = "admin"
 	mydb.Password = "admin"
 	mydb.Database = "ulbora_oauth2_server"
-	dbb_uri2 = &mydb
+	dbbUri2 = &mydb
 
 	//mydb.MockTestRow
 	var mTestRow db.DbRow
@@ -32,11 +32,11 @@ func TestMySQLOauthDB2_Connect(t *testing.T) {
 	mydb.MockInsertID1 = 1
 
 	var moadb MySQLOauthDB
-	moadb.DB = dbb_uri2
+	moadb.DB = dbbUri2
 
-	odbb_uri2 = &moadb
+	odbbUri2 = &moadb
 
-	dbb_uri2.Connect()
+	dbbUri2.Connect()
 
 }
 
@@ -63,7 +63,7 @@ func TestMySQLOauthDB2_AddClientRedirectURI(t *testing.T) {
 	var ur odb.ClientRedirectURI
 	ur.ClientID = 4
 	ur.URI = "someuri"
-	res, id := odbb_uri2.AddClientRedirectURI(&ur)
+	res, id := odbbUri2.AddClientRedirectURI(&ur)
 	if !res || id <= 0 {
 		t.Fail()
 	}

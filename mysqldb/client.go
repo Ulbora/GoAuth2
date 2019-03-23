@@ -33,7 +33,7 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
-	var fail = false
+	var fail bool
 	tx := d.DB.BeginTransaction()
 	var a []interface{}
 	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
