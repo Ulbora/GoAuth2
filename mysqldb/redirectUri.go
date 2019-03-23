@@ -21,19 +21,63 @@ package mysqldb
 */
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
-	//"log"
+	"strconv"
 )
 
 //AddClientRedirectURI AddClientRedirectURI
 func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
-	//var suc = false
-	//var id int64
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, ru.URI, ru.ClientID)
 	suc, id := d.DB.Insert(insertRedirectURI, a...)
-
 	return suc, id
+}
+
+//GetClientRedirectURIList GetClientRedirectURIList
+func (d *MySQLOauthDB) GetClientRedirectURIList(clientID int64) *[]odb.ClientRedirectURI {
+	var rtn []odb.ClientRedirectURI
+	var a []interface{}
+	a = append(a, clientID)
+	rows := d.DB.GetList(getRedirectURIList, a...)
+	if rows != nil && len(rows.Rows) != 0 {
+		foundRows := rows.Rows
+		for r := range foundRows {
+			foundRow := foundRows[r]
+			rowContent := parseClientURIRow(&foundRow)
+			rtn = append(rtn, *rowContent)
+		}
+	}
+	return &rtn
+}
+
+//GetClientRedirectURI GetClientRedirectURI
+func (d *MySQLOauthDB) GetClientRedirectURI(clientID int64, uri string) *odb.ClientRedirectURI {
+	var a []interface{}
+	a = append(a, clientID, uri)
+	row := d.DB.Get(getRedirectURI, a...)
+	rtn := parseClientURIRow(&row.Row)
+	return rtn
+}
+
+//DeleteClientRedirectURI DeleteClientRedirectURI
+func (d *MySQLOauthDB) DeleteClientRedirectURI(id int64) bool {
+	var a []interface{}
+	a = append(a, id)
+	return d.DB.Delete(deleteRedirectURI, a...)
+}
+
+func parseClientURIRow(foundRow *[]string) *odb.ClientRedirectURI {
+	var rtn odb.ClientRedirectURI
+	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
+	if err == nil {
+		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+		if err == nil {
+			rtn.ID = id
+			rtn.ClientID = clientID
+			rtn.URI = (*foundRow)[1]
+		}
+	}
+	return &rtn
 }

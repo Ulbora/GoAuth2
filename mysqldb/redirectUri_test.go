@@ -31,6 +31,18 @@ func TestMySQLOauthDB2_Connect(t *testing.T) {
 	mydb.MockInsertSuccess1 = true
 	mydb.MockInsertID1 = 1
 
+	var getRow db.DbRow
+	getRow.Row = []string{"1", "test", "2"}
+	mydb.MockRow1 = &getRow
+
+	var rows [][]string
+	row1 := []string{"1", "tester5", "2"}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+	mydb.MockDeleteSuccess1 = true
+
 	var moadb MySQLOauthDB
 	moadb.DB = dbbUri2
 
@@ -40,25 +52,6 @@ func TestMySQLOauthDB2_Connect(t *testing.T) {
 
 }
 
-// func TestMySQLOauthDB2_AddClientNullUri(t *testing.T) {
-// 	var c odb.Client
-// 	c.Secret = "12345"
-// 	c.Name = "tester"
-// 	c.Email = "bob@bob.com"
-// 	c.WebSite = "www.bob.com"
-// 	c.Enabled = true
-// 	c.Paid = false
-
-// 	fmt.Println("before db add")
-// 	res, id := odbb_uri2.AddClient(&c, nil)
-// 	fmt.Println("res: ", res)
-// 	fmt.Println("id: ", id)
-// 	if !res || id == 0 {
-// 		t.Fail()
-// 	} else {
-// 		cid_uri2 = id
-// 	}
-// }
 func TestMySQLOauthDB2_AddClientRedirectURI(t *testing.T) {
 	var ur odb.ClientRedirectURI
 	ur.ClientID = 4
@@ -69,9 +62,26 @@ func TestMySQLOauthDB2_AddClientRedirectURI(t *testing.T) {
 	}
 }
 
-// func TestMySQLOauthDB2_DeleteClient(t *testing.T) {
-// 	suc := odbb_uri2.DeleteClient(cid_uri)
-// 	if !suc {
-// 		t.Fail()
-// 	}
-// }
+func TestMySQLOauthDB2_GetClientRedirectURI(t *testing.T) {
+	var cid int64 = 2
+	res := odbbUri2.GetClientRedirectURI(cid, "someuri")
+	if res == nil {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDB2_GetClientRedirectURIList(t *testing.T) {
+	var cid int64 = 2
+	res := odbbUri2.GetClientRedirectURIList(cid)
+	if res == nil || len(*res) == 0 {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDB2_DeleteClientRedirectURI(t *testing.T) {
+	var id int64 = 2
+	res := odbbUri2.DeleteClientRedirectURI(id)
+	if !res {
+		t.Fail()
+	}
+}

@@ -13,7 +13,7 @@ import (
 
 var dbbUri db.Database
 var odbbUri odb.Oauth2DB
-var rdid int64
+var rdidi int64
 var cidUri int64
 
 func TestMySQLOauthDB_Connect(t *testing.T) {
@@ -60,6 +60,32 @@ func TestMySQLOauthDB_AddClientRedirectURI(t *testing.T) {
 	ur.URI = "someuri"
 	res, id := odbbUri.AddClientRedirectURI(&ur)
 	if !res || id <= 0 {
+		t.Fail()
+	} else {
+		rdidi = id
+	}
+}
+
+func TestMySQLOauthDB_GetClientRedirectURIList(t *testing.T) {
+	res := odbbUri.GetClientRedirectURIList(cidUri)
+	fmt.Println("uri res: ", res)
+	if res == nil || (*res)[0].ClientID != cidUri {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDB_GetClientRedirectURI(t *testing.T) {
+	res := odbbUri.GetClientRedirectURI(cidUri, "someuri")
+	fmt.Println("uri res by id: ", res)
+	if res == nil || (*res).ClientID != cidUri {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDB_DeleteClientRedirectURI(t *testing.T) {
+	res := odbbUri.DeleteClientRedirectURI(rdidi)
+	fmt.Println("uri  delete: ", res)
+	if !res {
 		t.Fail()
 	}
 }

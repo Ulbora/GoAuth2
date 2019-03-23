@@ -30,6 +30,9 @@ type Oauth2DB interface {
 	DeleteClient(clientID int64) bool
 
 	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
+	GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI
+	GetClientRedirectURI(clientID int64, uri string) *ClientRedirectURI
+	DeleteClientRedirectURI(id int64) bool
 }
 
 //Client Client

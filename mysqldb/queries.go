@@ -35,5 +35,8 @@ const (
 
 	//Redirect URI queries
 	insertRedirectURI    = "INSERT INTO client_redirect_uri (uri, client_id) values(?, ?)"
+	getRedirectURIList   = "SELECT id, uri, client_id FROM client_redirect_uri WHERE client_id = ? "
+	getRedirectURI       = "SELECT id, uri, client_id FROM client_redirect_uri WHERE client_id = ? and uri = ? "
 	deleteAllRedirectURI = "DELETE FROM client_redirect_uri WHERE client_id = ? "
+	deleteRedirectURI    = "DELETE FROM client_redirect_uri WHERE id = ?"
 )
