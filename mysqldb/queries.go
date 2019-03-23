@@ -39,4 +39,22 @@ const (
 	getRedirectURI       = "SELECT id, uri, client_id FROM client_redirect_uri WHERE client_id = ? and uri = ? "
 	deleteAllRedirectURI = "DELETE FROM client_redirect_uri WHERE client_id = ? "
 	deleteRedirectURI    = "DELETE FROM client_redirect_uri WHERE id = ?"
+
+	//Allowed URI queries
+	insertAllowedURI  = "INSERT INTO client_allowed_uri (uri, client_id) values(?, ?) "
+	updateAllowedURI  = "UPDATE client_allowed_uri SET uri = ? WHERE id = ? "
+	getAllowedURIByID = "SELECT id, uri, client_id from client_allowed_uri WHERE id = ? "
+	getAllowedURIList = "SELECT id, uri, client_id from client_allowed_uri WHERE client_id = ? order by uri "
+	getAllowedURI     = "SELECT id, uri, client_id from client_allowed_uri WHERE client_id = ? and uri = ? "
+	deleteAllowedURI  = "DELETE FROM client_allowed_uri WHERE id = ? "
+
+	//Role
+	insertRole  = "INSERT INTO client_role (role, client_id) values(?, ?) "
+	getRoleList = "SELECT id, role, client_id FROM client_role WHERE client_id = ? "
+	deleteRole  = "DELETE FROM client_role WHERE id = ? "
+
+	//Scope
+	insertScope  = "INSERT INTO client_scope (scope, client_id) values(?, ?) "
+	getScopeList = "SELECT id, scope, client_id FROM client_scope WHERE client_id = ? "
+	deleteScope  = "DELETE FROM client_scope WHERE id = ? "
 )

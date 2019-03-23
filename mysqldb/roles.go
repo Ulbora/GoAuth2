@@ -19,73 +19,62 @@ package mysqldb
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
 )
 
-//AddClientRedirectURI AddClientRedirectURI
-func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
+//AddClientRole AddClientRole
+func (d *MySQLOauthDB) AddClientRole(r *odb.ClientRole) (bool, int64) {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
-	a = append(a, ru.URI, ru.ClientID)
-	suc, id := d.DB.Insert(insertRedirectURI, a...)
+	a = append(a, r.Role, r.ClientID)
+	suc, id := d.DB.Insert(insertRole, a...)
 	return suc, id
 }
 
-//GetClientRedirectURIList GetClientRedirectURIList
-func (d *MySQLOauthDB) GetClientRedirectURIList(clientID int64) *[]odb.ClientRedirectURI {
+//GetClientRoleList GetClientRoleList
+func (d *MySQLOauthDB) GetClientRoleList(clientID int64) *[]odb.ClientRole {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
-	var rtn []odb.ClientRedirectURI
+	var rtn []odb.ClientRole
 	var a []interface{}
 	a = append(a, clientID)
-	rows := d.DB.GetList(getRedirectURIList, a...)
+	rows := d.DB.GetList(getRoleList, a...)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			rowContent := parseClientURIRow(&foundRow)
+			rowContent := parseClientRoleRow(&foundRow)
 			rtn = append(rtn, *rowContent)
 		}
 	}
 	return &rtn
 }
 
-//GetClientRedirectURI GetClientRedirectURI
-func (d *MySQLOauthDB) GetClientRedirectURI(clientID int64, uri string) *odb.ClientRedirectURI {
-	if !d.testConnection() {
-		d.DB.Connect()
-	}
-	var a []interface{}
-	a = append(a, clientID, uri)
-	row := d.DB.Get(getRedirectURI, a...)
-	rtn := parseClientURIRow(&row.Row)
-	return rtn
-}
-
-//DeleteClientRedirectURI DeleteClientRedirectURI
-func (d *MySQLOauthDB) DeleteClientRedirectURI(id int64) bool {
+//DeleteClientRole DeleteClientRole
+func (d *MySQLOauthDB) DeleteClientRole(id int64) bool {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, id)
-	return d.DB.Delete(deleteRedirectURI, a...)
+	return d.DB.Delete(deleteRole, a...)
 }
 
-func parseClientURIRow(foundRow *[]string) *odb.ClientRedirectURI {
-	var rtn odb.ClientRedirectURI
+func parseClientRoleRow(foundRow *[]string) *odb.ClientRole {
+	var rtn odb.ClientRole
 	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 	if err == nil {
 		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
 		if err == nil {
 			rtn.ID = id
 			rtn.ClientID = clientID
-			rtn.URI = (*foundRow)[1]
+			rtn.Role = (*foundRow)[1]
 		}
 	}
 	return &rtn

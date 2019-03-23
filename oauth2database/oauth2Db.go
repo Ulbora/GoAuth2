@@ -22,6 +22,7 @@ package oauth2database
 
 //Oauth2DB Oauth2DB
 type Oauth2DB interface {
+	//client
 	AddClient(client *Client, uris *[]ClientRedirectURI) (bool, int64)
 	UpdateClient(client *Client) bool
 	GetClient(clientID int64) *Client
@@ -29,10 +30,29 @@ type Oauth2DB interface {
 	SearchClients(name string) *[]Client
 	DeleteClient(clientID int64) bool
 
+	//Redirect URI
 	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
 	GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI
 	GetClientRedirectURI(clientID int64, uri string) *ClientRedirectURI
 	DeleteClientRedirectURI(id int64) bool
+
+	//Allowed URI
+	AddClientAllowedURI(au *ClientAllowedURI) (bool, int64)
+	UpdateClientAllowedURI(au *ClientAllowedURI) bool
+	GetClientAllowedURIByID(id int64) *ClientAllowedURI
+	GetClientAllowedURIList(clientID int64) *[]ClientAllowedURI
+	GetClientAllowedURI(clientID int64, uri string) *ClientAllowedURI
+	DeleteClientAllowedURI(id int64) bool
+
+	//Roles
+	AddClientRole(r *ClientRole) (bool, int64)
+	GetClientRoleList(clientID int64) *[]ClientRole
+	DeleteClientRole(id int64) bool
+
+	//Scope
+	AddClientScope(s *ClientScope) (bool, int64)
+	GetClientScopeList(clientID int64) *[]ClientScope
+	DeleteClientScope(id int64) bool
 }
 
 //Client Client
@@ -50,5 +70,26 @@ type Client struct {
 type ClientRedirectURI struct {
 	ID       int64
 	URI      string
+	ClientID int64
+}
+
+//ClientAllowedURI ClientAllowedURI
+type ClientAllowedURI struct {
+	ID       int64
+	URI      string
+	ClientID int64
+}
+
+//ClientRole ClientRole
+type ClientRole struct {
+	ID       int64
+	Role     string
+	ClientID int64
+}
+
+//ClientScope ClientScope
+type ClientScope struct {
+	ID       int64
+	Scope    string
 	ClientID int64
 }

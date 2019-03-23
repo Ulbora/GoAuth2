@@ -19,66 +19,90 @@ package mysqldb
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
 )
 
-//AddClientRedirectURI AddClientRedirectURI
-func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
+//AddClientAllowedURI AddClientAllowedURI
+func (d *MySQLOauthDB) AddClientAllowedURI(au *odb.ClientAllowedURI) (bool, int64) {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
-	a = append(a, ru.URI, ru.ClientID)
-	suc, id := d.DB.Insert(insertRedirectURI, a...)
+	a = append(a, au.URI, au.ClientID)
+	suc, id := d.DB.Insert(insertAllowedURI, a...)
 	return suc, id
 }
 
-//GetClientRedirectURIList GetClientRedirectURIList
-func (d *MySQLOauthDB) GetClientRedirectURIList(clientID int64) *[]odb.ClientRedirectURI {
+//UpdateClientAllowedURI UpdateClientAllowedURI
+func (d *MySQLOauthDB) UpdateClientAllowedURI(au *odb.ClientAllowedURI) bool {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
-	var rtn []odb.ClientRedirectURI
+	var a []interface{}
+	a = append(a, au.URI, au.ID)
+	suc := d.DB.Update(updateAllowedURI, a...)
+	return suc
+}
+
+//GetClientAllowedURIByID GetClientAllowedURIByID
+func (d *MySQLOauthDB) GetClientAllowedURIByID(id int64) *odb.ClientAllowedURI {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, id)
+	row := d.DB.Get(getAllowedURIByID, a...)
+	rtn := parseClientAllowedURIRow(&row.Row)
+	return rtn
+}
+
+//GetClientAllowedURIList GetClientAllowedURIList
+func (d *MySQLOauthDB) GetClientAllowedURIList(clientID int64) *[]odb.ClientAllowedURI {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var rtn []odb.ClientAllowedURI
 	var a []interface{}
 	a = append(a, clientID)
-	rows := d.DB.GetList(getRedirectURIList, a...)
+	rows := d.DB.GetList(getAllowedURIList, a...)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			rowContent := parseClientURIRow(&foundRow)
+			rowContent := parseClientAllowedURIRow(&foundRow)
 			rtn = append(rtn, *rowContent)
 		}
 	}
 	return &rtn
 }
 
-//GetClientRedirectURI GetClientRedirectURI
-func (d *MySQLOauthDB) GetClientRedirectURI(clientID int64, uri string) *odb.ClientRedirectURI {
+//GetClientAllowedURI GetClientAllowedURI
+func (d *MySQLOauthDB) GetClientAllowedURI(clientID int64, uri string) *odb.ClientAllowedURI {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, clientID, uri)
-	row := d.DB.Get(getRedirectURI, a...)
-	rtn := parseClientURIRow(&row.Row)
+	row := d.DB.Get(getAllowedURI, a...)
+	rtn := parseClientAllowedURIRow(&row.Row)
 	return rtn
 }
 
-//DeleteClientRedirectURI DeleteClientRedirectURI
-func (d *MySQLOauthDB) DeleteClientRedirectURI(id int64) bool {
+//DeleteClientAllowedURI DeleteClientAllowedURI
+func (d *MySQLOauthDB) DeleteClientAllowedURI(id int64) bool {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, id)
-	return d.DB.Delete(deleteRedirectURI, a...)
+	return d.DB.Delete(deleteAllowedURI, a...)
 }
 
-func parseClientURIRow(foundRow *[]string) *odb.ClientRedirectURI {
-	var rtn odb.ClientRedirectURI
+func parseClientAllowedURIRow(foundRow *[]string) *odb.ClientAllowedURI {
+	var rtn odb.ClientAllowedURI
 	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 	if err == nil {
 		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
