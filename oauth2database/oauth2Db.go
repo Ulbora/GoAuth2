@@ -53,6 +53,12 @@ type Oauth2DB interface {
 	AddClientScope(s *ClientScope) (bool, int64)
 	GetClientScopeList(clientID int64) *[]ClientScope
 	DeleteClientScope(id int64) bool
+
+	//Role URI
+	AddClientRoleURI(r *ClientRoleURI) bool
+	GetClientRoleAllowedURIList(roleID int64) *[]ClientRoleURI
+	GetClientRoleAllowedURIListByClientID(clientID int64) *[]RoleURI
+	DeleteClientRoleURI(r *ClientRoleURI) bool
 }
 
 //Client Client
@@ -92,4 +98,19 @@ type ClientScope struct {
 	ID       int64
 	Scope    string
 	ClientID int64
+}
+
+//ClientRoleURI ClientRoleURI
+type ClientRoleURI struct {
+	ClientRoleID       int64
+	ClientAllowedURIID int64
+}
+
+//RoleURI RoleURI
+type RoleURI struct {
+	ClientRoleID       int64
+	Role               string
+	ClientAllowedURIID int64
+	ClientAllowedURI   string
+	ClientID           int64
 }

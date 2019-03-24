@@ -57,4 +57,16 @@ const (
 	insertScope  = "INSERT INTO client_scope (scope, client_id) values(?, ?) "
 	getScopeList = "SELECT id, scope, client_id FROM client_scope WHERE client_id = ? "
 	deleteScope  = "DELETE FROM client_scope WHERE id = ? "
+
+	//RoleURI
+	insertRoleURI  = "INSERT INTO uri_role (client_role_id, client_allowed_uri_id) values(?, ?) "
+	getRoleURIList = "SELECT client_role_id, client_allowed_uri_id FROM uri_role WHERE client_role_id = ?"
+	roleURIJoin    = "SELECT cr.id as role_id, cr.role, " +
+		"cau.id as uri_id, cau.uri, cr.client_id " +
+		"FROM client_role cr inner join " +
+		"uri_role ur on cr.id = ur.client_role_id " +
+		"left join client_allowed_uri cau on cau.id = ur.client_allowed_uri_id " +
+		"WHERE cr.client_id = ? " +
+		"order by ur.client_role_id "
+	deleteRoleURI = "DELETE FROM uri_role WHERE client_role_id = ? and client_allowed_uri_id = ? "
 )
