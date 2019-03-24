@@ -20,6 +20,11 @@ package oauth2database
 
 */
 
+const (
+	//TimeFormat TimeFormat
+	TimeFormat = "2006-01-02 15:04:05"
+)
+
 //Oauth2DB Oauth2DB
 type Oauth2DB interface {
 	//client
@@ -65,64 +70,9 @@ type Oauth2DB interface {
 	UpdateRefreshToken(t *RefreshToken) bool
 	GetRefreshToken(id int64) *RefreshToken
 	DeleteRefreshToken(id int64) bool
-}
 
-//Client Client
-type Client struct {
-	ClientID int64  `json:"clientId"`
-	Secret   string `json:"secret"`
-	Name     string `json:"name"`
-	WebSite  string `json:"webSite"`
-	Email    string `json:"email"`
-	Enabled  bool   `json:"enabled"`
-	Paid     bool   `json:"paid"`
-}
-
-//ClientRedirectURI ClientRedirectURI
-type ClientRedirectURI struct {
-	ID       int64
-	URI      string
-	ClientID int64
-}
-
-//ClientAllowedURI ClientAllowedURI
-type ClientAllowedURI struct {
-	ID       int64
-	URI      string
-	ClientID int64
-}
-
-//ClientRole ClientRole
-type ClientRole struct {
-	ID       int64
-	Role     string
-	ClientID int64
-}
-
-//ClientScope ClientScope
-type ClientScope struct {
-	ID       int64
-	Scope    string
-	ClientID int64
-}
-
-//ClientRoleURI ClientRoleURI
-type ClientRoleURI struct {
-	ClientRoleID       int64
-	ClientAllowedURIID int64
-}
-
-//RoleURI RoleURI
-type RoleURI struct {
-	ClientRoleID       int64
-	Role               string
-	ClientAllowedURIID int64
-	ClientAllowedURI   string
-	ClientID           int64
-}
-
-//RefreshToken RefreshToken
-type RefreshToken struct {
-	ID    int64
-	Token string
+	AddAccessToken(t *AccessToken) (bool, int64)
+	UpdateAccessToken(t *AccessToken) bool
+	GetAccessToken(id int64) *AccessToken
+	DeleteAccessToken(id int64) bool
 }

@@ -75,4 +75,12 @@ const (
 	updateRefreshToken = "UPDATE refresh_token SET token = ? WHERE id = ? "
 	getRefreshToken    = "SELECT id, token FROM refresh_token WHERE id = ? "
 	deleteRefreshToken = "DELETE FROM refresh_token WHERE id = ? "
+
+	//Access Token
+	insertAccessToken     = "INSERT INTO access_token  (token, expires, refresh_token_id) values(?, ?, ?) "
+	insertAccessTokenNull = "INSERT INTO access_token  (token, expires) values(?, ?) "
+	updateAccessToken     = "UPDATE access_token SET token = ?, expires = ?, refresh_token_id = ? WHERE id = ? "
+	updateAccessTokenNull = "UPDATE access_token SET token = ?, expires = ? WHERE id = ? "
+	getAccessToken        = "SELECT id, token, expires, refresh_token_id FROM access_token WHERE id = ? "
+	deleteAccessToken     = "DELETE FROM access_token WHERE id = ? "
 )
