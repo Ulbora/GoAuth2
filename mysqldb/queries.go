@@ -69,4 +69,10 @@ const (
 		"WHERE cr.client_id = ? " +
 		"order by ur.client_role_id "
 	deleteRoleURI = "DELETE FROM uri_role WHERE client_role_id = ? and client_allowed_uri_id = ? "
+
+	//Refresh Token
+	insertRefreshToken = "INSERT INTO refresh_token (token) values(?)"
+	updateRefreshToken = "UPDATE refresh_token SET token = ? WHERE id = ? "
+	getRefreshToken    = "SELECT id, token FROM refresh_token WHERE id = ? "
+	deleteRefreshToken = "DELETE FROM refresh_token WHERE id = ? "
 )

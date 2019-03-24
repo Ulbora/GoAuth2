@@ -59,6 +59,12 @@ type Oauth2DB interface {
 	GetClientRoleAllowedURIList(roleID int64) *[]ClientRoleURI
 	GetClientRoleAllowedURIListByClientID(clientID int64) *[]RoleURI
 	DeleteClientRoleURI(r *ClientRoleURI) bool
+
+	//Refresh Token
+	AddRefreshToken(t *RefreshToken) (bool, int64)
+	UpdateRefreshToken(t *RefreshToken) bool
+	GetRefreshToken(id int64) *RefreshToken
+	DeleteRefreshToken(id int64) bool
 }
 
 //Client Client
@@ -113,4 +119,10 @@ type RoleURI struct {
 	ClientAllowedURIID int64
 	ClientAllowedURI   string
 	ClientID           int64
+}
+
+//RefreshToken RefreshToken
+type RefreshToken struct {
+	ID    int64
+	Token string
 }

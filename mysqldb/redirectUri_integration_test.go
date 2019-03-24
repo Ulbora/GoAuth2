@@ -54,6 +54,7 @@ func TestMySQLOauthDB_AddClientNullUri(t *testing.T) {
 		cidUri = id
 	}
 }
+
 func TestMySQLOauthDB_AddClientRedirectURI(t *testing.T) {
 	var ur odb.ClientRedirectURI
 	ur.ClientID = cidUri
