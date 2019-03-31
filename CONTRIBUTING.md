@@ -1,5 +1,9 @@
 # Contributing guidelines
 
+## Why
+GoAuth2 is written in Golang and if you would like to get experience with the language, this is a good place to start.
+If you have an interest in security, this is also a good place to start by helping to build a Golang Oauth2 server solution that is licensed under the GPLV3 license.
+
 ## Pull Request Checklist
 Before sending your pull requests, make sure you followed this list.
 
