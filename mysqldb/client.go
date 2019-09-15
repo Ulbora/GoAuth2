@@ -19,9 +19,12 @@ package mysqldb
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 import (
+	"fmt"
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
-	dbtx "github.com/Ulbora/dbinterface"
+
 	//"log"
 	"strconv"
 )
@@ -37,22 +40,29 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 	tx := d.DB.BeginTransaction()
 	var a []interface{}
 	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
-	succ, id := tx.Insert(insertClient, a...)
-	if succ && id > 0 {
-		fail = addURIs(tx, id, uris)
-		// if uris != nil && len(*uris) > 0 {
-		// 	for _, u := range *uris {
-		// 		var au []interface{}
-		// 		au = append(au, u.URI, id)
-		// 		u.ClientID = id
-		// 		rsus, rid := tx.Insert(insertRedirectURI, au...)
-		// 		if !rsus || rid <= 0 {
-		// 			tx.Rollback()
-		// 			fail = true
-		// 			break
-		// 		}
-		// 	}
-		// }
+	succ, cid := tx.Insert(insertClient, a...)
+	if succ && cid > 0 {
+		fmt.Println("cid in add client: ", cid)
+		//fail = addURIs(tx, id, uris)
+		if uris != nil && len(*uris) > 0 {
+			for _, u := range *uris {
+				//d.Tx = tx
+				u.ClientID = cid
+				rsus, rid := d.AddClientRedirectURI(tx, &u)
+				fmt.Println("cid in add client: ", cid)
+				fmt.Println("rid in add client: ", rid)
+				fmt.Println("rsus in add client: ", rsus)
+				// var au []interface{}
+				// au = append(au, u.URI, id)
+				// u.ClientID = id
+				// rsus, rid := tx.Insert(insertRedirectURI, au...)
+				if !rsus || rid <= 0 {
+					tx.Rollback()
+					fail = true
+					break
+				}
+			}
+		}
 	} else {
 		fail = true
 		tx.Rollback()
@@ -61,26 +71,26 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 		suc = true
 		tx.Commit()
 	}
-	return suc, id
+	return suc, cid
 }
 
-func addURIs(tx dbtx.Transaction, id int64, uris *[]odb.ClientRedirectURI) bool {
-	var fail = false
-	if uris != nil && len(*uris) > 0 {
-		for _, u := range *uris {
-			var au []interface{}
-			au = append(au, u.URI, id)
-			u.ClientID = id
-			rsus, rid := tx.Insert(insertRedirectURI, au...)
-			if !rsus || rid <= 0 {
-				tx.Rollback()
-				fail = true
-				break
-			}
-		}
-	}
-	return fail
-}
+// func addURIs(tx dbtx.Transaction, id int64, uris *[]odb.ClientRedirectURI) bool {
+// 	var fail = false
+// 	if uris != nil && len(*uris) > 0 {
+// 		for _, u := range *uris {
+// 			var au []interface{}
+// 			au = append(au, u.URI, id)
+// 			u.ClientID = id
+// 			rsus, rid := tx.Insert(insertRedirectURI, au...)
+// 			if !rsus || rid <= 0 {
+// 				tx.Rollback()
+// 				fail = true
+// 				break
+// 			}
+// 		}
+// 	}
+// 	return fail
+// }
 
 //UpdateClient UpdateClient
 func (d *MySQLOauthDB) UpdateClient(client *odb.Client) bool {
@@ -185,9 +195,11 @@ func (d *MySQLOauthDB) DeleteClient(clientID int64) bool {
 	}
 	var fail = false
 	tx := d.DB.BeginTransaction()
-	var au []interface{}
-	au = append(au, clientID)
-	usuc := tx.Delete(deleteAllRedirectURI, au...)
+	// var au []interface{}
+	// au = append(au, clientID)
+	// usuc := tx.Delete(deleteAllRedirectURI, au...)
+	//d.Tx = tx
+	usuc := d.DeleteClientAllRedirectURI(tx, clientID)
 	if usuc {
 		var a []interface{}
 		a = append(a, clientID)

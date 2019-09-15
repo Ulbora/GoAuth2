@@ -59,7 +59,7 @@ func TestMySQLOauthDB_AddClientRedirectURI(t *testing.T) {
 	var ur odb.ClientRedirectURI
 	ur.ClientID = cidUri
 	ur.URI = "someuri"
-	res, id := odbbUri.AddClientRedirectURI(&ur)
+	res, id := odbbUri.AddClientRedirectURI(nil, &ur)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
@@ -84,7 +84,7 @@ func TestMySQLOauthDB_GetClientRedirectURI(t *testing.T) {
 }
 
 func TestMySQLOauthDB_DeleteClientRedirectURI(t *testing.T) {
-	res := odbbUri.DeleteClientRedirectURI(rdidi)
+	res := odbbUri.DeleteClientRedirectURI(nil, rdidi)
 	fmt.Println("uri  delete: ", res)
 	if !res {
 		t.Fail()

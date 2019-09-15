@@ -20,18 +20,27 @@ package mysqldb
 
 */
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	dbtx "github.com/Ulbora/dbinterface"
 )
 
 //AddClientRedirectURI AddClientRedirectURI
-func (d *MySQLOauthDB) AddClientRedirectURI(ru *odb.ClientRedirectURI) (bool, int64) {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) AddClientRedirectURI(tx dbtx.Transaction, ru *odb.ClientRedirectURI) (bool, int64) {
+	var suc = false
+	var id int64
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, ru.URI, ru.ClientID)
-	suc, id := d.DB.Insert(insertRedirectURI, a...)
+	if tx == nil {
+		suc, id = d.DB.Insert(insertRedirectURI, a...)
+	} else {
+		suc, id = tx.Insert(insertRedirectURI, a...)
+	}
+
 	return suc, id
 }
 
@@ -68,13 +77,35 @@ func (d *MySQLOauthDB) GetClientRedirectURI(clientID int64, uri string) *odb.Cli
 }
 
 //DeleteClientRedirectURI DeleteClientRedirectURI
-func (d *MySQLOauthDB) DeleteClientRedirectURI(id int64) bool {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) DeleteClientRedirectURI(tx dbtx.Transaction, id int64) bool {
+	var suc = false
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, id)
-	return d.DB.Delete(deleteRedirectURI, a...)
+	if tx == nil {
+		suc = d.DB.Delete(deleteRedirectURI, a...)
+	} else {
+		suc = tx.Delete(deleteRedirectURI, a...)
+	}
+	return suc
+}
+
+//DeleteClientAllRedirectURI DeleteClientAllRedirectURI
+func (d *MySQLOauthDB) DeleteClientAllRedirectURI(tx dbtx.Transaction, clientID int64) bool {
+	var suc = false
+	if tx == nil && !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, clientID)
+	if tx == nil {
+		suc = d.DB.Delete(deleteAllRedirectURI, a...)
+	} else {
+		suc = tx.Delete(deleteAllRedirectURI, a...)
+	}
+	return suc
 }
 
 func parseClientURIRow(foundRow *[]string) *odb.ClientRedirectURI {

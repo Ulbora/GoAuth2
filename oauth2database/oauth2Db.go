@@ -20,6 +20,10 @@ package oauth2database
 
 */
 
+import (
+	dbtx "github.com/Ulbora/dbinterface"
+)
+
 const (
 	//TimeFormat TimeFormat
 	TimeFormat = "2006-01-02 15:04:05"
@@ -36,10 +40,11 @@ type Oauth2DB interface {
 	DeleteClient(clientID int64) bool
 
 	//Redirect URI
-	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
+	AddClientRedirectURI(tx dbtx.Transaction, ru *ClientRedirectURI) (bool, int64)
 	GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI
 	GetClientRedirectURI(clientID int64, uri string) *ClientRedirectURI
-	DeleteClientRedirectURI(id int64) bool
+	DeleteClientRedirectURI(tx dbtx.Transaction, id int64) bool
+	DeleteClientAllRedirectURI(tx dbtx.Transaction, clientID int64) bool
 
 	//Allowed URI
 	AddClientAllowedURI(au *ClientAllowedURI) (bool, int64)

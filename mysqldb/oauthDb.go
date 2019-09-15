@@ -20,9 +20,10 @@ package mysqldb
 
 */
 import (
-	dbi "github.com/Ulbora/dbinterface"
 	"log"
 	"strconv"
+
+	dbi "github.com/Ulbora/dbinterface"
 )
 
 //MySQLOauthDB MySQLOauthDB

@@ -76,7 +76,7 @@ func TestMySQLDBi_AddClient(t *testing.T) {
 	res, id := odbbi.AddClient(&c, &uis)
 	cid2i = id
 	fmt.Println("res: ", res)
-	fmt.Println("id: ", id)
+	fmt.Println("id in addclient int test: ", id)
 	if !res || id == 0 {
 		t.Fail()
 	}
