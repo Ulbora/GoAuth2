@@ -36,7 +36,7 @@ func TestMySQLOauthDBReTokeni_Connect(t *testing.T) {
 func TestMySQLOauthDBReTokeni_AddRefreshToken(t *testing.T) {
 	var tk odb.RefreshToken
 	tk.Token = "somereftoken"
-	res, id := odbRti.AddRefreshToken(&tk)
+	res, id := odbRti.AddRefreshToken(nil, &tk)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
@@ -63,7 +63,7 @@ func TestMySQLOauthDBReTokeni_GetRefreshToken(t *testing.T) {
 }
 
 func TestMySQLOauthDBReTokeni_DeleteRefreshToken(t *testing.T) {
-	res := odbRti.DeleteRefreshToken(idRti)
+	res := odbRti.DeleteRefreshToken(nil,idRti)
 	fmt.Println("del ref token: ", res)
 	if !res {
 		t.Fail()

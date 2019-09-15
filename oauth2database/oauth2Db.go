@@ -71,13 +71,13 @@ type Oauth2DB interface {
 	DeleteClientRoleURI(r *ClientRoleURI) bool
 
 	//Refresh Token
-	AddRefreshToken(t *RefreshToken) (bool, int64)
+	AddRefreshToken(tx dbtx.Transaction, t *RefreshToken) (bool, int64)
 	UpdateRefreshToken(t *RefreshToken) bool
 	GetRefreshToken(id int64) *RefreshToken
-	DeleteRefreshToken(id int64) bool
+	DeleteRefreshToken(tx dbtx.Transaction, id int64) bool
 
-	AddAccessToken(t *AccessToken) (bool, int64)
-	UpdateAccessToken(t *AccessToken) bool
+	AddAccessToken(tx dbtx.Transaction, t *AccessToken) (bool, int64)
+	UpdateAccessToken(tx dbtx.Transaction, t *AccessToken) bool
 	GetAccessToken(id int64) *AccessToken
-	DeleteAccessToken(id int64) bool
+	DeleteAccessToken(tx dbtx.Transaction, id int64) bool
 }

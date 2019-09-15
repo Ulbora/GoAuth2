@@ -21,7 +21,7 @@ package mysqldb
 */
 
 import (
-	"fmt"
+	//"fmt"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 
@@ -42,16 +42,16 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 	a = append(a, client.Secret, client.Name, client.WebSite, client.Email, client.Enabled, client.Paid)
 	succ, cid := tx.Insert(insertClient, a...)
 	if succ && cid > 0 {
-		fmt.Println("cid in add client: ", cid)
+		//fmt.Println("cid in add client: ", cid)
 		//fail = addURIs(tx, id, uris)
 		if uris != nil && len(*uris) > 0 {
 			for _, u := range *uris {
 				//d.Tx = tx
 				u.ClientID = cid
 				rsus, rid := d.AddClientRedirectURI(tx, &u)
-				fmt.Println("cid in add client: ", cid)
-				fmt.Println("rid in add client: ", rid)
-				fmt.Println("rsus in add client: ", rsus)
+				// fmt.Println("cid in add client: ", cid)
+				// fmt.Println("rid in add client: ", rid)
+				// fmt.Println("rsus in add client: ", rsus)
 				// var au []interface{}
 				// au = append(au, u.URI, id)
 				// u.ClientID = id

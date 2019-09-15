@@ -21,18 +21,26 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	dbtx "github.com/Ulbora/dbinterface"
 )
 
 //AddRefreshToken AddRefreshToken
-func (d *MySQLOauthDB) AddRefreshToken(t *odb.RefreshToken) (bool, int64) {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) AddRefreshToken(tx dbtx.Transaction, t *odb.RefreshToken) (bool, int64) {
+	var suc bool
+	var id int64
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, t.Token)
-	suc, id := d.DB.Insert(insertRefreshToken, a...)
+	if tx == nil {
+		suc, id = d.DB.Insert(insertRefreshToken, a...)
+	} else {
+		suc, id = tx.Insert(insertRefreshToken, a...)
+	}
 	return suc, id
 }
 
@@ -60,13 +68,19 @@ func (d *MySQLOauthDB) GetRefreshToken(id int64) *odb.RefreshToken {
 }
 
 //DeleteRefreshToken DeleteRefreshToken
-func (d *MySQLOauthDB) DeleteRefreshToken(id int64) bool {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) DeleteRefreshToken(tx dbtx.Transaction, id int64) bool {
+	var suc bool
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, id)
-	return d.DB.Delete(deleteRefreshToken, a...)
+	if tx == nil {
+		suc = d.DB.Delete(deleteRefreshToken, a...)
+	} else {
+		suc = tx.Delete(deleteRefreshToken, a...)
+	}
+	return suc
 }
 
 func parseRefreshTokenRow(foundRow *[]string) *odb.RefreshToken {

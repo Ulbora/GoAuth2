@@ -39,7 +39,7 @@ func TestMySQLOauthDBAcTokeni_AddAccessToken(t *testing.T) {
 	var tk odb.AccessToken
 	tk.Token = "someacctoken"
 	tk.Expires = time.Now()
-	res, id := odbAti.AddAccessToken(&tk)
+	res, id := odbAti.AddAccessToken(nil, &tk)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
@@ -52,7 +52,7 @@ func TestMySQLOauthDBAcTokeni_UpdateAccessToken(t *testing.T) {
 	tk.ID = idAti
 	tk.Token = "someacctoken2"
 	tk.Expires = time.Now()
-	res := odbAti.UpdateAccessToken(&tk)
+	res := odbAti.UpdateAccessToken(nil, &tk)
 	if !res {
 		t.Fail()
 	}
@@ -68,7 +68,7 @@ func TestMySQLOauthDBAcTokeni_GetAccessToken(t *testing.T) {
 }
 
 func TestMySQLOauthDBAcTokeni_DeleteAccessToken(t *testing.T) {
-	res := odbAti.DeleteAccessToken(idAti)
+	res := odbAti.DeleteAccessToken(nil, idAti)
 	fmt.Println("del access token: ", res)
 	if !res {
 		t.Fail()
@@ -78,7 +78,7 @@ func TestMySQLOauthDBAcTokeni_DeleteAccessToken(t *testing.T) {
 func TestMySQLOauthDBAcTokeni_AddRefreshToken(t *testing.T) {
 	var tk odb.RefreshToken
 	tk.Token = "somereftoken"
-	res, id := odbAti.AddRefreshToken(&tk)
+	res, id := odbAti.AddRefreshToken(nil,&tk)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
@@ -91,7 +91,7 @@ func TestMySQLOauthDBAcTokeni_AddAccessToken2(t *testing.T) {
 	tk.Token = "someacctoken"
 	tk.Expires = time.Now()
 	tk.RefreshTokenID = refTkIdi
-	res, id := odbAti.AddAccessToken(&tk)
+	res, id := odbAti.AddAccessToken(nil, &tk)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
@@ -105,7 +105,7 @@ func TestMySQLOauthDBAcTokeni_UpdateAccessToken2(t *testing.T) {
 	tk.Token = "someacctoken2"
 	tk.Expires = time.Now()
 	tk.RefreshTokenID = refTkIdi
-	res := odbAti.UpdateAccessToken(&tk)
+	res := odbAti.UpdateAccessToken(nil, &tk)
 	if !res {
 		t.Fail()
 	}
@@ -121,7 +121,7 @@ func TestMySQLOauthDBAcTokeni_GetAccessToken2(t *testing.T) {
 }
 
 func TestMySQLOauthDBAcTokeni_DeleteAccessToken2(t *testing.T) {
-	res := odbAti.DeleteAccessToken(idAti)
+	res := odbAti.DeleteAccessToken(nil, idAti)
 	fmt.Println("del access token: ", res)
 	if !res {
 		t.Fail()
@@ -129,7 +129,7 @@ func TestMySQLOauthDBAcTokeni_DeleteAccessToken2(t *testing.T) {
 }
 
 func TestMySQLOauthDBAcTokeni_DeleteRefreshToken(t *testing.T) {
-	res := odbAti.DeleteRefreshToken(refTkIdi)
+	res := odbAti.DeleteRefreshToken(nil, refTkIdi)
 	fmt.Println("del ref token: ", res)
 	if !res {
 		t.Fail()

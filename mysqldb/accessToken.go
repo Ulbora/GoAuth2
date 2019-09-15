@@ -21,43 +21,57 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
 	"time"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	dbtx "github.com/Ulbora/dbinterface"
 )
 
 //AddAccessToken AddAccessToken
-func (d *MySQLOauthDB) AddAccessToken(t *odb.AccessToken) (bool, int64) {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) AddAccessToken(tx dbtx.Transaction, t *odb.AccessToken) (bool, int64) {
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var suc bool
 	var id int64
 	var a []interface{}
-	if t.RefreshTokenID == 0 {
+	if tx == nil && t.RefreshTokenID == 0 {
 		a = append(a, t.Token, t.Expires)
 		suc, id = d.DB.Insert(insertAccessTokenNull, a...)
-	} else {
+	} else if tx == nil {
 		a = append(a, t.Token, t.Expires, t.RefreshTokenID)
 		suc, id = d.DB.Insert(insertAccessToken, a...)
+	} else if t.RefreshTokenID == 0 {
+		a = append(a, t.Token, t.Expires)
+		suc, id = tx.Insert(insertAccessTokenNull, a...)
+	} else {
+		a = append(a, t.Token, t.Expires, t.RefreshTokenID)
+		suc, id = tx.Insert(insertAccessToken, a...)
 	}
 
 	return suc, id
 }
 
 //UpdateAccessToken UpdateAccessToken
-func (d *MySQLOauthDB) UpdateAccessToken(t *odb.AccessToken) bool {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) UpdateAccessToken(tx dbtx.Transaction, t *odb.AccessToken) bool {
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var suc bool
 	var a []interface{}
-	if t.RefreshTokenID == 0 {
+	if tx == nil && t.RefreshTokenID == 0 {
 		a = append(a, t.Token, t.Expires, t.ID)
 		suc = d.DB.Update(updateAccessTokenNull, a...)
-	} else {
+	} else if tx == nil {
 		a = append(a, t.Token, t.Expires, t.RefreshTokenID, t.ID)
 		suc = d.DB.Update(updateAccessToken, a...)
+	} else if t.RefreshTokenID == 0 {
+		a = append(a, t.Token, t.Expires, t.ID)
+		suc = tx.Update(updateAccessTokenNull, a...)
+	} else {
+		a = append(a, t.Token, t.Expires, t.RefreshTokenID, t.ID)
+		suc = tx.Update(updateAccessToken, a...)
 	}
 	return suc
 }
@@ -75,13 +89,19 @@ func (d *MySQLOauthDB) GetAccessToken(id int64) *odb.AccessToken {
 }
 
 //DeleteAccessToken DeleteAccessToken
-func (d *MySQLOauthDB) DeleteAccessToken(id int64) bool {
-	if !d.testConnection() {
+func (d *MySQLOauthDB) DeleteAccessToken(tx dbtx.Transaction, id int64) bool {
+	var suc bool
+	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
 	var a []interface{}
 	a = append(a, id)
-	return d.DB.Delete(deleteAccessToken, a...)
+	if tx == nil {
+		suc = d.DB.Delete(deleteAccessToken, a...)
+	} else {
+		suc = tx.Delete(deleteAccessToken, a...)
+	}
+	return suc
 }
 
 func parseAccessTokenRow(foundRow *[]string) *odb.AccessToken {

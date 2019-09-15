@@ -28,7 +28,7 @@ import (
 
 //AddClientRedirectURI AddClientRedirectURI
 func (d *MySQLOauthDB) AddClientRedirectURI(tx dbtx.Transaction, ru *odb.ClientRedirectURI) (bool, int64) {
-	var suc = false
+	var suc bool
 	var id int64
 	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
@@ -78,7 +78,7 @@ func (d *MySQLOauthDB) GetClientRedirectURI(clientID int64, uri string) *odb.Cli
 
 //DeleteClientRedirectURI DeleteClientRedirectURI
 func (d *MySQLOauthDB) DeleteClientRedirectURI(tx dbtx.Transaction, id int64) bool {
-	var suc = false
+	var suc bool
 	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
@@ -94,7 +94,7 @@ func (d *MySQLOauthDB) DeleteClientRedirectURI(tx dbtx.Transaction, id int64) bo
 
 //DeleteClientAllRedirectURI DeleteClientAllRedirectURI
 func (d *MySQLOauthDB) DeleteClientAllRedirectURI(tx dbtx.Transaction, clientID int64) bool {
-	var suc = false
+	var suc bool
 	if tx == nil && !d.testConnection() {
 		d.DB.Connect()
 	}
