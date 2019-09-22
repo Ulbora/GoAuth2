@@ -74,12 +74,12 @@ func TestMySQLOauthDBACi_AddAuthorizationCode(t *testing.T) {
 	}
 }
 
-func TestMySQLOauthDBACi_DeleteAuthorizationCodeScope1(t *testing.T) {
-	res := odbAci.DeleteAuthorizationCode(cidAci, "1234")
-	if !res {
-		t.Fail()
-	}
-}
+// func TestMySQLOauthDBACi_DeleteAuthorizationCodeScope1(t *testing.T) {
+// 	res := odbAci.DeleteAuthorizationCode(cidAci, "1234")
+// 	if !res {
+// 		t.Fail()
+// 	}
+// }
 
 func TestMySQLOauthDBACi_AddAuthorizationCodeScope(t *testing.T) {
 
