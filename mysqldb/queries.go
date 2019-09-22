@@ -83,4 +83,14 @@ const (
 	updateAccessTokenNull = "UPDATE access_token SET token = ?, expires = ? WHERE id = ? "
 	getAccessToken        = "SELECT id, token, expires, refresh_token_id FROM access_token WHERE id = ? "
 	deleteAccessToken     = "DELETE FROM access_token WHERE id = ? "
+
+	//Auth Code
+	insertAuthCode           = "INSERT INTO authorization_code  (client_id, user_id, expires, access_token_id, randon_auth_code, already_used) values(?, ?, ?, ?, ?, ?) "
+	authorizationCodeGetByID = "SELECT authorization_code, client_id, user_id, expires,  access_token_id, randon_auth_code, already_used " +
+		"FROM authorization_code WHERE client_id = ? and user_id = ?"
+	deleteAuthCode = "DELETE FROM authorization_code WHERE client_id = ? and user_id = ?"
+
+	//Auth Code Scope
+	insertAuthCodeScope    = "INSERT INTO auth_code_scope  (scope, authorization_code) values(?, ?) "
+	deleteAllAuthCodeScope = "DELETE FROM auth_code_scope WHERE authorization_code = ?"
 )

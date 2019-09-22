@@ -91,3 +91,23 @@ type AccessToken struct {
 	Expires        time.Time
 	RefreshTokenID int64
 }
+
+//start on AuthCode here
+
+//AuthorizationCode AuthorizationCode
+type AuthorizationCode struct {
+	AuthorizationCode int64
+	ClientID          int64
+	UserID            int64
+	Expires           time.Time
+	AccessTokenID     int64
+	RandonAuthCode    string
+	AlreadyUsed       bool
+}
+
+//AuthCodeScope AuthCodeScope
+type AuthCodeScope struct {
+	ID                int64
+	Scope             string
+	AuthorizationCode int64
+}

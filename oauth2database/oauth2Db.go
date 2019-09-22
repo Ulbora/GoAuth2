@@ -76,8 +76,22 @@ type Oauth2DB interface {
 	GetRefreshToken(id int64) *RefreshToken
 	DeleteRefreshToken(tx dbtx.Transaction, id int64) bool
 
+	//Access Token
 	AddAccessToken(tx dbtx.Transaction, t *AccessToken) (bool, int64)
 	UpdateAccessToken(tx dbtx.Transaction, t *AccessToken) bool
 	GetAccessToken(id int64) *AccessToken
 	DeleteAccessToken(tx dbtx.Transaction, id int64) bool
+
+	//start on auth code
+
+	//AuthorizationCode
+	AddAuthorizationCode(code *AuthorizationCode, at *AccessToken, rt *RefreshToken, scopeList *[]string) (bool, int64)
+	//UpdateAuthorizationCode(code *AuthorizationCode) bool
+	//UpdateAuthorizationCodeAndToken(code *AuthorizationCode, at *AccessToken) bool
+	GetAuthorizationCode(clientID int64, userID string) *AuthorizationCode
+	//GetAuthorizationCodeByCode(code string) *AuthorizationCode
+	//GetAuthorizationCodeByScope(clientID int64, userID int64, scope string) *AuthorizationCode
+	DeleteAuthorizationCode(clientID int64, userID string) bool
+
+
 }
