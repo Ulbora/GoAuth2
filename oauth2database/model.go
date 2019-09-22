@@ -103,6 +103,7 @@ type AuthorizationCode struct {
 	AccessTokenID     int64
 	RandonAuthCode    string
 	AlreadyUsed       bool
+	Scope             string
 }
 
 //AuthCodeScope AuthCodeScope

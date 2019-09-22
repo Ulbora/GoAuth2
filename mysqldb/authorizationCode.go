@@ -92,6 +92,41 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 	return suc, id
 }
 
+//UpdateAuthorizationCode UpdateAuthorizationCode
+func (d *MySQLOauthDB) UpdateAuthorizationCode(code *odb.AuthorizationCode) bool {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, code.RandonAuthCode, code.AlreadyUsed, code.AuthorizationCode)
+	suc := d.DB.Update(updateAuthCode, a...)
+	return suc
+}
+
+//UpdateAuthorizationCodeAndToken UpdateAuthorizationCodeAndToken
+func (d *MySQLOauthDB) UpdateAuthorizationCodeAndToken(code *odb.AuthorizationCode, at *odb.AccessToken) bool {
+	var rtn bool
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	tx := d.DB.BeginTransaction()
+	res := d.UpdateAccessToken(tx, at)
+	if res {
+		var a []interface{}
+		a = append(a, code.Expires, code.AuthorizationCode)
+		suc := tx.Update(updateAuthCodeToken, a...)
+		if suc {
+			rtn = true
+			tx.Commit()
+		} else {
+			tx.Rollback()
+		}
+	} else {
+		tx.Rollback()
+	}
+	return rtn
+}
+
 //GetAuthorizationCode GetAuthorizationCode
 func (d *MySQLOauthDB) GetAuthorizationCode(clientID int64, userID string) *[]odb.AuthorizationCode {
 	if !d.testConnection() {
@@ -100,7 +135,7 @@ func (d *MySQLOauthDB) GetAuthorizationCode(clientID int64, userID string) *[]od
 	var rtn []odb.AuthorizationCode
 	var a []interface{}
 	a = append(a, clientID, userID)
-	rows := d.DB.GetList(authorizationCodeGetByID, a...)
+	rows := d.DB.GetList(getByAuthorizationCodeClientUser, a...)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
 		for r := range foundRows {
@@ -114,6 +149,61 @@ func (d *MySQLOauthDB) GetAuthorizationCode(clientID int64, userID string) *[]od
 	return &rtn
 }
 
+//GetAuthorizationCodeByScope GetAuthorizationCodeByScope
+func (d *MySQLOauthDB) GetAuthorizationCodeByScope(clientID int64, userID string, scope string) *[]odb.AuthorizationCode {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var rtn []odb.AuthorizationCode
+	var a []interface{}
+	a = append(a, clientID, userID, scope)
+	rows := d.DB.GetList(getAuthorizationCodeByClientUserScope, a...)
+	fmt.Println("rows in getbyscope: ", rows)
+	if rows != nil && len(rows.Rows) != 0 {
+		foundRows := rows.Rows
+		fmt.Println("foundRows in getbyscope: ", foundRows)
+		for r := range foundRows {
+			foundRow := foundRows[r]
+			fmt.Println("foundRow in getbyscope: ", foundRow)
+			ac, err := strconv.ParseInt((foundRow)[0], 10, 64)
+			if err == nil {
+				cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
+				if err == nil {
+					var rtnc odb.AuthorizationCode
+					rtnc.AuthorizationCode = ac
+					rtnc.ClientID = cid
+					rtnc.UserID = userID
+					rtnc.Scope = (foundRow)[2]
+					//rtnc.Expires = cTime
+					//rtnc.AccessTokenID = atid
+					rtnc.RandonAuthCode = (foundRow)[3]
+					rtnc.AlreadyUsed, _ = strconv.ParseBool((foundRow)[4])
+					fmt.Println("rtnc in getbyscope: ", rtnc)
+					rtn = append(rtn, rtnc)
+				}
+			}
+			//rowContent := parseAuthCodeRow(&foundRow)
+
+		}
+	}
+	// rtn := parseAuthCodeRow(&row.Row)
+	fmt.Println("authCode in scope: ", rtn)
+	return &rtn
+}
+
+//GetAuthorizationCodeByCode GetAuthorizationCodeByCode
+func (d *MySQLOauthDB) GetAuthorizationCodeByCode(code string) *odb.AuthorizationCode {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var a []interface{}
+	a = append(a, code)
+	row := d.DB.Get(getAuthorizationCodeByCode, a...)
+	rtn := parseAuthCodeRow(&row.Row)
+	fmt.Println("authCode: ", rtn)
+	return rtn
+}
+
 //DeleteAuthorizationCode DeleteAuthorizationCode
 func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bool {
 	var suc bool
@@ -122,6 +212,7 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 	}
 	//make this a list call
 	acodeList := d.GetAuthorizationCode(clientID, userID)
+	fmt.Println("auth code list: ", acodeList)
 	for _, acode := range *acodeList {
 		if acode.AuthorizationCode > 0 {
 			at := d.GetAccessToken(acode.AccessTokenID)
@@ -170,6 +261,7 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 }
 
 func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
+	fmt.Println("foundRow in parseAuthCodeRow: ", foundRow)
 	var rtn odb.AuthorizationCode
 	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 	if err == nil {

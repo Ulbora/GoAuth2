@@ -66,7 +66,7 @@ func TestMySQLOauthDBACi_AddAuthorizationCode(t *testing.T) {
 	ac.ClientID = cidAci
 	ac.UserID = "1234"
 	ac.Expires = time.Now()
-	ac.RandonAuthCode = "13445"
+	ac.RandonAuthCode = "13445a"
 
 	res, id := odbAci.AddAuthorizationCode(&ac, &at, &rt, nil)
 	if !res || id < 1 {
@@ -94,7 +94,7 @@ func TestMySQLOauthDBACi_AddAuthorizationCodeScope(t *testing.T) {
 	ac.ClientID = cidAci
 	ac.UserID = "1234"
 	ac.Expires = time.Now()
-	ac.RandonAuthCode = "13445"
+	ac.RandonAuthCode = "13445b"
 	var scope = []string{"test1", "test2"}
 
 	res, id := odbAci.AddAuthorizationCode(&ac, &at, &rt, &scope)
@@ -111,6 +111,72 @@ func TestMySQLOauthDBACi_AddAuthCodeRevolk(t *testing.T) {
 	res, id := odbAci.AddAuthCodeRevolk(nil, &rv)
 	fmt.Println("revolk id: ", id)
 	if !res {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBACi_UpdateAuthCode(t *testing.T) {
+	var ac odb.AuthorizationCode
+	ac.RandonAuthCode = "13445bb"
+	ac.AlreadyUsed = true
+	ac.AuthorizationCode = spID2Aci
+	res := odbAci.UpdateAuthorizationCode(&ac)
+	if !res {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBACi_UpdateAuthCodeToken(t *testing.T) {
+	ac := odbAci.GetAuthorizationCodeByCode("13445bb")
+
+	fmt.Println("auth code in update token: ", ac)
+	var rt odb.RefreshToken
+	rt.Token = "somereftoken2upd"
+	rfs, rfid := odbAci.AddRefreshToken(nil, &rt)
+	fmt.Println("new refresh token: ", rfs)
+	if rfs {
+		at := odbAci.GetAccessToken(ac.AccessTokenID)
+		fmt.Println("at in update token: ", at)
+		at.Token = "someacctokenupd"
+		at.Expires = time.Now()
+		at.RefreshTokenID = rfid
+		tt := time.Now()
+		ac.Expires = tt
+		res := odbAci.UpdateAuthorizationCodeAndToken(ac, at)
+		fmt.Println("auth code update token suc: ", res)
+		ac2 := odbAci.GetAuthorizationCodeByCode("13445bb")
+		fmt.Println("auth2 code in update token: ", ac2)
+		fmt.Println("tt in update token: ", tt.UTC())
+		fmt.Println("expires in update token: ", ac2.Expires)
+		at2 := odbAci.GetAccessToken(ac.AccessTokenID)
+		fmt.Println("at2 in update token: ", at2)
+		if !res || at2.Token != "someacctokenupd" {
+			t.Fail()
+		}
+	}
+
+}
+
+func TestMySQLOauthDBACi_GetAuthCodeByCode(t *testing.T) {
+	res := odbAci.GetAuthorizationCodeByCode("13445bb")
+	fmt.Println("auth code in get: ", res)
+	if res == nil || res.RandonAuthCode != "13445bb" || res.AlreadyUsed != true {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBACi_GetAuthCodeByClient(t *testing.T) {
+	res := odbAci.GetAuthorizationCode(cidAci, "1234")
+	fmt.Println("auth code in get by client: ", res)
+	if len(*res) < 1 {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBACi_GetAuthCodeByScope(t *testing.T) {
+	res := odbAci.GetAuthorizationCodeByScope(cidAci, "1234", "test1")
+	fmt.Println("auth code in get by scope: ", res)
+	if len(*res) < 1 || (*res)[0].Scope != "test1" {
 		t.Fail()
 	}
 }

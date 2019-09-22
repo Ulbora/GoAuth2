@@ -85,9 +85,20 @@ const (
 	deleteAccessToken     = "DELETE FROM access_token WHERE id = ? "
 
 	//Auth Code
-	insertAuthCode           = "INSERT INTO authorization_code  (client_id, user_id, expires, access_token_id, randon_auth_code, already_used) values(?, ?, ?, ?, ?, ?) "
-	authorizationCodeGetByID = "SELECT authorization_code, client_id, user_id, expires,  access_token_id, randon_auth_code, already_used " +
+	insertAuthCode = "INSERT INTO authorization_code  (client_id, user_id, expires, access_token_id, randon_auth_code, already_used) values(?, ?, ?, ?, ?, ?) "
+	updateAuthCode = "UPDATE authorization_code SET randon_auth_code = ?, already_used = ? " +
+		"WHERE authorization_code = ? "
+	updateAuthCodeToken = "UPDATE authorization_code SET expires = ? " +
+		"WHERE authorization_code = ? "
+
+	getByAuthorizationCodeClientUser = "SELECT authorization_code, client_id, user_id, expires,  access_token_id, randon_auth_code, already_used " +
 		"FROM authorization_code WHERE client_id = ? and user_id = ?"
+	getAuthorizationCodeByCode = "SELECT authorization_code, client_id, user_id, expires,  access_token_id, randon_auth_code, already_used " +
+		"FROM authorization_code WHERE randon_auth_code = ?"
+	getAuthorizationCodeByClientUserScope = "SELECT a.authorization_code, a.client_id, s.scope, a.randon_auth_code, a.already_used " +
+		"FROM authorization_code a inner join auth_code_scope s " +
+		"on a.authorization_code = s.authorization_code " +
+		"WHERE a.client_id = ? and a.user_id = ? and s.scope = ?"
 	deleteAuthCode = "DELETE FROM authorization_code WHERE client_id = ? and user_id = ?"
 
 	//Auth Code Scope

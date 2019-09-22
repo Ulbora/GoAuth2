@@ -86,11 +86,11 @@ type Oauth2DB interface {
 
 	//AuthorizationCode
 	AddAuthorizationCode(code *AuthorizationCode, at *AccessToken, rt *RefreshToken, scopeList *[]string) (bool, int64)
-	//UpdateAuthorizationCode(code *AuthorizationCode) bool
-	//UpdateAuthorizationCodeAndToken(code *AuthorizationCode, at *AccessToken) bool
+	UpdateAuthorizationCode(code *AuthorizationCode) bool
+	UpdateAuthorizationCodeAndToken(code *AuthorizationCode, at *AccessToken) bool
 	GetAuthorizationCode(clientID int64, userID string) *[]AuthorizationCode
-	//GetAuthorizationCodeByCode(code string) *AuthorizationCode
-	//GetAuthorizationCodeByScope(clientID int64, userID int64, scope string) *AuthorizationCode
+	GetAuthorizationCodeByCode(code string) *AuthorizationCode
+	GetAuthorizationCodeByScope(clientID int64, userID string, scope string) *[]AuthorizationCode
 	DeleteAuthorizationCode(clientID int64, userID string) bool
 
 	//add authcode revolk here
