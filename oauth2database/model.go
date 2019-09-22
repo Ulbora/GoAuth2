@@ -98,7 +98,7 @@ type AccessToken struct {
 type AuthorizationCode struct {
 	AuthorizationCode int64
 	ClientID          int64
-	UserID            int64
+	UserID            string
 	Expires           time.Time
 	AccessTokenID     int64
 	RandonAuthCode    string
@@ -109,5 +109,11 @@ type AuthorizationCode struct {
 type AuthCodeScope struct {
 	ID                int64
 	Scope             string
+	AuthorizationCode int64
+}
+
+//AuthCodeRevolk AuthCodeRevolk
+type AuthCodeRevolk struct {
+	ID                int64
 	AuthorizationCode int64
 }

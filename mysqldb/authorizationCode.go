@@ -48,7 +48,6 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 	} else {
 		cont = true
 	}
-
 	if cont {
 		//at.RefreshTokenID = rtID
 		atsuc, acID := d.AddAccessToken(tx, at)
@@ -133,23 +132,28 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 			}
 			tx := d.DB.BeginTransaction()
 			// authCodeRevokeProcessor.deleteAuthCodeRevoke do this
-			sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
-			fmt.Println("delete scope: ", sdel)
-			// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
-			if sdel {
-				var a []interface{}
-				a = append(a, clientID, userID)
-				acdel := tx.Delete(deleteAuthCode, a...)
-				if acdel {
-					atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
-					if atdel {
-						var cont = true
-						if rtid > 0 {
-							cont = d.DeleteRefreshToken(tx, rtid)
-						}
-						if cont {
-							suc = true
-							tx.Commit()
+			rvkDel := d.DeleteAuthCodeRevolk(tx, acode.AuthorizationCode)
+			if rvkDel {
+				sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
+				fmt.Println("delete scope: ", sdel)
+				// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
+				if sdel {
+					var a []interface{}
+					a = append(a, clientID, userID)
+					acdel := tx.Delete(deleteAuthCode, a...)
+					if acdel {
+						atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
+						if atdel {
+							var cont = true
+							if rtid > 0 {
+								cont = d.DeleteRefreshToken(tx, rtid)
+							}
+							if cont {
+								suc = true
+								tx.Commit()
+							} else {
+								tx.Rollback()
+							}
 						} else {
 							tx.Rollback()
 						}
@@ -159,8 +163,6 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 				} else {
 					tx.Rollback()
 				}
-			} else {
-				tx.Rollback()
 			}
 		}
 	}
@@ -175,23 +177,23 @@ func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
 		cid, err := strconv.ParseInt((*foundRow)[1], 10, 64)
 		if err == nil {
 			// rtn.ClientID = cid
-			uid, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			//uid, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			//if err == nil {
+			// rtn.UserID = uid
+			cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
 			if err == nil {
-				// rtn.UserID = uid
-				cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
+				atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
 				if err == nil {
-					atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
-					if err == nil {
-						rtn.AuthorizationCode = id
-						rtn.ClientID = cid
-						rtn.UserID = uid
-						rtn.Expires = cTime
-						rtn.AccessTokenID = atid
-						rtn.RandonAuthCode = (*foundRow)[5]
-						rtn.AlreadyUsed, _ = strconv.ParseBool((*foundRow)[6])
-					}
+					rtn.AuthorizationCode = id
+					rtn.ClientID = cid
+					rtn.UserID = (*foundRow)[2]
+					rtn.Expires = cTime
+					rtn.AccessTokenID = atid
+					rtn.RandonAuthCode = (*foundRow)[5]
+					rtn.AlreadyUsed, _ = strconv.ParseBool((*foundRow)[6])
 				}
 			}
+			//}
 		}
 	}
 	return &rtn

@@ -93,4 +93,9 @@ const (
 	//Auth Code Scope
 	insertAuthCodeScope    = "INSERT INTO auth_code_scope  (scope, authorization_code) values(?, ?) "
 	deleteAllAuthCodeScope = "DELETE FROM auth_code_scope WHERE authorization_code = ?"
+
+	//Auth Code Revolk
+	insertAuthCodeRevolk = "INSERT INTO auth_code_revoke  (authorization_code) values(?) "
+	getAuthCodeRevolk    = "SELECT id, authorization_code FROM auth_code_revoke WHERE authorization_code = ?"
+	deleteAuthCodeRevolk = "DELETE FROM auth_code_revoke WHERE authorization_code = ?"
 )

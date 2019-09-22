@@ -64,7 +64,7 @@ func TestMySQLOauthDBACi_AddAuthorizationCode(t *testing.T) {
 
 	var ac odb.AuthorizationCode
 	ac.ClientID = cidAci
-	ac.UserID = 1234
+	ac.UserID = "1234"
 	ac.Expires = time.Now()
 	ac.RandonAuthCode = "13445"
 
@@ -92,7 +92,7 @@ func TestMySQLOauthDBACi_AddAuthorizationCodeScope(t *testing.T) {
 
 	var ac odb.AuthorizationCode
 	ac.ClientID = cidAci
-	ac.UserID = 1234
+	ac.UserID = "1234"
 	ac.Expires = time.Now()
 	ac.RandonAuthCode = "13445"
 	var scope = []string{"test1", "test2"}
@@ -105,7 +105,17 @@ func TestMySQLOauthDBACi_AddAuthorizationCodeScope(t *testing.T) {
 	}
 }
 
-func TestMySQLOauthDBACi_DeleteAuthorizationCodeScope2(t *testing.T) {
+func TestMySQLOauthDBACi_AddAuthCodeRevolk(t *testing.T) {
+	var rv odb.AuthCodeRevolk
+	rv.AuthorizationCode = spID2Aci
+	res, id := odbAci.AddAuthCodeRevolk(nil, &rv)
+	fmt.Println("revolk id: ", id)
+	if !res {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBACi_DeleteAuthorizationCode(t *testing.T) {
 	res := odbAci.DeleteAuthorizationCode(cidAci, "1234")
 	if !res {
 		t.Fail()
