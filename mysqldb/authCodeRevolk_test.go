@@ -3,6 +3,7 @@ package mysqldb
 import (
 	"fmt"
 	"testing"
+
 	//"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -14,6 +15,7 @@ var dbAcRv db.Database
 var odbAcRv odb.Oauth2DB
 var cidAcRv int64 = 1
 var acIDAcRv int64 = 2
+
 //var spID2AcRv int64
 
 func TestMySQLOauthDBAcRv_Connect(t *testing.T) {
@@ -25,20 +27,16 @@ func TestMySQLOauthDBAcRv_Connect(t *testing.T) {
 	mydb.Database = "ulbora_oauth2_server"
 	dbAcRv = &mydb
 
-
 	var mTestRow db.DbRow
 	mTestRow.Row = []string{}
 	mydb.MockTestRow = &mTestRow
-
 
 	var getRow db.DbRow
 	getRow.Row = []string{"1", "2"}
 	mydb.MockRow1 = &getRow
 
-
 	mydb.MockInsertSuccess1 = true
 	mydb.MockInsertID1 = 1
-
 
 	mydb.MockDeleteSuccess1 = true
 
@@ -104,7 +102,6 @@ func TestMySQLOauthDBAcRv_AddAuthCodeRevolk(t *testing.T) {
 	}
 }
 
-
 func TestMySQLOauthDBAcRv_AddAuthCodeRevolkTx(t *testing.T) {
 
 	var mtx mdb.MyDbTxMock
@@ -115,7 +112,6 @@ func TestMySQLOauthDBAcRv_AddAuthCodeRevolkTx(t *testing.T) {
 	var mTestRow db.DbRow
 	mTestRow.Row = []string{}
 	mdbx.MockTestRow = &mTestRow
-
 
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB

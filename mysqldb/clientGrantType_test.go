@@ -22,14 +22,12 @@ func TestMySQLOauthDBCgt_ConnectClientGrantType(t *testing.T) {
 	mydb.Database = "ulbora_oauth2_server"
 	dbCgt = &mydb
 
-
 	var mTestRow db.DbRow
 	mTestRow.Row = []string{}
 	mydb.MockTestRow = &mTestRow
 
 	mydb.MockInsertSuccess1 = true
 	mydb.MockInsertID1 = 1
-
 
 	var rows [][]string
 	row1 := []string{"1", "tester5", "1"}
@@ -39,7 +37,6 @@ func TestMySQLOauthDBCgt_ConnectClientGrantType(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	mydb.MockDeleteSuccess1 = true
-
 
 	var moadb MySQLOauthDB
 	moadb.DB = dbCgt

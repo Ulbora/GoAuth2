@@ -4,11 +4,12 @@ package mysqldb
 
 import (
 	"fmt"
+	"testing"
+	"time"
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
-	"testing"
-	"time"
 )
 
 var dbAti db.Database
@@ -78,7 +79,7 @@ func TestMySQLOauthDBAcTokeni_DeleteAccessToken(t *testing.T) {
 func TestMySQLOauthDBAcTokeni_AddRefreshToken(t *testing.T) {
 	var tk odb.RefreshToken
 	tk.Token = "somereftoken"
-	res, id := odbAti.AddRefreshToken(nil,&tk)
+	res, id := odbAti.AddRefreshToken(nil, &tk)
 	if !res || id <= 0 {
 		t.Fail()
 	} else {
