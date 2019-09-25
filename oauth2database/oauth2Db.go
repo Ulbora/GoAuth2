@@ -103,5 +103,7 @@ type Oauth2DB interface {
 
 	//start here
 	//grant types
-	//AddClientGrantType(gt *ClientGrantType) (bool, int64)
+	AddClientGrantType(gt *ClientGrantType) (bool, int64)
+	GetClientGrantTypeList(cid int64) *[]ClientGrantType
+	DeleteClientGrantType(id int64) bool
 }

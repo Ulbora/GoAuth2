@@ -113,5 +113,7 @@ const (
 	deleteAuthCodeRevolk = "DELETE FROM auth_code_revoke WHERE authorization_code = ?"
 
 	//Grant Types
-	insertClientGrantType = "INSERT INTO client_grant_type  (grant_type, client_id) values(?, ?) "
+	insertClientGrantType  = "INSERT INTO client_grant_type  (grant_type, client_id) values(?, ?) "
+	getClientGrantTypeList = "SELECT * FROM client_grant_type WHERE client_id = ?"
+	deleteClientGrantType  = "DELETE FROM client_grant_type WHERE id = ?"
 )
