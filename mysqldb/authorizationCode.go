@@ -224,6 +224,7 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 			tx := d.DB.BeginTransaction()
 			// authCodeRevokeProcessor.deleteAuthCodeRevoke do this
 			rvkDel := d.DeleteAuthCodeRevolk(tx, acode.AuthorizationCode)
+			fmt.Println("delete refresh token: ", rvkDel)
 			if rvkDel {
 				sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
 				fmt.Println("delete scope: ", sdel)
@@ -232,12 +233,15 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 					var a []interface{}
 					a = append(a, clientID, userID)
 					acdel := tx.Delete(deleteAuthCode, a...)
+					fmt.Println("delete authCode: ", acdel)
 					if acdel {
 						atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
+						fmt.Println("delete AccessToken: ", atdel)
 						if atdel {
 							var cont = true
 							if rtid > 0 {
 								cont = d.DeleteRefreshToken(tx, rtid)
+								fmt.Println("delete RefreshToken: ", cont)
 							}
 							if cont {
 								suc = true
@@ -273,6 +277,7 @@ func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
 			//if err == nil {
 			// rtn.UserID = uid
 			cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
+			fmt.Println("time error:", err)
 			if err == nil {
 				atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
 				if err == nil {

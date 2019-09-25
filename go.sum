@@ -10,6 +10,8 @@ github.com/Ulbora/dbinterface_mysql v1.0.3 h1:A4NZozFMG+OfAoRylw+sBkoqTEzQlSvsCd
 github.com/Ulbora/dbinterface_mysql v1.0.3/go.mod h1:8XA1eoibXMbJNIfL5mvl7b77FZPSRewInYCNFRC65AQ=
 github.com/Ulbora/dbinterface_mysql v1.0.4 h1:LlpHjiE/dL+S/tiz6ZcXsAOwE2Ef6HyGboMFXhkO/Kc=
 github.com/Ulbora/dbinterface_mysql v1.0.4/go.mod h1:8XA1eoibXMbJNIfL5mvl7b77FZPSRewInYCNFRC65AQ=
+github.com/Ulbora/dbinterface_mysql v1.0.5 h1:tGPEBie+u4V6ob71ocy3e9XQ+mWkCCs8NbBvN8AzjoI=
+github.com/Ulbora/dbinterface_mysql v1.0.5/go.mod h1:8XA1eoibXMbJNIfL5mvl7b77FZPSRewInYCNFRC65AQ=
 github.com/go-sql-driver/mysql v1.4.1 h1:g24URVg0OFbNUTx9qqY1IRZ9D9z3iPyi5zKhQZpNwpA=
 github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
@@ -41,3 +43,5 @@ google.golang.org/appengine v1.4.0 h1:/wp5JvzpHIxhs/dumFmF7BXTf3Z+dd4uXta4kVyO50
 google.golang.org/appengine v1.4.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.6.2 h1:j8RI1yW0SkI+paT6uGwMlrMI/6zwYA6/CFil8rxOzGI=
 google.golang.org/appengine v1.6.2/go.mod h1:i06prIuMbXzDqacNJfV5OdTW448YApPu5ww/cMBSeb0=
+google.golang.org/appengine v1.6.3 h1:hvZejVcIxAKHR8Pq2gXaDggf6CWT1QEqO+JEBeOKCG8=
+google.golang.org/appengine v1.6.3/go.mod h1:i06prIuMbXzDqacNJfV5OdTW448YApPu5ww/cMBSeb0=

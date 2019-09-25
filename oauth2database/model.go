@@ -118,3 +118,10 @@ type AuthCodeRevolk struct {
 	ID                int64
 	AuthorizationCode int64
 }
+
+//ClientGrantType ClientGrantType
+type ClientGrantType struct {
+	ID        int64
+	GrantType string
+	ClientID  int64
+}

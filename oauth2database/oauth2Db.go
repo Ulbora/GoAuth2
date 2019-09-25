@@ -93,8 +93,15 @@ type Oauth2DB interface {
 	GetAuthorizationCodeByScope(clientID int64, userID string, scope string) *[]AuthorizationCode
 	DeleteAuthorizationCode(clientID int64, userID string) bool
 
-	//add authcode revolk here
+	//authcode revolk
 	AddAuthCodeRevolk(tx dbtx.Transaction, rv *AuthCodeRevolk) (bool, int64)
 	GetAuthCodeRevolk(id int64) *AuthCodeRevolk
 	DeleteAuthCodeRevolk(tx dbtx.Transaction, ac int64) bool
+
+	//Auth code scope
+	GetAuthorizationCodeScopeList(ac int64) *[]AuthCodeScope
+
+	//start here
+	//grant types
+	//AddClientGrantType(gt *ClientGrantType) (bool, int64)
 }

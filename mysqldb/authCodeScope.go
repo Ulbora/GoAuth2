@@ -21,6 +21,8 @@ package mysqldb
 */
 
 import (
+	"strconv"
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	dbtx "github.com/Ulbora/dbinterface"
 )
@@ -35,6 +37,35 @@ func (d *MySQLOauthDB) AddAuthCodeScope(tx dbtx.Transaction, as *odb.AuthCodeSco
 		suc, id = tx.Insert(insertAuthCodeScope, a...)
 	}
 	return suc, id
+}
+
+//GetAuthorizationCodeScopeList GetAuthorizationCodeScopeList
+func (d *MySQLOauthDB) GetAuthorizationCodeScopeList(ac int64) *[]odb.AuthCodeScope {
+	if !d.testConnection() {
+		d.DB.Connect()
+	}
+	var rtn []odb.AuthCodeScope
+	var a []interface{}
+	a = append(a, ac)
+	rows := d.DB.GetList(getAuthorizationCodeScopeList, a...)
+	if rows != nil && len(rows.Rows) != 0 {
+		foundRows := rows.Rows
+		for r := range foundRows {
+			foundRow := foundRows[r]
+			var acs odb.AuthCodeScope
+			id, err := strconv.ParseInt((foundRow)[0], 10, 64)
+			if err == nil {
+				ac, err := strconv.ParseInt((foundRow)[2], 10, 64)
+				if err == nil {
+					acs.ID = id
+					acs.Scope = (foundRow)[1]
+					acs.AuthorizationCode = ac
+				}
+			}
+			rtn = append(rtn, acs)
+		}
+	}
+	return &rtn
 }
 
 //DeleteAuthCodeScopeList DeleteAuthCodeScopeList

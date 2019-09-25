@@ -102,11 +102,16 @@ const (
 	deleteAuthCode = "DELETE FROM authorization_code WHERE client_id = ? and user_id = ?"
 
 	//Auth Code Scope
-	insertAuthCodeScope    = "INSERT INTO auth_code_scope  (scope, authorization_code) values(?, ?) "
+	insertAuthCodeScope           = "INSERT INTO auth_code_scope  (scope, authorization_code) values(?, ?) "
+	getAuthorizationCodeScopeList = "SELECT id, scope, authorization_code " +
+		"FROM auth_code_scope WHERE authorization_code = ?"
 	deleteAllAuthCodeScope = "DELETE FROM auth_code_scope WHERE authorization_code = ?"
 
 	//Auth Code Revolk
 	insertAuthCodeRevolk = "INSERT INTO auth_code_revoke  (authorization_code) values(?) "
 	getAuthCodeRevolk    = "SELECT id, authorization_code FROM auth_code_revoke WHERE authorization_code = ?"
 	deleteAuthCodeRevolk = "DELETE FROM auth_code_revoke WHERE authorization_code = ?"
+
+	//Grant Types
+	insertClientGrantType = "INSERT INTO client_grant_type  (grant_type, client_id) values(?, ?) "
 )
