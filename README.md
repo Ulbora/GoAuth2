@@ -8,6 +8,8 @@ An Oauth2 Server written in Golang and licensed under the GPL V3 license.
 GoAuth2 is an Oauth2 server implementation written in Golang. Currently authorization code, 
 implicit, and client credentials grant, and password grant types are supported.
 
+GoAuth2 issues an enhanced JWT token that can be used to secure individual REST endpoints for users using roles. REST endpoints can be coded to validate the JWT token using the user's role.
+
 ## Authorization Code Grant Type
 
  * Authorize

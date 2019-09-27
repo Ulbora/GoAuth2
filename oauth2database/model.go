@@ -125,3 +125,21 @@ type ClientGrantType struct {
 	GrantType string
 	ClientID  int64
 }
+
+//ImplicitGrant ImplicitGrant
+type ImplicitGrant struct {
+	ID            int64
+	ClientID      int64
+	UserID        string
+	AccessTokenID int64
+	Scope         string
+}
+
+//here add implicit grant scope
+
+//ImplicitScope ImplicitScope
+type ImplicitScope struct {
+	ID              int64
+	Scope           string
+	ImplicitGrantID int64
+}

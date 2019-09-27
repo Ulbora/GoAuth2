@@ -99,7 +99,8 @@ const (
 		"FROM authorization_code a inner join auth_code_scope s " +
 		"on a.authorization_code = s.authorization_code " +
 		"WHERE a.client_id = ? and a.user_id = ? and s.scope = ?"
-	deleteAuthCode = "DELETE FROM authorization_code WHERE client_id = ? and user_id = ?"
+	deleteAuthCode       = "DELETE FROM authorization_code WHERE client_id = ? and user_id = ?"
+	deleteAuthCodeByCode = "DELETE FROM authorization_code WHERE  authorization_code = ?"
 
 	//Auth Code Scope
 	insertAuthCodeScope           = "INSERT INTO auth_code_scope  (scope, authorization_code) values(?, ?) "
@@ -116,4 +117,21 @@ const (
 	insertClientGrantType  = "INSERT INTO client_grant_type  (grant_type, client_id) values(?, ?) "
 	getClientGrantTypeList = "SELECT * FROM client_grant_type WHERE client_id = ?"
 	deleteClientGrantType  = "DELETE FROM client_grant_type WHERE id = ?"
+
+	//Implicit Grant
+	insertImplicitGrant = "INSERT INTO implicit_grant  (client_id, user_id, access_token_id) values(?, ?, ?) "
+	getImplicitGrant    = "SELECT id, client_id, user_id, access_token_id " +
+		"FROM implicit_grant WHERE client_id = ? and user_id = ? "
+	getImplicitGrantByScope = "SELECT i.id, i.client_id, s.scope, i.access_token_id " +
+		"FROM implicit_grant i inner join implicit_scope s " +
+		"on i.id = s.implicit_grant_id " +
+		"WHERE i.client_id = ? and i.user_id = ? and s.scope = ?"
+	deleteImplicitGrant     = "DELETE FROM implicit_grant WHERE client_id = ? and user_id = ? "
+	deleteImplicitGrantByID = "DELETE FROM implicit_grant WHERE id = ? "
+
+	//Implicit Scope
+	insertImplicitScope  = "INSERT INTO implicit_scope  (scope, implicit_grant_id) values(?, ?) "
+	getImplicitScopeList = "SELECT id, scope, implicit_grant_id " +
+		"FROM implicit_scope WHERE implicit_grant_id = ?"
+	deleteImplicitScope = "DELETE FROM implicit_scope WHERE implicit_grant_id = ?"
 )

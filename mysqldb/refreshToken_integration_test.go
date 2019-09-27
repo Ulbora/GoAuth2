@@ -4,10 +4,11 @@ package mysqldb
 
 import (
 	"fmt"
+	"testing"
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
-	"testing"
 )
 
 var dbRti db.Database
@@ -63,7 +64,7 @@ func TestMySQLOauthDBReTokeni_GetRefreshToken(t *testing.T) {
 }
 
 func TestMySQLOauthDBReTokeni_DeleteRefreshToken(t *testing.T) {
-	res := odbRti.DeleteRefreshToken(nil,idRti)
+	res := odbRti.DeleteRefreshToken(nil, idRti)
 	fmt.Println("del ref token: ", res)
 	if !res {
 		t.Fail()

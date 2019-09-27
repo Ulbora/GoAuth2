@@ -72,6 +72,7 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 						fmt.Println("scope res: ", ssuc)
 						fmt.Println("scope id: ", sid)
 						if !ssuc {
+							fmt.Println("scope failed authcode: ", ssuc)
 							scSuc = false
 						}
 					}
@@ -80,6 +81,8 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 					suc = true
 					tx.Commit()
 				} else {
+					suc = false
+					fmt.Println("scope failed authcode rolling back: ", scSuc)
 					tx.Rollback()
 				}
 			} else {
@@ -231,8 +234,10 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 				// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
 				if sdel {
 					var a []interface{}
-					a = append(a, clientID, userID)
-					acdel := tx.Delete(deleteAuthCode, a...)
+					//a = append(a, clientID, userID)
+					//acdel := tx.Delete(deleteAuthCode, a...)
+					a = append(a, acode.AuthorizationCode)
+					acdel := tx.Delete(deleteAuthCodeByCode, a...)
 					fmt.Println("delete authCode: ", acdel)
 					if acdel {
 						atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
@@ -258,6 +263,8 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 				} else {
 					tx.Rollback()
 				}
+			} else {
+				tx.Rollback()
 			}
 		}
 	}

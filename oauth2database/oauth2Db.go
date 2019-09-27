@@ -101,9 +101,19 @@ type Oauth2DB interface {
 	//Auth code scope
 	GetAuthorizationCodeScopeList(ac int64) *[]AuthCodeScope
 
-	//start here
 	//grant types
 	AddClientGrantType(gt *ClientGrantType) (bool, int64)
 	GetClientGrantTypeList(cid int64) *[]ClientGrantType
 	DeleteClientGrantType(id int64) bool
+
+	//start here
+
+	//implicit grant
+	AddImplicitGrant(ig *ImplicitGrant, at *AccessToken, scopeList *[]string) (bool, int64)
+	GetImplicitGrant(clientID int64, userID string) *[]ImplicitGrant
+	GetImplicitGrantByScope(clientID int64, userID string, scope string) *[]ImplicitGrant
+	DeleteImplicitGrant(clientID int64, userID string) bool
+
+	//implicit grant scope
+	GetImplicitGrantScopeList(ig int64) *[]ImplicitScope
 }
