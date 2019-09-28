@@ -32,26 +32,6 @@ func TestMySQLOauthDBPg_Connect(t *testing.T) {
 	dbPg.Connect()
 }
 
-// func TestMySQLOauthDBPg_AddClientNullUri(t *testing.T) {
-// 	var c odb.Client
-// 	c.Secret = "12345"
-// 	c.Name = "tester"
-// 	c.Email = "bob@bob.com"
-// 	c.WebSite = "www.bob.com"
-// 	c.Enabled = true
-// 	c.Paid = false
-
-// 	fmt.Println("before db add")
-// 	res, id := odbPg.AddClient(&c, nil)
-// 	fmt.Println("client add res: ", res)
-// 	fmt.Println("client id: ", id)
-// 	if !res || id == 0 {
-// 		t.Fail()
-// 	} else {
-// 		cidPg = id
-// 	}
-// }
-
 func TestMySQLOauthDBPg_AddPasswordGrant(t *testing.T) {
 	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"
@@ -368,7 +348,6 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail1(t *testing.T) {
 	}
 }
 
-
 func TestMySQLOauthDBPg_DeletePasswordGrantFail2(t *testing.T) {
 	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"
@@ -417,7 +396,6 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail2(t *testing.T) {
 	}
 }
 
-
 func TestMySQLOauthDBPg_DeletePasswordGrantFail3(t *testing.T) {
 	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"
@@ -465,4 +443,3 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail3(t *testing.T) {
 		t.Fail()
 	}
 }
-

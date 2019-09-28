@@ -95,7 +95,7 @@ type Oauth2DB interface {
 
 	//authcode revolk
 	AddAuthCodeRevolk(tx dbtx.Transaction, rv *AuthCodeRevolk) (bool, int64)
-	GetAuthCodeRevolk(id int64) *AuthCodeRevolk
+	GetAuthCodeRevolk(ac int64) *AuthCodeRevolk
 	DeleteAuthCodeRevolk(tx dbtx.Transaction, ac int64) bool
 
 	//Auth code scope
@@ -120,4 +120,9 @@ type Oauth2DB interface {
 	AddPasswordGrant(pwg *PasswordGrant, at *AccessToken, rt *RefreshToken) (bool, int64)
 	GetPasswordGrant(clientID int64, userID string) *[]PasswordGrant
 	DeletePasswordGrant(clientID int64, userID string) bool
+
+	//credentials grant
+	AddCredentialsGrant(cg *CredentialsGrant, at *AccessToken) (bool, int64)
+	GetCredentialsGrant(clientID int64) *[]CredentialsGrant
+	DeleteCredentialsGrant(clientID int64) bool
 }

@@ -151,3 +151,10 @@ type PasswordGrant struct {
 	UserID        string
 	AccessTokenID int64
 }
+
+//CredentialsGrant CredentialsGrant
+type CredentialsGrant struct {
+	ID            int64
+	ClientID      int64
+	AccessTokenID int64
+}

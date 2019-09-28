@@ -140,4 +140,10 @@ const (
 	getPasswordGrant    = "SELECT id, client_id, user_id, access_token_id " +
 		"FROM password_grant WHERE client_id = ? and user_id = ?"
 	deletePasswordGrantByID = "DELETE FROM password_grant WHERE id = ? "
+
+	//Credentials Grant
+	insertCredentialsGrant = "INSERT INTO credentials_grant  (client_id, access_token_id) values(?, ?) "
+	getCredentialsGrant    = "SELECT id, client_id, access_token_id " +
+		"FROM credentials_grant WHERE client_id = ?"
+	deleteCredentialsGrant = "DELETE FROM credentials_grant WHERE id = ? "
 )
