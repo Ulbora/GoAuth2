@@ -269,6 +269,63 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeRefTokenFail(t *testing.T) {
 	}
 }
 
+func TestMySQLOauthDBAC_AddAuthorizationCodeAcTokenFail(t *testing.T) {
+
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbAc = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	mydb.MockInsertSuccess1 = true
+	mydb.MockInsertID1 = 0
+
+	mydb.MockInsertSuccess2 = false
+	mydb.MockInsertID2 = 0
+
+	mydb.MockInsertSuccess3 = false
+	mydb.MockInsertID3 = 1
+
+	mydb.MockInsertSuccess4 = true
+	mydb.MockInsertID4 = 1
+
+	var getRow db.DbRow
+	getRow.Row = []string{"1", "somereftoken2"}
+	mydb.MockRow1 = &getRow
+
+	mydb.MockUpdateSuccess1 = true
+
+	mydb.MockDeleteSuccess1 = true
+
+	var moadb MySQLOauthDB
+	moadb.DB = dbAc
+
+	odbAc = &moadb
+
+	var rt odb.RefreshToken
+	rt.Token = "aaaaa"
+
+	var at odb.AccessToken
+	at.Token = "someacctoken"
+	at.Expires = time.Now()
+
+	var ac odb.AuthorizationCode
+	ac.ClientID = cidAc
+	ac.UserID = "1234"
+	ac.Expires = time.Now()
+	ac.RandonAuthCode = "13445a"
+
+	res, id := odbAc.AddAuthorizationCode(&ac, &at, &rt, nil)
+	if res || id != 0 {
+		t.Fail()
+	}
+}
+
 // func TestMySQLOauthDBACi_DeleteAuthorizationCodeScope1(t *testing.T) {
 // 	res := odbAci.DeleteAuthorizationCode(cidAci, "1234")
 // 	if !res {

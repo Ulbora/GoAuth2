@@ -37,7 +37,7 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 	}
 	tx := d.DB.BeginTransaction()
 	var cont bool
-	if rt.Token != "" {
+	if rt != nil && rt.Token != "" {
 		rtsuc, rtID := d.AddRefreshToken(tx, rt)
 		fmt.Println("refTk res: ", rtsuc)
 		fmt.Println("refTk id: ", rtID)
@@ -82,12 +82,15 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 					tx.Commit()
 				} else {
 					suc = false
+					id = 0
 					fmt.Println("scope failed authcode rolling back: ", scSuc)
 					tx.Rollback()
 				}
 			} else {
 				tx.Rollback()
 			}
+		} else {
+			tx.Rollback()
 		}
 	} else {
 		tx.Rollback()

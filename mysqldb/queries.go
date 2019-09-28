@@ -134,4 +134,10 @@ const (
 	getImplicitScopeList = "SELECT id, scope, implicit_grant_id " +
 		"FROM implicit_scope WHERE implicit_grant_id = ?"
 	deleteImplicitScope = "DELETE FROM implicit_scope WHERE implicit_grant_id = ?"
+
+	//Password grant
+	insertPasswordGrant = "INSERT INTO password_grant  (client_id, user_id, access_token_id) values(?, ?, ?) "
+	getPasswordGrant    = "SELECT id, client_id, user_id, access_token_id " +
+		"FROM password_grant WHERE client_id = ? and user_id = ?"
+	deletePasswordGrantByID = "DELETE FROM password_grant WHERE id = ? "
 )

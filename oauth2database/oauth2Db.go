@@ -106,8 +106,6 @@ type Oauth2DB interface {
 	GetClientGrantTypeList(cid int64) *[]ClientGrantType
 	DeleteClientGrantType(id int64) bool
 
-	//start here
-
 	//implicit grant
 	AddImplicitGrant(ig *ImplicitGrant, at *AccessToken, scopeList *[]string) (bool, int64)
 	GetImplicitGrant(clientID int64, userID string) *[]ImplicitGrant
@@ -116,4 +114,10 @@ type Oauth2DB interface {
 
 	//implicit grant scope
 	GetImplicitGrantScopeList(ig int64) *[]ImplicitScope
+
+	//start here
+	// Password grand
+	AddPasswordGrant(pwg *PasswordGrant, at *AccessToken, rt *RefreshToken) (bool, int64)
+	GetPasswordGrant(clientID int64, userID string) *[]PasswordGrant
+	DeletePasswordGrant(clientID int64, userID string) bool
 }

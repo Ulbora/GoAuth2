@@ -68,6 +68,7 @@ func (d *MySQLOauthDB) AddImplicitGrant(ig *odb.ImplicitGrant, at *odb.AccessTok
 				tx.Commit()
 			} else {
 				suc = false
+				id = 0
 				fmt.Println("rolling back suc: ", suc)
 				tx.Rollback()
 			}

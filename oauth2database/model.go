@@ -143,3 +143,11 @@ type ImplicitScope struct {
 	Scope           string
 	ImplicitGrantID int64
 }
+
+//PasswordGrant PasswordGrant
+type PasswordGrant struct {
+	ID            int64
+	ClientID      int64
+	UserID        string
+	AccessTokenID int64
+}
