@@ -146,4 +146,9 @@ const (
 	getCredentialsGrant    = "SELECT id, client_id, access_token_id " +
 		"FROM credentials_grant WHERE client_id = ?"
 	deleteCredentialsGrant = "DELETE FROM credentials_grant WHERE id = ? "
+
+	//keys
+	getAccessTokenKey  = "SELECT * FROM access_token_key "
+	getRefreshTokenKey = "SELECT * FROM refresh_token_key"
+	getSessionKey      = "SELECT * FROM session_key"
 )
