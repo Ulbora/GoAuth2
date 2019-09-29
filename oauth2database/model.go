@@ -47,6 +47,7 @@ type ClientAllowedURI struct {
 	ID       int64
 	URI      string
 	ClientID int64
+	Super    bool
 }
 
 //ClientRole ClientRole
@@ -54,6 +55,7 @@ type ClientRole struct {
 	ID       int64
 	Role     string
 	ClientID int64
+	Super    bool
 }
 
 //ClientScope ClientScope

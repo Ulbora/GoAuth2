@@ -1,0 +1,14 @@
+mode: set
+github.com/Ulbora/GoAuth2/managers/utilities.go:32.36,35.26 3 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:40.2,40.13 1 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:35.26,39.3 3 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:43.39,45.37 2 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:55.2,55.12 1 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:45.37,54.3 4 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:59.41,61.37 2 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:71.2,71.12 1 1
+github.com/Ulbora/GoAuth2/managers/utilities.go:61.37,70.3 4 1
+github.com/Ulbora/GoAuth2/managers/grantTypeManager.go:23.75,26.29 3 1
+github.com/Ulbora/GoAuth2/managers/grantTypeManager.go:31.2,31.12 1 1
+github.com/Ulbora/GoAuth2/managers/grantTypeManager.go:26.29,27.32 1 1
+github.com/Ulbora/GoAuth2/managers/grantTypeManager.go:27.32,29.4 1 1
