@@ -36,8 +36,8 @@ type Manager interface {
 
 	//client redirect uri
 	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
-	// GetClientRedirectUriList(clientID int64) *[]odb.ClientRedirectURI
-	// DeleteClientRedirectUri(id int64) bool
+	GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI
+	DeleteClientRedirectURI(id int64) bool
 
 	// //client roles
 	// AddClientRole(r *odb.ClientRole) (bool, int64)

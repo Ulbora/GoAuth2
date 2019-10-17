@@ -43,3 +43,23 @@ func (m *OauthManager) AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
 	suc, id := m.Db.AddClientRedirectURI(nil, &cru)
 	return suc, id
 }
+
+//GetClientRedirectURIList GetClientRedirectURIList
+func (m *OauthManager) GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI {
+	var rtn []ClientRedirectURI
+	ul := m.Db.GetClientAllowedURIList(clientID)
+	for _, u := range *ul {
+		var ui ClientRedirectURI
+		ui.ID = u.ID
+		ui.URI = u.URI
+		ui.ClientID = u.ClientID
+		rtn = append(rtn, ui)
+	}
+	return &rtn
+}
+
+//DeleteClientRedirectURI DeleteClientRedirectURI
+func (m *OauthManager) DeleteClientRedirectURI(id int64) bool {
+	suc := m.Db.DeleteClientRedirectURI(nil, id)
+	return suc
+}
