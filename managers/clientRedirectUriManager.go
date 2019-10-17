@@ -20,19 +20,26 @@ package managers
 
 */
 
-//AuthCode AuthCode
-type AuthCode struct {
-	ClientID    int64
-	UserID      string
-	Scope       string
-	RedirectURI string
-	CallbackURI string
+import (
+	//"fmt"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+)
+
+//ClientRedirectURI ClientRedirectURI
+type ClientRedirectURI struct {
+	ID       int64
+	URI      string
+	ClientID int64
 }
 
-//AuthCodeClient AuthCodeClient
-type AuthCodeClient struct {
-	Valid      bool
-	ClientName string
-	WebSite    string
+//AddClientRedirectURI AddClientRedirectURI
+func (m *OauthManager) AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64) {
+	// var suc bool
+	// var id int64
+	var cru odb.ClientRedirectURI
+	cru.URI = ru.URI
+	cru.ClientID = ru.ClientID
+	suc, id := m.Db.AddClientRedirectURI(nil, &cru)
+	return suc, id
 }
-

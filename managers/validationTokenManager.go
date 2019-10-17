@@ -20,19 +20,13 @@ package managers
 
 */
 
-//AuthCode AuthCode
-type AuthCode struct {
-	ClientID    int64
-	UserID      string
-	Scope       string
-	RedirectURI string
-	CallbackURI string
+//ValidateAccessTokenReq ValidateAccessTokenReq
+type ValidateAccessTokenReq struct {
+	AccessToken string
+	Hashed bool
+	UserID string
+	ClientID int64
+	Role string
+	URI string
+	Scope string
 }
-
-//AuthCodeClient AuthCodeClient
-type AuthCodeClient struct {
-	Valid      bool
-	ClientName string
-	WebSite    string
-}
-

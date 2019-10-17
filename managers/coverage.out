@@ -1,4 +1,27 @@
 mode: set
+github.com/Ulbora/GoAuth2/managers/clientManager.go:49.64,54.74 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:76.2,76.16 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:54.74,64.42 9 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:71.3,74.11 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:64.42,68.4 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:80.58,83.25 2 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:88.2,98.12 8 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:83.25,85.3 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:85.8,87.3 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:102.52,106.21 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:125.2,125.13 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:106.21,116.27 10 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:123.3,123.28 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:116.27,122.4 5 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:129.50,132.24 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:136.2,136.13 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:132.24,135.3 2 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:140.67,143.24 3 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:147.2,147.13 1 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:143.24,146.3 2 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:151.52,154.2 2 1
+github.com/Ulbora/GoAuth2/managers/clientManager.go:156.42,164.2 7 1
+github.com/Ulbora/GoAuth2/managers/clientRedirectUriManager.go:37.82,45.2 5 1
 github.com/Ulbora/GoAuth2/managers/utilities.go:32.36,35.26 3 1
 github.com/Ulbora/GoAuth2/managers/utilities.go:40.2,40.13 1 1
 github.com/Ulbora/GoAuth2/managers/utilities.go:35.26,39.3 3 1

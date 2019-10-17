@@ -20,19 +20,38 @@ package managers
 
 */
 
-//AuthCode AuthCode
-type AuthCode struct {
+//AuthCodeTokenReq AuthCodeTokenReq
+type AuthCodeTokenReq struct {
 	ClientID    int64
-	UserID      string
-	Scope       string
+	Secret      string
+	Code        string
 	RedirectURI string
-	CallbackURI string
 }
 
-//AuthCodeClient AuthCodeClient
-type AuthCodeClient struct {
-	Valid      bool
-	ClientName string
-	WebSite    string
+//CredentialsTokenReq CredentialsTokenReq
+type CredentialsTokenReq struct {
+	ClientID int64
+	Secret   string
 }
 
+//RefreshTokenReq RefreshTokenReq
+type RefreshTokenReq struct {
+	ClientID     int64
+	Secret       string
+	RefreshToken string
+}
+
+//PasswordTokenReq PasswordTokenReq
+type PasswordTokenReq struct {
+	Username string
+	Password string
+	ClientID int64
+}
+
+//Token Token
+type Token struct {
+	AccessToken  string
+	TokenType    string
+	ExpiresIn    int64
+	RefreshToken string
+}

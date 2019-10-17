@@ -35,41 +35,50 @@ type Manager interface {
 	DeleteClient(id int64) bool
 
 	//client redirect uri
-	AddClientRedirectUri(ru *odb.ClientRedirectURI) (bool, int64)
-	GetClientRedirectUriList(clientID int64) *[]odb.ClientRedirectURI
-	DeleteClientRedirectUri(id int64) bool
+	AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
+	// GetClientRedirectUriList(clientID int64) *[]odb.ClientRedirectURI
+	// DeleteClientRedirectUri(id int64) bool
 
-	//client roles
-	AddClientRole(r *odb.ClientRole) (bool, int64)
-	GetClientRoleList(clientID int64) *[]odb.ClientRole
-	DeleteClientRole(id int64) bool
+	// //client roles
+	// AddClientRole(r *odb.ClientRole) (bool, int64)
+	// GetClientRoleList(clientID int64) *[]odb.ClientRole
+	// DeleteClientRole(id int64) bool
 
-	//client allowed uri
-	AddClientAllowedUri(au *odb.ClientAllowedURI) (bool, int64)
-	UpdateClientAllowedUri(au *odb.ClientAllowedURI) bool
-	GetClientAllowedUri(id int64) *odb.ClientAllowedURI
-	GetClientAllowedUriList(clientID int64) *[]odb.ClientAllowedURI
-	DeleteClientAllowedUri(id int64) bool
+	// //client allowed uri
+	// AddClientAllowedUri(au *odb.ClientAllowedURI) (bool, int64)
+	// UpdateClientAllowedUri(au *odb.ClientAllowedURI) bool
+	// GetClientAllowedUri(id int64) *odb.ClientAllowedURI
+	// GetClientAllowedUriList(clientID int64) *[]odb.ClientAllowedURI
+	// DeleteClientAllowedUri(id int64) bool
 
-	//client role uri
-	AddClientRoleUri(r *odb.ClientRoleURI) (bool, int64)
-	GetClientRoleAllowedUriList(roleID int64) *[]odb.ClientRoleURI
-	DeleteClientRoleUri(r *odb.ClientRoleURI) bool
+	// //client role uri
+	// AddClientRoleUri(r *odb.ClientRoleURI) (bool, int64)
+	// GetClientRoleAllowedUriList(roleID int64) *[]odb.ClientRoleURI
+	// DeleteClientRoleUri(r *odb.ClientRoleURI) bool
 
-	//client grant type
-	AddClientGrantType(gt *odb.ClientGrantType) (bool, int64)
-	GetClientGrantTypeList(clientID int64) *[]odb.ClientGrantType
-	DeleteClientGrantType(id int64) bool
+	// //client grant type
+	// AddClientGrantType(gt *odb.ClientGrantType) (bool, int64)
+	// GetClientGrantTypeList(clientID int64) *[]odb.ClientGrantType
+	// DeleteClientGrantType(id int64) bool
 
-	//auth code
-	AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
-	CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool)
-	ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
+	// //auth code
+	// AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
+	// CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool)
+	// ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
 
-	//implicit
-	AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn)
-	CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool)
-	ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
+	// //implicit
+	// AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn)
+	// CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool)
+	// ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
+
+	// //token manager
+	// GetAuthCodeToken(act *AuthCodeTokenReq) *Token
+	// GetCredentialsToken(ct *CredentialsTokenReq) *Token
+	// GetRefreshToken(rt *RefreshTokenReq) *Token
+	// GetPasswordToken(pt *PasswordTokenReq) *Token
+
+	// //validate Token
+	// ValidateAccessToken(at *ValidateAccessTokenReq) bool
 }
 
 //OauthManager OauthManager
