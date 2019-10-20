@@ -20,18 +20,46 @@ package managers
 
 */
 
+import (
+	//"fmt"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+)
+
 //ClientRole ClientRole
 type ClientRole struct {
 	ID       int64
 	Role     string
 	ClientID int64
-	Super    bool
 }
 
 //AddClientRole AddClientRole
 func (m *OauthManager) AddClientRole(r *ClientRole) (bool, int64) {
-	var suc bool
-	var id int64
-
+	// var suc bool
+	// var id int64
+	var cr odb.ClientRole
+	cr.Role = r.Role
+	cr.ClientID = r.ClientID
+	suc, id := m.Db.AddClientRole(&cr)
 	return suc, id
+}
+
+//GetClientRoleList GetClientRoleList
+func (m *OauthManager) GetClientRoleList(clientID int64) *[]ClientRole {
+	var rtn []ClientRole
+	rl := m.Db.GetClientRoleList(clientID)
+	for _, r := range *rl {
+		var cr ClientRole
+		cr.ID = r.ID
+		cr.Role = r.Role
+		cr.ClientID = r.ClientID
+		rtn = append(rtn, cr)
+	}
+	return &rtn
+}
+
+//DeleteClientRole DeleteClientRole
+func (m *OauthManager) DeleteClientRole(id int64) bool {
+	suc := m.Db.DeleteClientRole(id)
+	return suc
 }

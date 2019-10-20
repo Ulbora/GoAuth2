@@ -41,8 +41,8 @@ type Manager interface {
 
 	// //client roles
 	AddClientRole(r *ClientRole) (bool, int64)
-	// GetClientRoleList(clientID int64) *[]odb.ClientRole
-	// DeleteClientRole(id int64) bool
+	GetClientRoleList(clientID int64) *[]ClientRole
+	DeleteClientRole(id int64) bool
 
 	// //client allowed uri
 	// AddClientAllowedUri(au *odb.ClientAllowedURI) (bool, int64)
