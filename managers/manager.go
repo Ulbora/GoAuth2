@@ -44,12 +44,12 @@ type Manager interface {
 	GetClientRoleList(clientID int64) *[]ClientRole
 	DeleteClientRole(id int64) bool
 
-	// //client allowed uri
-	// AddClientAllowedUri(au *odb.ClientAllowedURI) (bool, int64)
-	// UpdateClientAllowedUri(au *odb.ClientAllowedURI) bool
-	// GetClientAllowedUri(id int64) *odb.ClientAllowedURI
-	// GetClientAllowedUriList(clientID int64) *[]odb.ClientAllowedURI
-	// DeleteClientAllowedUri(id int64) bool
+	//client allowed uri
+	AddClientAllowedURI(au *ClientAllowedURI) (bool, int64)
+	UpdateClientAllowedURI(au *ClientAllowedURI) bool
+	GetClientAllowedURI(id int64) *ClientAllowedURI
+	GetClientAllowedURIList(clientID int64) *[]ClientAllowedURI
+	DeleteClientAllowedURI(id int64) bool
 
 	// //client role uri
 	// AddClientRoleUri(r *odb.ClientRoleURI) (bool, int64)
