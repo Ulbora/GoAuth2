@@ -11,7 +11,7 @@ implicit, and client credentials grant, and password grant types are supported.
 GoAuth2 issues an enhanced JWT token that can be used to secure individual REST endpoints for users using roles. REST endpoints can be coded to validate the JWT token using the user's role.
 
 ### GoAuth2 will provide the security infrastructure for the new Ulbora Labs eCommerce Platform project, Ulbora Cart.
-#### Ulbora Cart is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. Ulbora Cart frontend soltutions can be written in golang or any other language.
+#### (Ulbora Cart is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. Ulbora Cart frontend soltutions can be written in golang or any other language.)
 
 ## Authorization Code Grant Type
 
