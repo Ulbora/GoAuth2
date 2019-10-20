@@ -1,5 +1,7 @@
 package managers
 
+import "fmt"
+
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
  All rights reserved.
@@ -20,6 +22,10 @@ package managers
 
 */
 
+//"fmt"
+
+//"fmt"
+
 //AuthCode AuthCode
 type AuthCode struct {
 	ClientID    int64
@@ -36,3 +42,42 @@ type AuthCodeClient struct {
 	WebSite    string
 }
 
+//AuthorizeAuthCode AuthorizeAuthCode
+func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string) {
+	client := m.Db.GetClient(ac.ClientID)
+	if client.Enabled {
+		rtu := m.Db.GetClientRedirectURI(ac.ClientID, ac.RedirectURI)
+		if rtu.ID > 0 {
+			gton := m.grantTypeTurnedOn(ac.ClientID, codeGrantType)
+			fmt.Println("grant turned on: ", gton)
+			if gton {
+				acode := m.Db.GetAuthorizationCode(ac.ClientID, ac.UserID)
+				fmt.Println("acode: ", acode)
+				if len(*acode) > 0 && (*acode)[0].AuthorizationCode != 0 {
+					scopeList := m.Db.GetAuthorizationCodeScopeList((*acode)[0].AuthorizationCode)
+					fmt.Println("scopeList: ", scopeList)
+					var scopeFound bool
+					for _, s := range *scopeList {
+						if s.Scope == ac.Scope {
+							scopeFound = true
+							break
+						}
+					}
+					fmt.Println("scopeFound: ", scopeFound)
+					if scopeFound {
+						acdel := m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
+						fmt.Println("acdel: ", acdel)
+						if acdel {
+
+						}
+					} else {
+
+					}
+				}
+			}
+
+		}
+	}
+
+	return success, authCode, authCodeString
+}

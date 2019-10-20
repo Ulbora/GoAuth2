@@ -24,6 +24,10 @@ import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
+const (
+	codeGrantType = "code"
+)
+
 //Manager Manager
 type Manager interface {
 	//client
@@ -61,8 +65,8 @@ type Manager interface {
 	GetClientGrantTypeList(clientID int64) *[]ClientGrantType
 	DeleteClientGrantType(id int64) bool
 
-	// //auth code
-	// AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
+	//auth code
+	AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
 	// CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool)
 	// ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
 

@@ -42,9 +42,9 @@ func (m *OauthManager) AddClientGrantType(gt *ClientGrantType) (bool, int64) {
 	return suc, id
 }
 
-func (m *OauthManager) grantTypeTurnedOn(id int64, grantType string) bool {
+func (m *OauthManager) grantTypeTurnedOn(clientID int64, grantType string) bool {
 	var rtn bool
-	gtlist := m.Db.GetClientGrantTypeList(id)
+	gtlist := m.Db.GetClientGrantTypeList(clientID)
 	for _, gt := range *gtlist {
 		if gt.GrantType == grantType {
 			rtn = true
