@@ -20,13 +20,55 @@ package managers
 
 */
 
-func (o *OauthManager) grantTypeTurnedOn(id int64, grantType string) bool {
+import (
+	//"fmt"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+)
+
+//ClientGrantType ClientGrantType
+type ClientGrantType struct {
+	ID        int64
+	GrantType string
+	ClientID  int64
+}
+
+//AddClientGrantType AddClientGrantType
+func (m *OauthManager) AddClientGrantType(gt *ClientGrantType) (bool, int64) {
+	var cgt odb.ClientGrantType
+	cgt.GrantType = gt.GrantType
+	cgt.ClientID = gt.ClientID
+	suc, id := m.Db.AddClientGrantType(&cgt)
+	return suc, id
+}
+
+func (m *OauthManager) grantTypeTurnedOn(id int64, grantType string) bool {
 	var rtn bool
-	gtlist := o.Db.GetClientGrantTypeList(id)
+	gtlist := m.Db.GetClientGrantTypeList(id)
 	for _, gt := range *gtlist {
 		if gt.GrantType == grantType {
 			rtn = true
 		}
 	}
 	return rtn
+}
+
+//GetClientGrantTypeList GetClientGrantTypeList
+func (m *OauthManager) GetClientGrantTypeList(clientID int64) *[]ClientGrantType {
+	var rtn []ClientGrantType
+	gtl := m.Db.GetClientGrantTypeList(clientID)
+	for _, gt := range *gtl {
+		var g ClientGrantType
+		g.ID = gt.ID
+		g.GrantType = gt.GrantType
+		g.ClientID = gt.ClientID
+		rtn = append(rtn, g)
+	}
+	return &rtn
+}
+
+//DeleteClientGrantType DeleteClientGrantType
+func (m *OauthManager) DeleteClientGrantType(id int64) bool {
+	suc := m.Db.DeleteClientGrantType(id)
+	return suc
 }

@@ -56,10 +56,10 @@ type Manager interface {
 	GetClientRoleAllowedURIList(roleID int64) *[]ClientRoleURI
 	DeleteClientRoleURI(r *ClientRoleURI) bool
 
-	// //client grant type
-	// AddClientGrantType(gt *odb.ClientGrantType) (bool, int64)
-	// GetClientGrantTypeList(clientID int64) *[]odb.ClientGrantType
-	// DeleteClientGrantType(id int64) bool
+	//client grant type
+	AddClientGrantType(gt *ClientGrantType) (bool, int64)
+	GetClientGrantTypeList(clientID int64) *[]ClientGrantType
+	DeleteClientGrantType(id int64) bool
 
 	// //auth code
 	// AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
