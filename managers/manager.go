@@ -40,7 +40,7 @@ type Manager interface {
 	DeleteClientRedirectURI(id int64) bool
 
 	// //client roles
-	// AddClientRole(r *odb.ClientRole) (bool, int64)
+	AddClientRole(r *ClientRole) (bool, int64)
 	// GetClientRoleList(clientID int64) *[]odb.ClientRole
 	// DeleteClientRole(id int64) bool
 
