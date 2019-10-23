@@ -68,7 +68,9 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 						acdel := m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
 						fmt.Println("acdel: ", acdel)
 						if acdel {
-
+							//start here
+							//generate refresh token
+							//reKey := m.Db.GetRefreshTokenKey()
 						}
 					} else {
 

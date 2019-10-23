@@ -24,7 +24,7 @@ func (m *OauthManager) generateRefreshToken(clientID, int64, userID string) stri
 	var rtn string
 	rtk := m.Db.GetRefreshTokenKey()
 	if rtk != "" {
-
+		// here write code to generate refresh token
 	}
 	return rtn
 }
