@@ -21,6 +21,7 @@ package managers
 */
 
 import (
+	"fmt"
 	"time"
 
 	jwt "github.com/gbrlsnchs/jwt/v3"
@@ -33,6 +34,7 @@ type Payload struct {
 	ClientID        int64
 	Subject         string
 	Issuer          string
+	Audience        string
 	ExpiresInMinute time.Duration
 	Grant           string
 	SecretKey       string
@@ -58,9 +60,9 @@ func (m *OauthManager) GenerateJwtToken(pl *Payload) string {
 	var jwtPl jwt.Payload
 	jwtPl.Subject = pl.Subject
 	jwtPl.Issuer = pl.Issuer
+	jwtPl.Audience = jwt.Audience{pl.Audience}
 	jwtPl.ExpirationTime = jwt.NumericDate(now.Add(pl.ExpiresInMinute * time.Minute))
 	jwtPl.IssuedAt = jwt.NumericDate(now)
-	
 
 	var jpl jwtPayload
 	jpl.Payload = jwtPl
@@ -81,4 +83,46 @@ func (m *OauthManager) GenerateJwtToken(pl *Payload) string {
 		rtn = string(token)
 	}
 	return rtn
+}
+
+//Validate Validate
+func (m *OauthManager) Validate(token string, secret string) (bool, *Payload) {
+	var valid bool
+	var rtn Payload
+	var pl jwtPayload
+	now := time.Now()
+	var hs = jwt.NewHS256([]byte(secret))
+	//aud = jwt.Audience{"https://golang.org"}
+
+	// Validate claims "iat", "exp" and "aud".
+	iatValidator := jwt.IssuedAtValidator(now)
+	expValidator := jwt.ExpirationTimeValidator(now)
+	//audValidator = jwt.AudienceValidator(aud)
+
+	// Use jwt.ValidatePayload to build a jwt.VerifyOption.
+	// Validators are run in the order informed.
+	//pl              CustomPayload
+	validatePayload := jwt.ValidatePayload(&pl.Payload, iatValidator, expValidator)
+	hd, err := jwt.Verify([]byte(token), hs, &pl, validatePayload)
+	if err == nil {
+		valid = true
+		fmt.Println("hd: ", hd)
+		fmt.Println("pl: ", pl)
+		rtn.TokenType = pl.TokenType
+		rtn.UserID = pl.UserID
+		rtn.ClientID = pl.ClientID
+		rtn.Subject = pl.Payload.Subject
+		rtn.Issuer = pl.Payload.Issuer
+		aud := pl.Payload.Audience
+		for _, a := range aud {
+			rtn.Audience = a
+			break
+		}
+		rtn.Grant = pl.Grant
+		rtn.RoleURIs = pl.RoleURIs
+		rtn.ScopeList = pl.ScopeList
+
+	}
+
+	return valid, &rtn
 }
