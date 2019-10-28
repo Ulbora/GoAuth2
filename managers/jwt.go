@@ -21,7 +21,6 @@ package managers
 */
 
 import (
-	"fmt"
 	"time"
 
 	jwt "github.com/gbrlsnchs/jwt/v3"
@@ -38,19 +37,28 @@ type Payload struct {
 	ExpiresInMinute time.Duration
 	Grant           string
 	SecretKey       string
-	RoleURIs        []string
+	RoleURIs        []RoleURI
 	ScopeList       []string
 }
 
 //JwtPayload JwtPayload
 type jwtPayload struct {
 	Payload   jwt.Payload
-	TokenType string   `json:"tokenType,omitempty"`
-	UserID    string   `json:"userId,omitempty"`
-	ClientID  int64    `json:"clientId,omitempty"`
-	Grant     string   `json:"grant,omitempty"`
-	RoleURIs  []string `json:"roleURIs,omitempty"`
-	ScopeList []string `json:"scopeList,omitempty"`
+	TokenType string    `json:"tokenType,omitempty"`
+	UserID    string    `json:"userId,omitempty"`
+	ClientID  int64     `json:"clientId,omitempty"`
+	Grant     string    `json:"grant,omitempty"`
+	RoleURIs  []RoleURI `json:"roleURIs,omitempty"`
+	ScopeList []string  `json:"scopeList,omitempty"`
+}
+
+//RoleURI RoleURI
+type RoleURI struct {
+	ClientRoleID       int64
+	Role               string
+	ClientAllowedURIID int64
+	ClientAllowedURI   string
+	ClientID           int64
 }
 
 //GenerateJwtToken GenerateJwtToken
@@ -103,11 +111,10 @@ func (m *OauthManager) Validate(token string, secret string) (bool, *Payload) {
 	// Validators are run in the order informed.
 	//pl              CustomPayload
 	validatePayload := jwt.ValidatePayload(&pl.Payload, iatValidator, expValidator)
-	hd, err := jwt.Verify([]byte(token), hs, &pl, validatePayload)
+	_, err := jwt.Verify([]byte(token), hs, &pl, validatePayload)
 	if err == nil {
 		valid = true
-		fmt.Println("hd: ", hd)
-		fmt.Println("pl: ", pl)
+		//fmt.Println("pl: ", pl)
 		rtn.TokenType = pl.TokenType
 		rtn.UserID = pl.UserID
 		rtn.ClientID = pl.ClientID

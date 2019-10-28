@@ -74,11 +74,40 @@ func TestOauthManagerAuthCode_AuthorizeAuthCode(t *testing.T) {
 	mGetRow4.Row = []string{"2", "testUri"}
 	mydb.MockRow4 = &mGetRow4
 
+	var mGetRow5 db.DbRow
+	mGetRow5.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow5 = &mGetRow5
+
+	var mGetRow6 db.DbRow
+	mGetRow6.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow6 = &mGetRow6
+
 	mydb.MockDeleteSuccess1 = true
 	mydb.MockDeleteSuccess2 = true
 	mydb.MockDeleteSuccess3 = true
 	mydb.MockDeleteSuccess4 = true
 	mydb.MockDeleteSuccess5 = true
+
+	var rows5 [][]string
+	row5 := []string{"4", "somerole", "1", "someurl", "2"}
+	rows5 = append(rows5, row5)
+	var dbrows5 db.DbRows
+	dbrows5.Rows = rows5
+	mydb.MockRows5 = &dbrows5
+
+
+	mydb.MockInsertSuccess1 = true
+	mydb.MockInsertID1 = 2
+
+	mydb.MockInsertSuccess2 = true
+	mydb.MockInsertID2 = 2
+
+	mydb.MockInsertSuccess3 = true
+	mydb.MockInsertID3 = 2
+
+	mydb.MockInsertSuccess4 = true
+	mydb.MockInsertID4 = 22
+
 
 	var moadb msdb.MySQLOauthDB
 	moadb.DB = dbAu

@@ -29,6 +29,17 @@ const (
 	shifter = 4
 )
 
+func generateRandonAuthCode() string {
+	var text = ""
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+	for i := 0; i < 20; i++ {
+		rand.Seed(time.Now().UnixNano())
+		t := possible[rand.Intn(len(possible))]
+		text += string(t)
+	}
+	return text
+}
+
 func generateClientSecret() string {
 	var text = ""
 	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -55,7 +66,6 @@ func hashUser(username string) string {
 	return rtn
 }
 
-
 func unHashUser(username string) string {
 	var rtn string
 	for i := 0; i < len(username); i++ {
@@ -70,4 +80,3 @@ func unHashUser(username string) string {
 	}
 	return rtn
 }
-

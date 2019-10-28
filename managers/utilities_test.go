@@ -13,6 +13,16 @@ func Test_generateClientSecret(t *testing.T) {
 	}
 }
 
+
+func Test_generateRandonAuthCode(t *testing.T) {
+	sec := generateClientSecret()
+	fmt.Println("random :", sec)
+	if len(sec) < 20 {
+		t.Fail()
+	}
+}
+
+
 func Test_hashUser(t *testing.T) {
 	h := hashUser("kenz")
 	fmt.Println("hash :", h)

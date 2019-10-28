@@ -20,23 +20,16 @@ package managers
 
 */
 
-//GenerateRefreshToken GenerateRefreshToken
-func (m *OauthManager) GenerateRefreshToken(clientID int64, userID string, grantType string) string {
+//GenerateAccessToken GenerateAccessToken
+func (m *OauthManager) GenerateAccessToken(pl *Payload) string {
 	var token string
-	rtk := m.Db.GetRefreshTokenKey()
-	if rtk != "" {
-		// here write code to generate refresh token
-		var pl Payload
-		pl.TokenType = refreshTokenType
-		pl.UserID = userID
-		pl.ClientID = clientID
-		pl.Subject = grantType
+	key := m.Db.GetAccessTokenKey()
+	if key != "" {
+		pl.SecretKey = key
+		pl.Subject = pl.Grant
 		pl.Issuer = tokenIssuer
 		pl.Audience = tokenAudience
-		pl.ExpiresInMinute = refreshTokenLifeInMinutes //(600 * time.Minute) => (600 * 60) => 36000 minutes => 10 hours
-		pl.Grant = grantType
-		pl.SecretKey = rtk
-		token = m.GenerateJwtToken(&pl)
+		token = m.GenerateJwtToken(pl)
 	}
 	return token
 }

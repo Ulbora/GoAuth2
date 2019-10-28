@@ -1,6 +1,12 @@
 package managers
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+
+	"github.com/Ulbora/GoAuth2/oauth2database"
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+)
 
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
@@ -63,7 +69,11 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 							break
 						}
 					}
+					var scopeStrList []string
 					fmt.Println("scopeFound: ", scopeFound)
+					for _, s := range *scopeList {
+						scopeStrList = append(scopeStrList, s.Scope)
+					}
 					if scopeFound {
 						acdel := m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
 						fmt.Println("acdel: ", acdel)
@@ -71,6 +81,42 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 							//start here
 							//generate refresh token
 							//reKey := m.Db.GetRefreshTokenKey()
+							refToken := m.GenerateRefreshToken(ac.ClientID, ac.UserID, codeGrantType)
+							fmt.Println("refToken:", refToken)
+							if refToken != "" {
+								roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ac.ClientID)
+								fmt.Println("roleURIList", roleURIList)
+								var pl Payload
+								pl.TokenType = accessTokenType
+								pl.UserID = hashUser(ac.UserID)
+								pl.ClientID = ac.ClientID
+								pl.Subject = codeGrantType
+								pl.ExpiresInMinute = codeAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+								pl.Grant = codeGrantType
+								pl.RoleURIs = *m.populateRoleURLList(roleURIList)
+								pl.ScopeList = scopeStrList
+								accessToken := m.GenerateAccessToken(&pl)
+								fmt.Println("accessToken: ", accessToken)
+								if accessToken != "" {
+									var code odb.AuthorizationCode
+									code.ClientID = ac.ClientID
+									code.UserID = ac.UserID
+									code.RandonAuthCode = generateRandonAuthCode()
+									now := time.Now()
+									code.Expires = now.Add(time.Minute * authCodeLifeInMinutes)
+
+									var aToken odb.AccessToken
+									aToken.Token = accessToken
+									aToken.Expires = now.Add(time.Minute * codeAccessTokenLifeInMinutes)
+
+									var rToken odb.RefreshToken
+									rToken.Token = refToken
+									acSuc, acID := m.Db.AddAuthorizationCode(&code, &aToken, &rToken, &scopeStrList)
+									fmt.Println("acSuc: ", acSuc)
+									fmt.Println("acID: ", acID)
+
+								}
+							}
 						}
 					} else {
 
@@ -82,4 +128,18 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 	}
 
 	return success, authCode, authCodeString
+}
+
+func (m *OauthManager) populateRoleURLList(rl *[]oauth2database.RoleURI) *[]RoleURI {
+	var rtn []RoleURI
+	for _, r := range *rl {
+		var ru RoleURI
+		ru.ClientRoleID = r.ClientRoleID
+		ru.Role = r.Role
+		ru.ClientAllowedURIID = r.ClientAllowedURIID
+		ru.ClientAllowedURI = r.ClientAllowedURI
+		ru.ClientID = r.ClientID
+		rtn = append(rtn, ru)
+	}
+	return &rtn
 }

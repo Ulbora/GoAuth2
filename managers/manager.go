@@ -25,7 +25,18 @@ import (
 )
 
 const (
+	//Grant Types
 	codeGrantType = "code"
+
+	//token info
+	tokenIssuer                  = "GoAuth2"
+	tokenAudience                = "GoAuth2.com"
+	refreshTokenType             = "refresh"
+	accessTokenType              = "access"
+	refreshTokenLifeInMinutes    = 600
+	codeAccessTokenLifeInMinutes = 60
+	authCodeLifeInMinutes        = 5
+	
 )
 
 //Manager Manager
