@@ -59,6 +59,7 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 			if gton {
 				acode := m.Db.GetAuthorizationCode(ac.ClientID, ac.UserID)
 				fmt.Println("acode: ", acode)
+				var scopeStrList []string
 				if len(*acode) > 0 && (*acode)[0].AuthorizationCode != 0 {
 					scopeList := m.Db.GetAuthorizationCodeScopeList((*acode)[0].AuthorizationCode)
 					fmt.Println("scopeList: ", scopeList)
@@ -68,65 +69,86 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 							scopeFound = true
 							break
 						}
-					}
-					var scopeStrList []string
+					}					
 					fmt.Println("scopeFound: ", scopeFound)
 					for _, s := range *scopeList {
 						scopeStrList = append(scopeStrList, s.Scope)
 					}
 					if scopeFound {
-						acdel := m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
-						fmt.Println("acdel: ", acdel)
-						if acdel {
-							//start here
-							//generate refresh token
-							//reKey := m.Db.GetRefreshTokenKey()
-							refToken := m.GenerateRefreshToken(ac.ClientID, ac.UserID, codeGrantType)
-							fmt.Println("refToken:", refToken)
-							if refToken != "" {
-								roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ac.ClientID)
-								fmt.Println("roleURIList", roleURIList)
-								var pl Payload
-								pl.TokenType = accessTokenType
-								pl.UserID = hashUser(ac.UserID)
-								pl.ClientID = ac.ClientID
-								pl.Subject = codeGrantType
-								pl.ExpiresInMinute = codeAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
-								pl.Grant = codeGrantType
-								pl.RoleURIs = *m.populateRoleURLList(roleURIList)
-								pl.ScopeList = scopeStrList
-								accessToken := m.GenerateAccessToken(&pl)
-								fmt.Println("accessToken: ", accessToken)
-								if accessToken != "" {
-									var code odb.AuthorizationCode
-									code.ClientID = ac.ClientID
-									code.UserID = ac.UserID
-									code.RandonAuthCode = generateRandonAuthCode()
-									now := time.Now()
-									code.Expires = now.Add(time.Minute * authCodeLifeInMinutes)
-
-									var aToken odb.AccessToken
-									aToken.Token = accessToken
-									aToken.Expires = now.Add(time.Minute * codeAccessTokenLifeInMinutes)
-
-									var rToken odb.RefreshToken
-									rToken.Token = refToken
-									acSuc, acID := m.Db.AddAuthorizationCode(&code, &aToken, &rToken, &scopeStrList)
-									fmt.Println("acSuc: ", acSuc)
-									fmt.Println("acID: ", acID)
-
-								}
-							}
-						}
+						success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, true)						
 					} else {
-
+						scopeStrList = append(scopeStrList, ac.Scope)
+						success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, true)
 					}
+				} else {
+					scopeStrList = append(scopeStrList, ac.Scope)
+					success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, false)
 				}
 			}
-
 		}
 	}
 
+	return success, authCode, authCodeString
+}
+
+func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]string, existingAuthCode bool) (success bool, authCode int64, authCodeString string) {
+	var acdel bool
+	if existingAuthCode {
+		acdel = m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
+		fmt.Println("acdel: ", acdel)
+	} else {
+		acdel = true
+	}	
+	if acdel {	
+		refToken := m.GenerateRefreshToken(ac.ClientID, hashUser(ac.UserID), codeGrantType)
+		fmt.Println("refToken:", refToken)
+		if refToken != "" {
+			roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ac.ClientID)
+			fmt.Println("roleURIList", roleURIList)
+			var pl Payload
+			pl.TokenType = accessTokenType
+			pl.UserID = hashUser(ac.UserID)
+			pl.ClientID = ac.ClientID
+			pl.Subject = codeGrantType
+			pl.ExpiresInMinute = codeAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+			pl.Grant = codeGrantType
+			pl.RoleURIs = *m.populateRoleURLList(roleURIList)
+			pl.ScopeList = *scopeStrList
+			accessToken := m.GenerateAccessToken(&pl)
+			fmt.Println("accessToken: ", accessToken)
+			if accessToken != "" {
+				var code odb.AuthorizationCode
+				code.ClientID = ac.ClientID
+				code.UserID = ac.UserID
+				code.RandonAuthCode = generateRandonAuthCode()
+				now := time.Now()
+				code.Expires = now.Add(time.Minute * authCodeLifeInMinutes)
+
+				var aToken odb.AccessToken
+				aToken.Token = accessToken
+				aToken.Expires = now.Add(time.Minute * codeAccessTokenLifeInMinutes)
+
+				var rToken odb.RefreshToken
+				rToken.Token = refToken
+				acSuc, acID := m.Db.AddAuthorizationCode(&code, &aToken, &rToken, scopeStrList)
+				fmt.Println("acSuc: ", acSuc)
+				fmt.Println("acID: ", acID)
+				if acSuc {
+					newRanCode := generateAuthCodeString(acID, code.RandonAuthCode)
+					var uac odb.AuthorizationCode
+					uac.AuthorizationCode = acID
+					uac.RandonAuthCode = newRanCode
+					usuc := m.Db.UpdateAuthorizationCode(&uac)
+					fmt.Println("update success: ", usuc)
+					if usuc {
+						success = usuc
+						authCode = acID
+						authCodeString = newRanCode
+					}
+				}
+			}
+		}
+	}
 	return success, authCode, authCodeString
 }
 
