@@ -69,13 +69,13 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 							scopeFound = true
 							break
 						}
-					}					
+					}
 					fmt.Println("scopeFound: ", scopeFound)
 					for _, s := range *scopeList {
 						scopeStrList = append(scopeStrList, s.Scope)
 					}
 					if scopeFound {
-						success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, true)						
+						success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, true)
 					} else {
 						scopeStrList = append(scopeStrList, ac.Scope)
 						success, authCode, authCodeString = m.processAuthCodeInsert(ac, &scopeStrList, true)
@@ -91,6 +91,17 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 	return success, authCode, authCodeString
 }
 
+//CheckAuthCodeApplicationAuthorization CheckAuthCodeApplicationAuthorization
+func (m *OauthManager) CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool) {
+	if ac.ClientID != 0 && ac.UserID != "" && ac.Scope != "" {
+		facs := m.Db.GetAuthorizationCodeByScope(ac.ClientID, ac.UserID, ac.UserID)
+		if len(*facs) > 0 && (*facs)[0].AuthorizationCode != 0 {
+			authorized = true
+		}
+	}
+	return authorized
+}
+
 func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]string, existingAuthCode bool) (success bool, authCode int64, authCodeString string) {
 	var acdel bool
 	if existingAuthCode {
@@ -98,8 +109,8 @@ func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]strin
 		fmt.Println("acdel: ", acdel)
 	} else {
 		acdel = true
-	}	
-	if acdel {	
+	}
+	if acdel {
 		refToken := m.GenerateRefreshToken(ac.ClientID, hashUser(ac.UserID), codeGrantType)
 		fmt.Println("refToken:", refToken)
 		if refToken != "" {

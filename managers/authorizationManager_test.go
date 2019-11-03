@@ -377,3 +377,49 @@ func TestOauthManagerAuthCode_AuthorizeAuthCodeNoAuthCode(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestOauthManagerAuthCode_CheckAuthCodeApplicationAuthorization(t *testing.T) {
+
+	var dbAu db.Database
+	var odbAu odb.Oauth2DB
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbAu = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+
+	var tt = time.Now()
+	var rows1 [][]string
+	row1 := []string{"5", "3", "code", tt.Format("2006-01-02 15:04:05"), "2", "test", "false", "test"}
+	rows1 = append(rows1, row1)
+	var dbrows1 db.DbRows
+	dbrows1.Rows = rows1
+	mydb.MockRows1 = &dbrows1
+
+	var moadb msdb.MySQLOauthDB
+	moadb.DB = dbAu
+
+	odbAu = &moadb
+
+	var man OauthManager
+	man.Db = odbAu
+	var m Manager
+	m = &man
+	var ac AuthCode
+	ac.ClientID = 2
+	ac.UserID = "tester"
+	ac.Scope = "facebook"
+	ac.RedirectURI = "someurl.com"
+	ac.CallbackURI = "someotherurl.com"
+	auth := m.CheckAuthCodeApplicationAuthorization(&ac)
+	fmt.Println("auth: ", auth)
+	if !auth {
+		t.Fail()
+	}
+}
