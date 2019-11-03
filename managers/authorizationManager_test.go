@@ -393,7 +393,6 @@ func TestOauthManagerAuthCode_CheckAuthCodeApplicationAuthorization(t *testing.T
 	mTestRow.Row = []string{}
 	mydb.MockTestRow = &mTestRow
 
-
 	var tt = time.Now()
 	var rows1 [][]string
 	row1 := []string{"5", "3", "code", tt.Format("2006-01-02 15:04:05"), "2", "test", "false", "test"}
@@ -420,6 +419,51 @@ func TestOauthManagerAuthCode_CheckAuthCodeApplicationAuthorization(t *testing.T
 	auth := m.CheckAuthCodeApplicationAuthorization(&ac)
 	fmt.Println("auth: ", auth)
 	if !auth {
+		t.Fail()
+	}
+}
+
+func TestOauthManagerAuthCode_ValidateAuthCodeClientAndCallback(t *testing.T) {
+
+	var dbAu db.Database
+	var odbAu odb.Oauth2DB
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbAu = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	var mGetRow1 db.DbRow
+	mGetRow1.Row = []string{"5", "someurl.com", "25"}
+	mydb.MockRow1 = &mGetRow1
+
+	var mGetRow2 db.DbRow
+	mGetRow2.Row = []string{"25", "secret", "testname", "testWebSite", "test", "true", "false"}
+	mydb.MockRow2 = &mGetRow2
+
+	var moadb msdb.MySQLOauthDB
+	moadb.DB = dbAu
+
+	odbAu = &moadb
+
+	var man OauthManager
+	man.Db = odbAu
+	var m Manager
+	m = &man
+	var ac AuthCode
+	ac.ClientID = 25
+	ac.UserID = "tester"
+	//ac.Scope = "facebook"
+	ac.RedirectURI = "someurl.com"
+	ac.CallbackURI = "someotherurl.com"
+	auth := m.ValidateAuthCodeClientAndCallback(&ac)
+	fmt.Println("auth: ", auth)
+	if !auth.Valid || auth.ClientName != "testname" || auth.WebSite != "testWebSite" {
 		t.Fail()
 	}
 }

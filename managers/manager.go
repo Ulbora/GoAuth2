@@ -79,7 +79,7 @@ type Manager interface {
 	//auth code
 	AuthorizeAuthCode(ac *AuthCode) (success bool, authCode int64, authCodeString string)
 	CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool)
-	// ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
+	ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
 
 	// //implicit
 	// AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn)

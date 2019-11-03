@@ -102,6 +102,24 @@ func (m *OauthManager) CheckAuthCodeApplicationAuthorization(ac *AuthCode) (auth
 	return authorized
 }
 
+//ValidateAuthCodeClientAndCallback ValidateAuthCodeClientAndCallback
+func (m *OauthManager) ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient {
+	var rtn AuthCodeClient
+	if ac.ClientID != 0 && ac.RedirectURI != "" {
+		cru := m.Db.GetClientRedirectURI(ac.ClientID, ac.RedirectURI)
+		fmt.Println("cru: ", cru)
+		if cru.ID > 0 && cru.URI == ac.RedirectURI && cru.ClientID == ac.ClientID{
+			c := m.Db.GetClient(ac.ClientID)
+			if c.Enabled{
+				rtn.Valid = true
+				rtn.ClientName = c.Name
+				rtn.WebSite = c.WebSite
+			}
+		}
+	}
+	return &rtn
+}
+
 func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]string, existingAuthCode bool) (success bool, authCode int64, authCodeString string) {
 	var acdel bool
 	if existingAuthCode {
