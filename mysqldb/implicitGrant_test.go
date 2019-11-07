@@ -59,7 +59,6 @@ func TestMySQLOauthDBIg_Connect(t *testing.T) {
 	// getRow.Row = []string{"1", "2", "user", "4", ""}
 	// mydb.MockRow1 = &getRow
 
-
 	var rows1 [][]string
 	row1 := []string{"1", "scope1", "4"}
 	rows1 = append(rows1, row1)
@@ -76,7 +75,6 @@ func TestMySQLOauthDBIg_Connect(t *testing.T) {
 	// mydb.MockRows2 = &dbrows
 	// mydb.MockRows3 = &dbrows
 
-
 	var rows [][]string
 	row := []string{"1", "2", "user", "4", ""}
 	rows = append(rows, row)
@@ -86,8 +84,6 @@ func TestMySQLOauthDBIg_Connect(t *testing.T) {
 	mydb.MockRows2 = &dbrows
 	mydb.MockRows3 = &dbrows
 	mydb.MockRows4 = &dbrows
-
-
 
 	var moadb MySQLOauthDB
 	moadb.DB = dbIg

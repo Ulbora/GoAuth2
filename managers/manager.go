@@ -26,17 +26,20 @@ import (
 
 const (
 	//Grant Types
-	codeGrantType = "code"
+	codeGrantType     = "code"
+	implicitGrantType = "implicit"
 
 	//token info
-	tokenIssuer                  = "GoAuth2"
-	tokenAudience                = "GoAuth2.com"
-	refreshTokenType             = "refresh"
-	accessTokenType              = "access"
-	refreshTokenLifeInMinutes    = 600
-	codeAccessTokenLifeInMinutes = 60
+	tokenIssuer      = "GoAuth2"
+	tokenAudience    = "GoAuth2.com"
+	refreshTokenType = "refresh"
+	accessTokenType  = "access"
+
+	refreshTokenLifeInMinutes    = 600 //10 hours
+	codeAccessTokenLifeInMinutes = 60  //1 hour
 	authCodeLifeInMinutes        = 5
-	
+
+	implicitAccessTokenLifeInMinutes = 600 //10 hours
 )
 
 //Manager Manager
@@ -81,10 +84,10 @@ type Manager interface {
 	CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool)
 	ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCodeClient
 
-	// //implicit
-	// AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn)
-	// CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool)
-	// ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
+	//implicit
+	AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn)
+	CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool)
+	ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
 
 	// //token manager
 	// GetAuthCodeToken(act *AuthCodeTokenReq) *Token

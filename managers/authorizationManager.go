@@ -28,9 +28,6 @@ import (
 
 */
 
-//"fmt"
-
-//"fmt"
 
 //AuthCode AuthCode
 type AuthCode struct {
