@@ -21,8 +21,9 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
 //AddClientRoleURI AddClientRoleURI
@@ -102,17 +103,19 @@ func parseRowURIRow(foundRow *[]string) *odb.ClientRoleURI {
 
 func parseClientRowURIRow(foundRow *[]string) *odb.RoleURI {
 	var rtn odb.RoleURI
-	roleID, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		URIID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		roleID, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			clientID, err := strconv.ParseInt((*foundRow)[4], 10, 64)
+			URIID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
 			if err == nil {
-				rtn.ClientRoleID = roleID
-				rtn.ClientAllowedURIID = URIID
-				rtn.ClientID = clientID
-				rtn.Role = (*foundRow)[1]
-				rtn.ClientAllowedURI = (*foundRow)[3]
+				clientID, err := strconv.ParseInt((*foundRow)[4], 10, 64)
+				if err == nil {
+					rtn.ClientRoleID = roleID
+					rtn.ClientAllowedURIID = URIID
+					rtn.ClientID = clientID
+					rtn.Role = (*foundRow)[1]
+					rtn.ClientAllowedURI = (*foundRow)[3]
+				}
 			}
 		}
 	}

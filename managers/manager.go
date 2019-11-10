@@ -35,9 +35,12 @@ const (
 	refreshTokenType = "refresh"
 	accessTokenType  = "access"
 
+	tokenTypeBearer = "bearer"
+
 	refreshTokenLifeInMinutes    = 600 //10 hours
 	codeAccessTokenLifeInMinutes = 60  //1 hour
 	authCodeLifeInMinutes        = 5
+	
 
 	implicitAccessTokenLifeInMinutes = 600 //10 hours
 )
@@ -89,8 +92,8 @@ type Manager interface {
 	CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool)
 	ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
 
-	// //token manager
-	// GetAuthCodeToken(act *AuthCodeTokenReq) *Token
+	//token manager
+	GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token)
 	// GetCredentialsToken(ct *CredentialsTokenReq) *Token
 	// GetRefreshToken(rt *RefreshTokenReq) *Token
 	// GetPasswordToken(pt *PasswordTokenReq) *Token

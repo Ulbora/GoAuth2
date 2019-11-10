@@ -69,13 +69,15 @@ func (d *MySQLOauthDB) DeleteClientGrantType(id int64) bool {
 
 func parseClientGrantType(foundRow *[]string) *odb.ClientGrantType {
 	var rtn odb.ClientGrantType
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.ClientID = clientID
-			rtn.GrantType = (*foundRow)[1]
+			clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.ClientID = clientID
+				rtn.GrantType = (*foundRow)[1]
+			}
 		}
 	}
 	return &rtn

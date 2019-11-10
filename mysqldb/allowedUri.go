@@ -21,8 +21,9 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
 //AddClientAllowedURI AddClientAllowedURI
@@ -103,13 +104,15 @@ func (d *MySQLOauthDB) DeleteClientAllowedURI(id int64) bool {
 
 func parseClientAllowedURIRow(foundRow *[]string) *odb.ClientAllowedURI {
 	var rtn odb.ClientAllowedURI
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.ClientID = clientID
-			rtn.URI = (*foundRow)[1]
+			clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.ClientID = clientID
+				rtn.URI = (*foundRow)[1]
+			}
 		}
 	}
 	return &rtn

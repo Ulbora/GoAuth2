@@ -53,16 +53,18 @@ func (d *MySQLOauthDB) GetAuthorizationCodeScopeList(ac int64) *[]odb.AuthCodeSc
 		for r := range foundRows {
 			foundRow := foundRows[r]
 			var acs odb.AuthCodeScope
-			id, err := strconv.ParseInt((foundRow)[0], 10, 64)
-			if err == nil {
-				ac, err := strconv.ParseInt((foundRow)[2], 10, 64)
+			if len(foundRow) > 0 {
+				id, err := strconv.ParseInt((foundRow)[0], 10, 64)
 				if err == nil {
-					acs.ID = id
-					acs.Scope = (foundRow)[1]
-					acs.AuthorizationCode = ac
+					ac, err := strconv.ParseInt((foundRow)[2], 10, 64)
+					if err == nil {
+						acs.ID = id
+						acs.Scope = (foundRow)[1]
+						acs.AuthorizationCode = ac
+					}
 				}
+				rtn = append(rtn, acs)
 			}
-			rtn = append(rtn, acs)
 		}
 	}
 	return &rtn

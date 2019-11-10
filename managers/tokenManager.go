@@ -1,5 +1,11 @@
 package managers
 
+import (
+	"fmt"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
+)
+
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
  All rights reserved.
@@ -54,4 +60,58 @@ type Token struct {
 	TokenType    string
 	ExpiresIn    int64
 	RefreshToken string
+}
+
+//GetAuthCodeToken GetAuthCodeToken
+func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
+	var rtn Token
+	var suc bool
+	client := m.Db.GetClient(act.ClientID)
+	fmt.Println("client: ", client)
+	if client != nil && client.Secret == act.Secret && client.Enabled {
+		rtu := m.Db.GetClientRedirectURI(act.ClientID, act.RedirectURI)
+		fmt.Println("rtu: ", rtu)
+		if rtu.ID > 0 {
+			acode := m.Db.GetAuthorizationCodeByCode(act.Code)
+			if acode.ClientID == act.ClientID {
+				acRev := m.Db.GetAuthCodeRevolk(acode.AuthorizationCode)
+				fmt.Println("acRev: ", acRev)
+				if acRev == nil || acRev.ID == 0 {
+					if acode.AlreadyUsed {
+						fmt.Println("AlreadyUsed: ", acode.AlreadyUsed)
+						var rvk odb.AuthCodeRevolk
+						rvk.AuthorizationCode = acode.AuthorizationCode
+						suc, rvid := m.Db.AddAuthCodeRevolk(nil, &rvk)
+						fmt.Println("suc: ", suc)
+						fmt.Println("rvid: ", rvid)
+					} else {
+						acode.AlreadyUsed = true
+						usuc := m.Db.UpdateAuthorizationCode(acode)
+						fmt.Println("usuc: ", usuc)
+						if usuc {
+							tkn := m.Db.GetAccessToken(acode.AccessTokenID)
+							if tkn.ID > 0 {
+								fmt.Println("tkn: ", tkn)
+								rtn.AccessToken = tkn.Token
+								rtn.TokenType = tokenTypeBearer
+								rtn.ExpiresIn = codeAccessTokenLifeInMinutes
+								if tkn.RefreshTokenID != 0 {
+									rtkn := m.Db.GetRefreshToken(tkn.RefreshTokenID)
+									fmt.Println("rtkn: ", rtkn)
+									if rtkn.ID > 0 {
+										rtn.RefreshToken = rtkn.Token
+										suc = true
+									}
+								} else {
+									suc = true
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return suc, &rtn
 }

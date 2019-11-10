@@ -21,8 +21,9 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
 //AddClientScope AddClientScope
@@ -68,13 +69,15 @@ func (d *MySQLOauthDB) DeleteClientScope(id int64) bool {
 
 func parseClientScopeRow(foundRow *[]string) *odb.ClientScope {
 	var rtn odb.ClientScope
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.ClientID = clientID
-			rtn.Scope = (*foundRow)[1]
+			clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.ClientID = clientID
+				rtn.Scope = (*foundRow)[1]
+			}
 		}
 	}
 	return &rtn

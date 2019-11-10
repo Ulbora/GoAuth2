@@ -153,15 +153,17 @@ func (d *MySQLOauthDB) GetClients() *[]odb.Client {
 
 func parseClientRow(foundRow *[]string) *odb.Client {
 	var rtn odb.Client
-	int64Val, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		rtn.ClientID = int64Val
-		rtn.Secret = (*foundRow)[1]
-		rtn.Name = (*foundRow)[2]
-		rtn.WebSite = (*foundRow)[3]
-		rtn.Email = (*foundRow)[4]
-		rtn.Enabled, _ = strconv.ParseBool((*foundRow)[5])
-		rtn.Paid, _ = strconv.ParseBool((*foundRow)[6])
+	if len(*foundRow) > 0 {
+		int64Val, err := strconv.ParseInt((*foundRow)[0], 10, 64)
+		if err == nil {
+			rtn.ClientID = int64Val
+			rtn.Secret = (*foundRow)[1]
+			rtn.Name = (*foundRow)[2]
+			rtn.WebSite = (*foundRow)[3]
+			rtn.Email = (*foundRow)[4]
+			rtn.Enabled, _ = strconv.ParseBool((*foundRow)[5])
+			rtn.Paid, _ = strconv.ParseBool((*foundRow)[6])
+		}
 	}
 	return &rtn
 }

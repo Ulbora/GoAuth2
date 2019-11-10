@@ -110,13 +110,15 @@ func (d *MySQLOauthDB) DeleteClientAllRedirectURI(tx dbtx.Transaction, clientID 
 
 func parseClientURIRow(foundRow *[]string) *odb.ClientRedirectURI {
 	var rtn odb.ClientRedirectURI
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.ClientID = clientID
-			rtn.URI = (*foundRow)[1]
+			clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.ClientID = clientID
+				rtn.URI = (*foundRow)[1]
+			}
 		}
 	}
 	return &rtn

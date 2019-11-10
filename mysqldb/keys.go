@@ -28,7 +28,9 @@ func (d *MySQLOauthDB) GetAccessTokenKey() string {
 	}
 	var a []interface{}
 	row := d.DB.Get(getAccessTokenKey, a...)
-	rtn = row.Row[1]
+	if len(row.Row) > 0 {
+		rtn = row.Row[1]
+	}
 	return rtn
 }
 
@@ -40,7 +42,9 @@ func (d *MySQLOauthDB) GetRefreshTokenKey() string {
 	}
 	var a []interface{}
 	row := d.DB.Get(getRefreshTokenKey, a...)
-	rtn = row.Row[1]
+	if len(row.Row) > 0 {
+		rtn = row.Row[1]
+	}
 	return rtn
 }
 
@@ -52,6 +56,8 @@ func (d *MySQLOauthDB) GetSessionKey() string {
 	}
 	var a []interface{}
 	row := d.DB.Get(getSessionKey, a...)
-	rtn = row.Row[1]
+	if len(row.Row) > 0 {
+		rtn = row.Row[1]
+	}
 	return rtn
 }

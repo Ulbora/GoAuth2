@@ -277,30 +277,32 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
 	fmt.Println("foundRow in parseAuthCodeRow: ", foundRow)
 	var rtn odb.AuthorizationCode
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		// rtn.AuthorizationCode = id
-		cid, err := strconv.ParseInt((*foundRow)[1], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			// rtn.ClientID = cid
-			//uid, err := strconv.ParseInt((*foundRow)[2], 10, 64)
-			//if err == nil {
-			// rtn.UserID = uid
-			cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
-			fmt.Println("time error:", err)
+			// rtn.AuthorizationCode = id
+			cid, err := strconv.ParseInt((*foundRow)[1], 10, 64)
 			if err == nil {
-				atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
+				// rtn.ClientID = cid
+				//uid, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+				//if err == nil {
+				// rtn.UserID = uid
+				cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
+				fmt.Println("time error:", err)
 				if err == nil {
-					rtn.AuthorizationCode = id
-					rtn.ClientID = cid
-					rtn.UserID = (*foundRow)[2]
-					rtn.Expires = cTime
-					rtn.AccessTokenID = atid
-					rtn.RandonAuthCode = (*foundRow)[5]
-					rtn.AlreadyUsed, _ = strconv.ParseBool((*foundRow)[6])
+					atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
+					if err == nil {
+						rtn.AuthorizationCode = id
+						rtn.ClientID = cid
+						rtn.UserID = (*foundRow)[2]
+						rtn.Expires = cTime
+						rtn.AccessTokenID = atid
+						rtn.RandonAuthCode = (*foundRow)[5]
+						rtn.AlreadyUsed, _ = strconv.ParseBool((*foundRow)[6])
+					}
 				}
+				//}
 			}
-			//}
 		}
 	}
 	return &rtn

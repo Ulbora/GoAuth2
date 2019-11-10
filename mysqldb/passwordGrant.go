@@ -89,20 +89,22 @@ func (d *MySQLOauthDB) GetPasswordGrant(clientID int64, userID string) *[]odb.Pa
 		fmt.Println("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			fmt.Println("foundRow in getbyscope: ", foundRow)
-			pgID, err := strconv.ParseInt((foundRow)[0], 10, 64)
-			if err == nil {
-				cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
+			if len(foundRow) > 0 {
+				fmt.Println("foundRow in getbyscope: ", foundRow)
+				pgID, err := strconv.ParseInt((foundRow)[0], 10, 64)
 				if err == nil {
-					tid, err := strconv.ParseInt((foundRow)[3], 10, 64)
+					cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
 					if err == nil {
-						var rtnc odb.PasswordGrant
-						rtnc.ID = pgID
-						rtnc.ClientID = cid
-						rtnc.UserID = (foundRow)[2]
-						rtnc.AccessTokenID = tid
-						fmt.Println("rtnc in getbyscope: ", rtnc)
-						rtn = append(rtn, rtnc)
+						tid, err := strconv.ParseInt((foundRow)[3], 10, 64)
+						if err == nil {
+							var rtnc odb.PasswordGrant
+							rtnc.ID = pgID
+							rtnc.ClientID = cid
+							rtnc.UserID = (foundRow)[2]
+							rtnc.AccessTokenID = tid
+							fmt.Println("rtnc in getbyscope: ", rtnc)
+							rtn = append(rtn, rtnc)
+						}
 					}
 				}
 			}

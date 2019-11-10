@@ -21,6 +21,7 @@ package mysqldb
 */
 
 import (
+	"fmt"
 	"strconv"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -52,6 +53,7 @@ func (d *MySQLOauthDB) GetAuthCodeRevolk(ac int64) *odb.AuthCodeRevolk {
 	var a []interface{}
 	a = append(a, ac)
 	row := d.DB.Get(getAuthCodeRevolk, a...)
+	fmt.Println("row: ", row)
 	rtn := parseAuthCodeRevolkRow(&row.Row)
 	return rtn
 }
@@ -74,13 +76,16 @@ func (d *MySQLOauthDB) DeleteAuthCodeRevolk(tx dbtx.Transaction, ac int64) bool 
 
 func parseAuthCodeRevolkRow(foundRow *[]string) *odb.AuthCodeRevolk {
 	var rtn odb.AuthCodeRevolk
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		ac, err := strconv.ParseInt((*foundRow)[1], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.AuthorizationCode = ac
+			ac, err := strconv.ParseInt((*foundRow)[1], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.AuthorizationCode = ac
+			}
 		}
 	}
+
 	return &rtn
 }

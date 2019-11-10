@@ -187,17 +187,19 @@ func (d *MySQLOauthDB) DeleteImplicitGrant(clientID int64, userID string) bool {
 func parseImplicitGrantRow(foundRow *[]string) *odb.ImplicitGrant {
 	fmt.Println("foundRow in parseImplicitGrantRow: ", foundRow)
 	var rtn odb.ImplicitGrant
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		// rtn.ImplicitGrant = id
-		cid, err := strconv.ParseInt((*foundRow)[1], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			atid, err := strconv.ParseInt((*foundRow)[3], 10, 64)
+			// rtn.ImplicitGrant = id
+			cid, err := strconv.ParseInt((*foundRow)[1], 10, 64)
 			if err == nil {
-				rtn.ID = id
-				rtn.ClientID = cid
-				rtn.UserID = (*foundRow)[2]
-				rtn.AccessTokenID = atid
+				atid, err := strconv.ParseInt((*foundRow)[3], 10, 64)
+				if err == nil {
+					rtn.ID = id
+					rtn.ClientID = cid
+					rtn.UserID = (*foundRow)[2]
+					rtn.AccessTokenID = atid
+				}
 			}
 		}
 	}

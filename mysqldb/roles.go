@@ -21,8 +21,9 @@ package mysqldb
 */
 
 import (
-	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	"strconv"
+
+	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
 
 //AddClientRole AddClientRole
@@ -68,13 +69,15 @@ func (d *MySQLOauthDB) DeleteClientRole(id int64) bool {
 
 func parseClientRoleRow(foundRow *[]string) *odb.ClientRole {
 	var rtn odb.ClientRole
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.ClientID = clientID
-			rtn.Role = (*foundRow)[1]
+			clientID, err := strconv.ParseInt((*foundRow)[2], 10, 64)
+			if err == nil {
+				rtn.ID = id
+				rtn.ClientID = clientID
+				rtn.Role = (*foundRow)[1]
+			}
 		}
 	}
 	return &rtn

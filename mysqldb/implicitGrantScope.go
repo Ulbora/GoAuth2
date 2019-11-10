@@ -52,17 +52,19 @@ func (d *MySQLOauthDB) GetImplicitGrantScopeList(ig int64) *[]odb.ImplicitScope 
 		foundRows := rows.Rows
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			var igs odb.ImplicitScope
-			id, err := strconv.ParseInt((foundRow)[0], 10, 64)
-			if err == nil {
-				igid, err := strconv.ParseInt((foundRow)[2], 10, 64)
+			if len(foundRow) > 0 {
+				var igs odb.ImplicitScope
+				id, err := strconv.ParseInt((foundRow)[0], 10, 64)
 				if err == nil {
-					igs.ID = id
-					igs.Scope = (foundRow)[1]
-					igs.ImplicitGrantID = igid
+					igid, err := strconv.ParseInt((foundRow)[2], 10, 64)
+					if err == nil {
+						igs.ID = id
+						igs.Scope = (foundRow)[1]
+						igs.ImplicitGrantID = igid
+					}
 				}
+				rtn = append(rtn, igs)
 			}
-			rtn = append(rtn, igs)
 		}
 	}
 	return &rtn

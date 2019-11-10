@@ -85,10 +85,12 @@ func (d *MySQLOauthDB) DeleteRefreshToken(tx dbtx.Transaction, id int64) bool {
 
 func parseRefreshTokenRow(foundRow *[]string) *odb.RefreshToken {
 	var rtn odb.RefreshToken
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		rtn.ID = id
-		rtn.Token = (*foundRow)[1]
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
+		if err == nil {
+			rtn.ID = id
+			rtn.Token = (*foundRow)[1]
+		}
 	}
 	return &rtn
 }

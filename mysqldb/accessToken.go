@@ -106,16 +106,18 @@ func (d *MySQLOauthDB) DeleteAccessToken(tx dbtx.Transaction, id int64) bool {
 
 func parseAccessTokenRow(foundRow *[]string) *odb.AccessToken {
 	var rtn odb.AccessToken
-	id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
-	if err == nil {
-		cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[2])
+	if len(*foundRow) > 0 {
+		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
 		if err == nil {
-			rtn.ID = id
-			rtn.Token = (*foundRow)[1]
-			rtn.Expires = cTime
-			if (*foundRow)[3] != "" {
-				refTokID, _ := strconv.ParseInt((*foundRow)[3], 10, 64)
-				rtn.RefreshTokenID = refTokID
+			cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[2])
+			if err == nil {
+				rtn.ID = id
+				rtn.Token = (*foundRow)[1]
+				rtn.Expires = cTime
+				if (*foundRow)[3] != "" {
+					refTokID, _ := strconv.ParseInt((*foundRow)[3], 10, 64)
+					rtn.RefreshTokenID = refTokID
+				}
 			}
 		}
 	}
