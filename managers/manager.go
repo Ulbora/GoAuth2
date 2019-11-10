@@ -28,6 +28,7 @@ const (
 	//Grant Types
 	codeGrantType     = "code"
 	implicitGrantType = "implicit"
+	clientGrantType   = "client_credentials"
 
 	//token info
 	tokenIssuer      = "GoAuth2"
@@ -37,10 +38,10 @@ const (
 
 	tokenTypeBearer = "bearer"
 
-	refreshTokenLifeInMinutes    = 600 //10 hours
-	codeAccessTokenLifeInMinutes = 60  //1 hour
-	authCodeLifeInMinutes        = 5
-	
+	refreshTokenLifeInMinutes                = 600 //10 hours
+	codeAccessTokenLifeInMinutes             = 60  //1 hour
+	credentialsGrantAccessTokenLifeInMinutes = 60  //1 hour
+	authCodeLifeInMinutes                    = 5
 
 	implicitAccessTokenLifeInMinutes = 600 //10 hours
 )
@@ -94,9 +95,9 @@ type Manager interface {
 
 	//token manager
 	GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token)
-	// GetCredentialsToken(ct *CredentialsTokenReq) *Token
-	// GetRefreshToken(rt *RefreshTokenReq) *Token
-	// GetPasswordToken(pt *PasswordTokenReq) *Token
+	GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token)
+	// GetRefreshToken(rt *RefreshTokenReq) (bool, *Token)
+	// GetPasswordToken(pt *PasswordTokenReq) (bool, *Token)
 
 	// //validate Token
 	// ValidateAccessToken(at *ValidateAccessTokenReq) bool

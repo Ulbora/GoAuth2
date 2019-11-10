@@ -2,6 +2,7 @@ package managers
 
 import (
 	"fmt"
+	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 )
@@ -81,8 +82,8 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
 						fmt.Println("AlreadyUsed: ", acode.AlreadyUsed)
 						var rvk odb.AuthCodeRevolk
 						rvk.AuthorizationCode = acode.AuthorizationCode
-						suc, rvid := m.Db.AddAuthCodeRevolk(nil, &rvk)
-						fmt.Println("suc: ", suc)
+						rvsuc, rvid := m.Db.AddAuthCodeRevolk(nil, &rvk)
+						fmt.Println("rvsuc: ", rvsuc)
 						fmt.Println("rvid: ", rvid)
 					} else {
 						acode.AlreadyUsed = true
@@ -94,7 +95,7 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
 								fmt.Println("tkn: ", tkn)
 								rtn.AccessToken = tkn.Token
 								rtn.TokenType = tokenTypeBearer
-								rtn.ExpiresIn = codeAccessTokenLifeInMinutes
+								rtn.ExpiresIn = codeAccessTokenLifeInMinutes * 60
 								if tkn.RefreshTokenID != 0 {
 									rtkn := m.Db.GetRefreshToken(tkn.RefreshTokenID)
 									fmt.Println("rtkn: ", rtkn)
@@ -112,6 +113,56 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
 			}
 		}
 	}
+	return suc, &rtn
+}
 
+//GetCredentialsToken GetCredentialsToken
+func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token) {
+	var rtn Token
+	var suc bool
+	client := m.Db.GetClient(ct.ClientID)
+	fmt.Println("client: ", client)
+	if client != nil && client.Secret == ct.Secret && client.Enabled {
+
+		gton := m.grantTypeTurnedOn(ct.ClientID, clientGrantType)
+		fmt.Println("gton: ", gton)
+		if gton {
+			delSuc := m.Db.DeleteCredentialsGrant(ct.ClientID)
+			fmt.Println("delSuc: ", delSuc)
+			if delSuc {
+				roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ct.ClientID)
+				fmt.Println("roleURIList", roleURIList)
+				var pl Payload
+				pl.TokenType = accessTokenType
+				//pl.UserID = hashUser(ac.UserID)
+				pl.ClientID = ct.ClientID
+				pl.Subject = clientGrantType
+				pl.ExpiresInMinute = credentialsGrantAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+				pl.Grant = clientGrantType
+				pl.RoleURIs = *m.populateRoleURLList(roleURIList)
+				//pl.ScopeList = *scopeStrList
+				accessToken := m.GenerateAccessToken(&pl)
+				fmt.Println("accessToken: ", accessToken)
+				if accessToken != "" {
+					now := time.Now()
+					var aToken odb.AccessToken
+					aToken.Token = accessToken
+					aToken.Expires = now.Add(time.Minute * codeAccessTokenLifeInMinutes)
+
+					var cgrant odb.CredentialsGrant
+					cgrant.ClientID = ct.ClientID
+
+					cgSuc, _ := m.Db.AddCredentialsGrant(&cgrant, &aToken)
+					fmt.Println("cgSuc: ", cgSuc)
+					if cgSuc {
+						rtn.AccessToken = accessToken
+						rtn.TokenType = tokenTypeBearer
+						rtn.ExpiresIn = credentialsGrantAccessTokenLifeInMinutes * 60
+						suc = true
+					}
+				}
+			}
+		}
+	}
 	return suc, &rtn
 }
