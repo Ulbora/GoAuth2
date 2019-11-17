@@ -96,7 +96,8 @@ type Manager interface {
 	//token manager
 	GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token)
 	GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token)
-	// GetRefreshToken(rt *RefreshTokenReq) (bool, *Token)
+	GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
+	// GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
 	// GetPasswordToken(pt *PasswordTokenReq) (bool, *Token)
 
 	// //validate Token

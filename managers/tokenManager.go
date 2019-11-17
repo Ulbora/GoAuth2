@@ -166,3 +166,68 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 	}
 	return suc, &rtn
 }
+
+//GetAuthCodeAccesssTokenWithRefreshToken GetAuthCodeAccesssTokenWithRefreshToken
+func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
+	var rtn Token
+	var suc bool
+	if rt.ClientID != 0 && rt.Secret != "" {
+		client := m.Db.GetClient(rt.ClientID)
+		fmt.Println("client in get with ref: ", client)
+		if client.Enabled && client.Secret == rt.Secret {
+			fmt.Println("client enabled and secrets match")
+			rtk := m.Db.GetRefreshTokenKey()
+			if rtk != "" {
+				fmt.Println("refresh Token Key", rtk)
+				rtsuc, rtpl := m.ValidateJwt(rt.RefreshToken, rtk)
+				fmt.Println("rtsuc", rtsuc)
+				fmt.Println("rtpl", rtpl)
+				if rtsuc && rtpl.ClientID == rt.ClientID && rtpl.Subject == codeGrantType {
+					fmt.Println("rtpl in success", rtpl)
+					fmt.Println("unhashed user", unHashUser(rtpl.UserID))
+					acode := m.Db.GetAuthorizationCode(rt.ClientID, unHashUser(rtpl.UserID))
+					fmt.Println("acode", acode)
+					fmt.Println("acode user", (*acode)[0].UserID)
+					fmt.Println("acode AccessTokenID", (*acode)[0].AccessTokenID)
+					if len(*acode) > 0 && (*acode)[0].UserID == unHashUser(rtpl.UserID) {
+						fmt.Println("acode user suc")
+						atkn := m.Db.GetAccessToken((*acode)[0].AccessTokenID)
+						//fmt.Println("atkn", atkn)
+						if atkn.ID > 0 {
+							fmt.Println("atkn", atkn)
+							tkkey := m.Db.GetAccessTokenKey()
+							fmt.Println("tkkey", tkkey)
+							atsuc, atpl := m.ValidateJwt(atkn.Token, tkkey)
+							fmt.Println("atsuc", atsuc)
+							fmt.Println("atpl", atpl)
+							if atpl.UserID == rtpl.UserID && atpl.ClientID == rt.ClientID {
+								fmt.Println("atpl in success", atpl)
+								var pl Payload
+								pl.TokenType = accessTokenType
+								pl.UserID = atpl.UserID
+								pl.ClientID = rt.ClientID
+								pl.Subject = codeGrantType
+								pl.ExpiresInMinute = codeAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+								pl.Grant = codeGrantType
+								pl.RoleURIs = atpl.RoleURIs
+								pl.ScopeList = atpl.ScopeList
+								newAccessToken := m.GenerateAccessToken(&pl)
+								fmt.Println("newAccessToken", newAccessToken)
+								now := time.Now()
+								(*acode)[0].Expires = now.Add(time.Minute * authCodeLifeInMinutes)
+								atkn.Token = newAccessToken
+								atkn.Expires = now.Add(time.Minute * codeAccessTokenLifeInMinutes)
+								suc = m.Db.UpdateAuthorizationCodeAndToken(&(*acode)[0], atkn)
+								rtn.AccessToken = newAccessToken
+								rtn.TokenType = tokenTypeBearer
+								rtn.ExpiresIn = codeAccessTokenLifeInMinutes
+								rtn.RefreshToken = rt.RefreshToken
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return suc, &rtn
+}

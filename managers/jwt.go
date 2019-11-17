@@ -93,8 +93,8 @@ func (m *OauthManager) GenerateJwtToken(pl *Payload) string {
 	return rtn
 }
 
-//Validate Validate
-func (m *OauthManager) Validate(token string, secret string) (bool, *Payload) {
+//ValidateJwt ValidateJwt
+func (m *OauthManager) ValidateJwt(token string, secret string) (bool, *Payload) {
 	var valid bool
 	var rtn Payload
 	var pl jwtPayload
@@ -114,22 +114,22 @@ func (m *OauthManager) Validate(token string, secret string) (bool, *Payload) {
 	_, err := jwt.Verify([]byte(token), hs, &pl, validatePayload)
 	if err == nil {
 		valid = true
-		//fmt.Println("pl: ", pl)
-		rtn.TokenType = pl.TokenType
-		rtn.UserID = pl.UserID
-		rtn.ClientID = pl.ClientID
-		rtn.Subject = pl.Payload.Subject
-		rtn.Issuer = pl.Payload.Issuer
-		aud := pl.Payload.Audience
-		for _, a := range aud {
-			rtn.Audience = a
-			break
-		}
-		rtn.Grant = pl.Grant
-		rtn.RoleURIs = pl.RoleURIs
-		rtn.ScopeList = pl.ScopeList
-
 	}
+
+	//fmt.Println("pl: ", pl)
+	rtn.TokenType = pl.TokenType
+	rtn.UserID = pl.UserID
+	rtn.ClientID = pl.ClientID
+	rtn.Subject = pl.Payload.Subject
+	rtn.Issuer = pl.Payload.Issuer
+	aud := pl.Payload.Audience
+	for _, a := range aud {
+		rtn.Audience = a
+		break
+	}
+	rtn.Grant = pl.Grant
+	rtn.RoleURIs = pl.RoleURIs
+	rtn.ScopeList = pl.ScopeList
 
 	return valid, &rtn
 }

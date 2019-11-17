@@ -74,7 +74,7 @@ func TestOauthManagerAccessToken_GenerateAccessToken(t *testing.T) {
 		fmt.Println("accessToken in test: ", token)
 	}
 
-	valid, val := m.Validate(token, "6g651dfg6gf6")
+	valid, val := m.ValidateJwt(token, "6g651dfg6gf6")
 	if !valid || val.UserID != "tester1" {
 		t.Fail()
 	}
