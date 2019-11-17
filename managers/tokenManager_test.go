@@ -384,3 +384,96 @@ func TestOauthManagerToken_GetAuthCodeWithRefToken(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestOauthManagerToken_GetPasseordToken(t *testing.T) {
+
+	var dbAu db.Database
+	var odbAu odb.Oauth2DB
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbAu = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	var mGetRow db.DbRow
+	mGetRow.Row = []string{"2", "12345", "test", "test", "test", "true", "false"}
+	mydb.MockRow1 = &mGetRow
+
+	var rows [][]string
+	row1 := []string{"1", "password", "2"}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+
+	//get cred grant for del
+	var rows2 [][]string
+	row2 := []string{"1", "2", "tester1", "2"}
+	rows2 = append(rows2, row2)
+	var dbrows2 db.DbRows
+	dbrows2.Rows = rows2
+	mydb.MockRows2 = &dbrows2
+
+	var nowTime = time.Now().Format(odb.TimeFormat)
+	var getRow2 db.DbRow
+	getRow2.Row = []string{"2", "someacctoken2", nowTime, "1"}
+	mydb.MockRow2 = &getRow2
+
+	var getRow3 db.DbRow
+	getRow3.Row = []string{"1", "somereftoken2"}
+	mydb.MockRow3 = &getRow3
+
+	mydb.MockDeleteSuccess1 = true
+	mydb.MockDeleteSuccess2 = true
+	mydb.MockDeleteSuccess3 = true
+
+	//ClientRoleAllowedURIList
+	var rows3 [][]string
+	row3 := []string{"4", "somerole", "1", "someurl", "2"}
+	rows3 = append(rows3, row3)
+	var dbrows3 db.DbRows
+	dbrows3.Rows = rows3
+	mydb.MockRows3 = &dbrows3
+
+	//access token key
+	var mGetRow4 db.DbRow
+	mGetRow4.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow4 = &mGetRow4
+
+	var mGetRow5 db.DbRow
+	mGetRow5.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow5 = &mGetRow5
+
+	mydb.MockInsertSuccess1 = true
+	mydb.MockInsertID1 = 5
+
+	mydb.MockInsertSuccess2 = true
+	mydb.MockInsertID2 = 6
+
+	mydb.MockInsertSuccess3 = true
+	mydb.MockInsertID3 = 6
+
+	var moadb msdb.MySQLOauthDB
+	moadb.DB = dbAu
+
+	odbAu = &moadb
+
+	var man OauthManager
+	man.Db = odbAu
+	var m Manager
+	m = &man
+	var ptr PasswordTokenReq
+	ptr.ClientID = 2
+	ptr.Username = "tester1"
+	suc, tkn := m.GetPasswordToken(&ptr)
+	fmt.Println("suc: ", suc)
+	fmt.Println("tkn: ", tkn)
+	if !suc || tkn.TokenType != "bearer" {
+		t.Fail()
+	}
+}

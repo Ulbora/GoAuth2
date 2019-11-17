@@ -125,6 +125,7 @@ func (d *MySQLOauthDB) DeletePasswordGrant(clientID int64, userID string) bool {
 	for _, pw := range *pwgList {
 		if pw.ID > 0 {
 			at := d.GetAccessToken(pw.AccessTokenID)
+			fmt.Println("at: ", at)
 			var rtid int64
 			if at.RefreshTokenID > 0 {
 				rt := d.GetRefreshToken(at.RefreshTokenID)

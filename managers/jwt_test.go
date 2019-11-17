@@ -3,7 +3,7 @@ package managers
 import (
 	"fmt"
 	"testing"
-	"time"
+	//"time"
 )
 
 var tkn string
@@ -107,17 +107,17 @@ func TestOauthManagerJwt_ValidateJwtToken(t *testing.T) {
 
 }
 
-func TestOauthManagerJwt_ValidateJwtTokenExpired(t *testing.T) {
-	time.Sleep(2 * time.Minute)
-	var man OauthManager
+// func TestOauthManagerJwt_ValidateJwtTokenExpired(t *testing.T) {
+// 	time.Sleep(2 * time.Minute)
+// 	var man OauthManager
 
-	suc, pl := man.ValidateJwt(tknExp, "secret")
-	fmt.Println("suc: ", suc)
-	if suc || pl.TokenType != "test" || pl.UserID != "tester1" || pl.ClientID != 234 {
-		t.Fail()
-	} else {
-		fmt.Println("pl: ", pl)
-		fmt.Println("Audience: ", pl.Audience)
-	}
+// 	suc, pl := man.ValidateJwt(tknExp, "secret")
+// 	fmt.Println("suc: ", suc)
+// 	if suc || pl.TokenType != "test" || pl.UserID != "tester1" || pl.ClientID != 234 {
+// 		t.Fail()
+// 	} else {
+// 		fmt.Println("pl: ", pl)
+// 		fmt.Println("Audience: ", pl.Audience)
+// 	}
 
-}
+// }

@@ -51,7 +51,7 @@ type RefreshTokenReq struct {
 //PasswordTokenReq PasswordTokenReq
 type PasswordTokenReq struct {
 	Username string
-	Password string
+	// Password string
 	ClientID int64
 }
 
@@ -167,6 +167,65 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 	return suc, &rtn
 }
 
+//GetPasswordToken GetPasswordToken
+func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token) {
+	var rtn Token
+	var suc bool
+	client := m.Db.GetClient(pt.ClientID)
+	fmt.Println("pw client: ", client)
+	if client != nil && client.Enabled {
+
+		gton := m.grantTypeTurnedOn(pt.ClientID, passwordGrantType)
+		fmt.Println("pw gton: ", gton)
+		if gton {
+			delSuc := m.Db.DeletePasswordGrant(pt.ClientID, pt.Username)
+			fmt.Println("delSuc: ", delSuc)
+			if delSuc {
+				roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(pt.ClientID)
+				fmt.Println("roleURIList", roleURIList)
+				var pl Payload
+				pl.TokenType = accessTokenType
+				pl.UserID = hashUser(pt.Username)
+				pl.ClientID = pt.ClientID
+				pl.Subject = passwordGrantType
+				pl.ExpiresInMinute = passwordGrantAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+				pl.Grant = passwordGrantType
+				pl.RoleURIs = *m.populateRoleURLList(roleURIList)
+				//pl.ScopeList = *scopeStrList
+				accessToken := m.GenerateAccessToken(&pl)
+				fmt.Println("accessToken: ", accessToken)
+				if accessToken != "" {
+					refToken := m.GenerateRefreshToken(pt.ClientID, hashUser(pt.Username), passwordGrantType)
+					fmt.Println("refToken: ", refToken)
+
+					now := time.Now()
+					var aToken odb.AccessToken
+					aToken.Token = accessToken
+					aToken.Expires = now.Add(time.Minute * passwordGrantAccessTokenLifeInMinutes)
+
+					var rToken odb.RefreshToken
+					rToken.Token = refToken
+
+					var pgrant odb.PasswordGrant
+					pgrant.ClientID = pt.ClientID
+					pgrant.UserID = pt.Username
+
+					cgSuc, _ := m.Db.AddPasswordGrant(&pgrant, &aToken, &rToken)
+					fmt.Println("cgSuc: ", cgSuc)
+					if cgSuc {
+						rtn.AccessToken = accessToken
+						rtn.TokenType = tokenTypeBearer
+						rtn.ExpiresIn = passwordGrantAccessTokenLifeInMinutes * 60
+						rtn.RefreshToken = refToken
+						suc = true
+					}
+				}
+			}
+		}
+	}
+	return suc, &rtn
+}
+
 //GetAuthCodeAccesssTokenWithRefreshToken GetAuthCodeAccesssTokenWithRefreshToken
 func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
 	var rtn Token
@@ -220,7 +279,7 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 								suc = m.Db.UpdateAuthorizationCodeAndToken(&(*acode)[0], atkn)
 								rtn.AccessToken = newAccessToken
 								rtn.TokenType = tokenTypeBearer
-								rtn.ExpiresIn = codeAccessTokenLifeInMinutes
+								rtn.ExpiresIn = codeAccessTokenLifeInMinutes * 60
 								rtn.RefreshToken = rt.RefreshToken
 							}
 						}
