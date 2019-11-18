@@ -313,33 +313,33 @@ func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenR
 				fmt.Println("pgnt AccessTokenID", (*pgnt)[0].AccessTokenID)
 				if len(*pgnt) > 0 && (*pgnt)[0].UserID == unHashUser(rtpl.UserID) {
 					fmt.Println("pgnt user suc")
-					atkn := m.Db.GetAccessToken((*pgnt)[0].AccessTokenID)
-					fmt.Println("atkn", atkn)
-					if atkn.ID > 0 {
-						fmt.Println("atkn", atkn)
+					pgatkn := m.Db.GetAccessToken((*pgnt)[0].AccessTokenID)
+					fmt.Println("pgatkn", pgatkn)
+					if pgatkn.ID > 0 {
+						fmt.Println("pgatkn", pgatkn)
 						tkkey := m.Db.GetAccessTokenKey()
 						fmt.Println("tkkey", tkkey)
-						atsuc, atpl := m.ValidateJwt(atkn.Token, tkkey)
+						atsuc, pwatpl := m.ValidateJwt(pgatkn.Token, tkkey)
 						fmt.Println("atsuc", atsuc)
-						fmt.Println("atpl", atpl)
-						if atpl.UserID == rtpl.UserID && atpl.ClientID == rt.ClientID {
-							fmt.Println("atpl in success", atpl)
+						fmt.Println("pwatpl", pwatpl)
+						if pwatpl.UserID == rtpl.UserID && pwatpl.ClientID == rt.ClientID {
+							fmt.Println("pwatpl in success", pwatpl)
 							var pl Payload
 							pl.TokenType = accessTokenType
-							pl.UserID = atpl.UserID
+							pl.UserID = pwatpl.UserID
 							pl.ClientID = rt.ClientID
 							pl.Subject = passwordGrantType
 							pl.ExpiresInMinute = passwordGrantAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
 							pl.Grant = passwordGrantType
-							pl.RoleURIs = atpl.RoleURIs
-							pl.ScopeList = atpl.ScopeList
+							pl.RoleURIs = pwatpl.RoleURIs
+							pl.ScopeList = pwatpl.ScopeList
 							newAccessToken := m.GenerateAccessToken(&pl)
 							fmt.Println("newAccessToken", newAccessToken)
 							now := time.Now()
 							//(*pgnt)[0].Expires = now.Add(time.Minute * authCodeLifeInMinutes)
-							atkn.Token = newAccessToken
-							atkn.Expires = now.Add(time.Minute * passwordGrantAccessTokenLifeInMinutes)
-							suc = m.Db.UpdateAccessToken(nil, atkn)
+							pgatkn.Token = newAccessToken
+							pgatkn.Expires = now.Add(time.Minute * passwordGrantAccessTokenLifeInMinutes)
+							suc = m.Db.UpdateAccessToken(nil, pgatkn)
 							rtn.AccessToken = newAccessToken
 							rtn.TokenType = tokenTypeBearer
 							rtn.ExpiresIn = passwordGrantAccessTokenLifeInMinutes * 60
