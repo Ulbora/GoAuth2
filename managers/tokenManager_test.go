@@ -477,3 +477,97 @@ func TestOauthManagerToken_GetPasseordToken(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestOauthManagerToken_GetPasswordWithRefToken(t *testing.T) {
+
+	var dbAu db.Database
+	var odbAu odb.Oauth2DB
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbAu = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	var mGetRow1 db.DbRow
+	mGetRow1.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow1 = &mGetRow1
+
+	var mGetRow2 db.DbRow
+	mGetRow2.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow2 = &mGetRow2
+
+	var mGetRow3 db.DbRow
+	mGetRow3.Row = []string{"2", "12345", "test", "test", "test", "true", "false"}
+	mydb.MockRow3 = &mGetRow3
+
+	var mGetRow4 db.DbRow
+	mGetRow4.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow4 = &mGetRow4
+
+	//var tt = time.Now()
+	// var getRow4 db.DbRow
+	// getRow4.Row = []string{"1", "2", "3", tt.Format("2006-01-02 15:04:05"), "3", "13445bb", "false"}
+	// mydb.MockRow4 = &getRow4
+	var rows [][]string
+	row1 := []string{"1", "2", "tester1", "2"}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+
+	var moadb msdb.MySQLOauthDB
+	moadb.DB = dbAu
+
+	odbAu = &moadb
+
+	var man OauthManager
+	man.Db = odbAu
+	var m Manager
+	m = &man
+
+	var pl Payload
+	pl.TokenType = accessTokenType
+	pl.UserID = hashUser("tester1")
+	pl.ClientID = 2
+	pl.Subject = passwordGrantType
+	pl.ExpiresInMinute = passwordGrantAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+	pl.Grant = passwordGrantType
+	//pl.RoleURIs = *m.populateRoleURLList(roleURIList)
+	//pl.ScopeList = *scopeStrList
+	accessToken := man.GenerateAccessToken(&pl)
+
+	var nowTime = time.Now().Format(odb.TimeFormat)
+	var getRow5 db.DbRow
+	getRow5.Row = []string{"2", accessToken, nowTime, "5"}
+	mydb.MockRow5 = &getRow5
+
+	rtoken := man.GenerateRefreshToken(2, hashUser("tester1"), "password")
+	fmt.Println("rtoken: ", rtoken)
+
+	var mGetRow6 db.DbRow
+	mGetRow6.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow6 = &mGetRow6
+
+	var mGetRow7 db.DbRow
+	mGetRow7.Row = []string{"2", "6g651dfg6gf6"}
+	mydb.MockRow7 = &mGetRow7
+
+	mydb.MockUpdateSuccess1 = true
+	// mydb.MockUpdateSuccess2 = true
+
+	var rtr RefreshTokenReq
+	rtr.ClientID = 2
+	//rtr.Secret = "12345"
+	rtr.RefreshToken = rtoken
+	suc, tkn := m.GetPasswordAccesssTokenWithRefreshToken(&rtr)
+	fmt.Println("suc: ", suc)
+	fmt.Println("tkn: ", tkn)
+	if !suc || tkn.TokenType != "bearer" {
+		t.Fail()
+	}
+}

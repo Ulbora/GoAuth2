@@ -100,7 +100,7 @@ type Manager interface {
 	GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token)
 	GetPasswordToken(pt *PasswordTokenReq) (bool, *Token)
 	GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
-	// GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
+	GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
 
 	// //validate Token
 	// ValidateAccessToken(at *ValidateAccessTokenReq) bool

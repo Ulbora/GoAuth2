@@ -290,3 +290,65 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 	}
 	return suc, &rtn
 }
+
+//GetPasswordAccesssTokenWithRefreshToken GetPasswordAccesssTokenWithRefreshToken
+func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
+	var rtn Token
+	var suc bool
+	if rt.ClientID != 0 {
+		client := m.Db.GetClient(rt.ClientID)
+		fmt.Println("client in get with ref: ", client)
+		rtk := m.Db.GetRefreshTokenKey()
+		if rtk != "" {
+			fmt.Println("refresh Token Key", rtk)
+			rtsuc, rtpl := m.ValidateJwt(rt.RefreshToken, rtk)
+			fmt.Println("rtsuc", rtsuc)
+			fmt.Println("rtpl", rtpl)
+			if rtsuc && rtpl.ClientID == rt.ClientID && rtpl.Subject == passwordGrantType {
+				fmt.Println("rtpl in success", rtpl)
+				fmt.Println("unhashed user", unHashUser(rtpl.UserID))
+				pgnt := m.Db.GetPasswordGrant(rt.ClientID, unHashUser(rtpl.UserID))
+				fmt.Println("pgnt", pgnt)
+				fmt.Println("pgnt user", (*pgnt)[0].UserID)
+				fmt.Println("pgnt AccessTokenID", (*pgnt)[0].AccessTokenID)
+				if len(*pgnt) > 0 && (*pgnt)[0].UserID == unHashUser(rtpl.UserID) {
+					fmt.Println("pgnt user suc")
+					atkn := m.Db.GetAccessToken((*pgnt)[0].AccessTokenID)
+					fmt.Println("atkn", atkn)
+					if atkn.ID > 0 {
+						fmt.Println("atkn", atkn)
+						tkkey := m.Db.GetAccessTokenKey()
+						fmt.Println("tkkey", tkkey)
+						atsuc, atpl := m.ValidateJwt(atkn.Token, tkkey)
+						fmt.Println("atsuc", atsuc)
+						fmt.Println("atpl", atpl)
+						if atpl.UserID == rtpl.UserID && atpl.ClientID == rt.ClientID {
+							fmt.Println("atpl in success", atpl)
+							var pl Payload
+							pl.TokenType = accessTokenType
+							pl.UserID = atpl.UserID
+							pl.ClientID = rt.ClientID
+							pl.Subject = passwordGrantType
+							pl.ExpiresInMinute = passwordGrantAccessTokenLifeInMinutes //(60 * time.Minute) => (60 * 60) => 3600 minutes => 1 hours
+							pl.Grant = passwordGrantType
+							pl.RoleURIs = atpl.RoleURIs
+							pl.ScopeList = atpl.ScopeList
+							newAccessToken := m.GenerateAccessToken(&pl)
+							fmt.Println("newAccessToken", newAccessToken)
+							now := time.Now()
+							//(*pgnt)[0].Expires = now.Add(time.Minute * authCodeLifeInMinutes)
+							atkn.Token = newAccessToken
+							atkn.Expires = now.Add(time.Minute * passwordGrantAccessTokenLifeInMinutes)
+							suc = m.Db.UpdateAccessToken(nil, atkn)
+							rtn.AccessToken = newAccessToken
+							rtn.TokenType = tokenTypeBearer
+							rtn.ExpiresIn = passwordGrantAccessTokenLifeInMinutes * 60
+							rtn.RefreshToken = rt.RefreshToken
+						}
+					}
+				}
+			}
+		}
+	}
+	return suc, &rtn
+}
