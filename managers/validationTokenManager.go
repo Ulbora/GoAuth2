@@ -1,5 +1,7 @@
 package managers
 
+import "fmt"
+
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
  All rights reserved.
@@ -23,10 +25,66 @@ package managers
 //ValidateAccessTokenReq ValidateAccessTokenReq
 type ValidateAccessTokenReq struct {
 	AccessToken string
-	Hashed bool
-	UserID string
-	ClientID int64
-	Role string
-	URI string
-	Scope string
+	Hashed      bool
+	UserID      string
+	ClientID    int64
+	Role        string
+	URI         string
+	Scope       string
+}
+
+//ValidateAccessToken ValidateAccessToken
+func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
+	var rtn bool
+	if at.AccessToken != "" && at.UserID != "" && at.ClientID != 0 {
+		var userID string
+		if at.Hashed {
+			userID = unHashUser(at.UserID)
+			fmt.Println("unhashed user: ", userID)
+		} else {
+			userID = at.UserID
+		}
+		tkkey := m.Db.GetAccessTokenKey()
+		fmt.Println("tkkey", tkkey)
+		atsuc, pwatpl := m.ValidateJwt(at.AccessToken, tkkey)
+		fmt.Println("atsuc", atsuc)
+		fmt.Println("pwatpl", pwatpl)
+		if userID == unHashUser(pwatpl.UserID) && pwatpl.TokenType == accessTokenType &&
+			pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
+			fmt.Println("inside if")
+			var roleFound bool
+			var scopeFound bool
+			if at.Role != "" && at.URI != "" {
+				for _, r := range pwatpl.RoleURIs {
+					if r.Role == at.Role && r.ClientAllowedURI == at.URI {
+						roleFound = true
+						break
+					}
+				}
+			} else {
+				roleFound = true
+			}
+			if at.Scope != "" {
+				for _, s := range pwatpl.ScopeList {
+					if s == at.Scope {
+						scopeFound = true
+						break
+					}
+				}
+			} else {
+				for _, s := range pwatpl.ScopeList {
+					if s == "write" {
+						scopeFound = true
+						break
+					}
+				}
+			}
+			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound{
+				rtn = true
+			}else if (pwatpl.Grant == clientGrantType || pwatpl.Grant == passwordGrantType) && roleFound{
+				rtn = true
+			}
+		}
+	}
+	return rtn
 }

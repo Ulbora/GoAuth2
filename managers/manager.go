@@ -103,7 +103,7 @@ type Manager interface {
 	GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
 
 	// //validate Token
-	// ValidateAccessToken(at *ValidateAccessTokenReq) bool
+	ValidateAccessToken(at *ValidateAccessTokenReq) bool
 }
 
 //OauthManager OauthManager
