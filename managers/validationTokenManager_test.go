@@ -146,7 +146,6 @@ func TestOauthManagerTakenVal_ValidateAccessToken2(t *testing.T) {
 	}
 }
 
-
 func TestOauthManagerTakenVal_ValidateAccessToken3(t *testing.T) {
 
 	var dbAu db.Database
@@ -220,4 +219,3 @@ func TestOauthManagerTakenVal_ValidateAccessToken3(t *testing.T) {
 		t.Fail()
 	}
 }
-

@@ -49,7 +49,7 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 		atsuc, pwatpl := m.ValidateJwt(at.AccessToken, tkkey)
 		fmt.Println("atsuc", atsuc)
 		fmt.Println("pwatpl", pwatpl)
-		if userID == unHashUser(pwatpl.UserID) && pwatpl.TokenType == accessTokenType &&
+		if atsuc && userID == unHashUser(pwatpl.UserID) && pwatpl.TokenType == accessTokenType &&
 			pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
 			fmt.Println("inside if")
 			var roleFound bool
@@ -79,9 +79,9 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 					}
 				}
 			}
-			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound{
+			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound {
 				rtn = true
-			}else if (pwatpl.Grant == clientGrantType || pwatpl.Grant == passwordGrantType) && roleFound{
+			} else if (pwatpl.Grant == clientGrantType || pwatpl.Grant == passwordGrantType) && roleFound {
 				rtn = true
 			}
 		}
