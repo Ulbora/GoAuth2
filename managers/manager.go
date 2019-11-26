@@ -22,6 +22,7 @@ package managers
 
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	px "github.com/Ulbora/GoProxy"
 )
 
 const (
@@ -46,6 +47,8 @@ const (
 	authCodeLifeInMinutes                    = 5
 
 	implicitAccessTokenLifeInMinutes = 600 //10 hours
+
+	authenticationServiceLocal = "http://localhost:3001/rs/user/login"
 )
 
 //Manager Manager
@@ -104,9 +107,12 @@ type Manager interface {
 
 	// //validate Token
 	ValidateAccessToken(at *ValidateAccessTokenReq) bool
+
+	UserLogin(login *Login) bool
 }
 
 //OauthManager OauthManager
 type OauthManager struct {
-	Db odb.Oauth2DB
+	Db    odb.Oauth2DB
+	Proxy px.Proxy
 }

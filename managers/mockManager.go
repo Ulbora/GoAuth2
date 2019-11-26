@@ -62,6 +62,8 @@ type MockManager struct {
 	MockPasswordRefreshTokenSuccess bool
 
 	MockValidateAccessTokenSuccess bool
+
+	MockUserLoginSuccess bool
 }
 
 //client
@@ -257,4 +259,9 @@ func (m *MockManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenRe
 //ValidateAccessToken ValidateAccessToken
 func (m *MockManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 	return m.MockValidateAccessTokenSuccess
+}
+
+//UserLogin UserLogin
+func (m *MockManager) UserLogin(login *Login) bool {
+	return m.MockUserLoginSuccess
 }
