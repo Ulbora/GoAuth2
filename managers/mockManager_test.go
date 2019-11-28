@@ -512,3 +512,18 @@ func TestMockManager_ValidateAccessToken(t *testing.T) {
 		t.Fail()
 	}
 }
+
+
+func TestMockManager_UserLogin(t *testing.T) {
+	var man MockManager
+
+	man.MockUserLoginSuccess = true
+
+	var m Manager
+	m = &man
+	var l Login
+	suc := m.UserLogin(&l)
+	if !suc {
+		t.Fail()
+	}
+}

@@ -53,25 +53,22 @@ func (m *OauthManager) UserLogin(login *Login) bool {
 	} else {
 		url = authenticationServiceLocal
 	}
-	aJSON, err := json.Marshal(login)
-	if err != nil {
-		log.Println("Marshal error: ", err)
+	aJSON, _ := json.Marshal(login)	
+	req, rErr := http.NewRequest("POST", url, bytes.NewBuffer(aJSON))
+	if rErr != nil {
+		log.Println("Request error: ", rErr)
 	} else {
-		req, rErr := http.NewRequest("POST", url, bytes.NewBuffer(aJSON))
-		if rErr != nil {
-			log.Println("Request error: ", rErr)
-		} else {
-			req.Header.Set("Content-Type", "application/json")
-			var lres LoginRes
-			suc, code := m.Proxy.Do(req, &lres)
-			fmt.Println("suc: ", suc)
-			fmt.Println("code: ", code)
-			fmt.Println("lres: ", lres)
-			fmt.Println("lres code: ", lres.Code)
-			fmt.Println("clientid: ", strconv.FormatInt(login.ClientID, 10))
-			if suc && code == http.StatusOK && strconv.FormatInt(login.ClientID, 10) == lres.Code {
-				rtn = lres.Valid
-			}
+		req.Header.Set("Content-Type", "application/json")
+		var lres LoginRes
+		fmt.Println("m.Proxy: ", m.Proxy)
+		suc, code := m.Proxy.Do(req, &lres)
+		fmt.Println("suc: ", suc)
+		fmt.Println("code: ", code)
+		fmt.Println("lres: ", lres)
+		fmt.Println("lres code: ", lres.Code)
+		fmt.Println("clientid: ", strconv.FormatInt(login.ClientID, 10))
+		if suc && code == http.StatusOK && strconv.FormatInt(login.ClientID, 10) == lres.Code {
+			rtn = lres.Valid
 		}
 	}
 	return rtn

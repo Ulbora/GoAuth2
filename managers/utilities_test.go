@@ -1,3 +1,4 @@
+//Package managers ...
 package managers
 
 import (
@@ -13,7 +14,6 @@ func Test_generateClientSecret(t *testing.T) {
 	}
 }
 
-
 func Test_generateRandonAuthCode(t *testing.T) {
 	sec := generateClientSecret()
 	fmt.Println("random :", sec)
@@ -21,7 +21,6 @@ func Test_generateRandonAuthCode(t *testing.T) {
 		t.Fail()
 	}
 }
-
 
 func Test_hashUser(t *testing.T) {
 	h := hashUser("kenz")
