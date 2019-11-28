@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	m "github.com/Ulbora/GoAuth2/managers"
-	
 )
 
 /*
