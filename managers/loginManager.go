@@ -1,3 +1,4 @@
+//Package managers ...
 package managers
 
 /*
@@ -53,7 +54,7 @@ func (m *OauthManager) UserLogin(login *Login) bool {
 	} else {
 		url = authenticationServiceLocal
 	}
-	aJSON, _ := json.Marshal(login)	
+	aJSON, _ := json.Marshal(login)
 	req, rErr := http.NewRequest("POST", url, bytes.NewBuffer(aJSON))
 	if rErr != nil {
 		log.Println("Request error: ", rErr)

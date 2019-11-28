@@ -1,3 +1,4 @@
+//Package managers ...
 package managers
 
 import (
@@ -512,7 +513,6 @@ func TestMockManager_ValidateAccessToken(t *testing.T) {
 		t.Fail()
 	}
 }
-
 
 func TestMockManager_UserLogin(t *testing.T) {
 	var man MockManager

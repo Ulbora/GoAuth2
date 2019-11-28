@@ -1,3 +1,4 @@
+//Package managers ...
 package managers
 
 import (
@@ -27,7 +28,6 @@ import (
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-
 
 //AuthCode AuthCode
 type AuthCode struct {
@@ -105,9 +105,9 @@ func (m *OauthManager) ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCode
 	if ac.ClientID != 0 && ac.RedirectURI != "" {
 		cru := m.Db.GetClientRedirectURI(ac.ClientID, ac.RedirectURI)
 		fmt.Println("cru: ", cru)
-		if cru.ID > 0 && cru.URI == ac.RedirectURI && cru.ClientID == ac.ClientID{
+		if cru.ID > 0 && cru.URI == ac.RedirectURI && cru.ClientID == ac.ClientID {
 			c := m.Db.GetClient(ac.ClientID)
-			if c.Enabled{
+			if c.Enabled {
 				rtn.Valid = true
 				rtn.ClientName = c.Name
 				rtn.WebSite = c.WebSite
