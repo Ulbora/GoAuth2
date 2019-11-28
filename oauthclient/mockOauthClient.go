@@ -38,31 +38,31 @@ type MockOauthClient struct {
 
 //Authorize Authorize
 func (o *MockOauthClient) Authorize(r *http.Request, c *Claim) bool {
-	var rtn bool
-	var hashed bool
-	tokenHeader := r.Header.Get("Authorization")
-	clientIDStr := r.Header.Get("clientId")
-	clientID, _ := strconv.ParseInt(clientIDStr, 10, 64)
-	userID := r.Header.Get("userId")
-	hashedStr := r.Header.Get("hashed")
-	if hashedStr == "true" {
-		hashed = true
+	var mrtn bool
+	var mhashed bool
+	mtokenHeader := r.Header.Get("Authorization")
+	mclientIDStr := r.Header.Get("clientId")
+	mclientID, _ := strconv.ParseInt(mclientIDStr, 10, 64)
+	muserID := r.Header.Get("userId")
+	mhashedStr := r.Header.Get("hashed")
+	if mhashedStr == "true" {
+		mhashed = true
 	}
-	fmt.Println("tokenHeader", tokenHeader)
-	fmt.Println("clientIDStr", clientIDStr)
-	fmt.Println("clientID", clientID)
-	fmt.Println("userID", userID)
-	fmt.Println("hashed", hashed)
-	if tokenHeader != "" {
-		tokenArray := strings.Split(tokenHeader, " ")
-		fmt.Println("tokenArray", tokenArray)
-		if len(tokenArray) == 2 {
-			fmt.Println("tokenArray[1]", tokenArray[1])
-			rtn = o.MockValid
+	fmt.Println("tokenHeader", mtokenHeader)
+	fmt.Println("clientIDStr", mclientIDStr)
+	fmt.Println("clientID", mclientID)
+	fmt.Println("userID", muserID)
+	fmt.Println("hashed", mhashed)
+	if mtokenHeader != "" {
+		mtokenArray := strings.Split(mtokenHeader, " ")
+		fmt.Println("tokenArray", mtokenArray)
+		if len(mtokenArray) == 2 {
+			fmt.Println("tokenArray[1]", mtokenArray[1])
+			mrtn = o.MockValid
 		}
 	}
 
-	return rtn
+	return mrtn
 }
 
 //GetNewClient GetNewClient
