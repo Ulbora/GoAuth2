@@ -2,10 +2,7 @@
 package oauthclient
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 
 	m "github.com/Ulbora/GoAuth2/managers"
 )
@@ -38,31 +35,31 @@ type MockOauthClient struct {
 
 //Authorize Authorize
 func (o *MockOauthClient) Authorize(r *http.Request, c *Claim) bool {
-	var mrtn bool
-	var mhashed bool
-	mtokenHeader := r.Header.Get("Authorization")
-	mclientIDStr := r.Header.Get("clientId")
-	mclientID, _ := strconv.ParseInt(mclientIDStr, 10, 64)
-	muserID := r.Header.Get("userId")
-	mhashedStr := r.Header.Get("hashed")
-	if mhashedStr == "true" {
-		mhashed = true
-	}
-	fmt.Println("tokenHeader", mtokenHeader)
-	fmt.Println("clientIDStr", mclientIDStr)
-	fmt.Println("clientID", mclientID)
-	fmt.Println("userID", muserID)
-	fmt.Println("hashed", mhashed)
-	if mtokenHeader != "" {
-		mtokenArray := strings.Split(mtokenHeader, " ")
-		fmt.Println("tokenArray", mtokenArray)
-		if len(mtokenArray) == 2 {
-			fmt.Println("tokenArray[1]", mtokenArray[1])
-			mrtn = o.MockValid
-		}
-	}
+	// var mrtn bool
+	// var mhashed bool
+	// mtokenHeader := r.Header.Get("Authorization")
+	// mclientIDStr := r.Header.Get("clientId")
+	// mclientID, _ := strconv.ParseInt(mclientIDStr, 10, 64)
+	// muserID := r.Header.Get("userId")
+	// mhashedStr := r.Header.Get("hashed")
+	// if mhashedStr == "true" {
+	// 	mhashed = true
+	// }
+	// fmt.Println("tokenHeader", mtokenHeader)
+	// fmt.Println("clientIDStr", mclientIDStr)
+	// fmt.Println("clientID", mclientID)
+	// fmt.Println("userID", muserID)
+	// fmt.Println("hashed", mhashed)
+	// if mtokenHeader != "" {
+	// 	mtokenArray := strings.Split(mtokenHeader, " ")
+	// 	fmt.Println("tokenArray", mtokenArray)
+	// 	if len(mtokenArray) == 2 {
+	// 		fmt.Println("tokenArray[1]", mtokenArray[1])
+	// 		mrtn = o.MockValid
+	// 	}
+	// }
 
-	return mrtn
+	return o.MockValid
 }
 
 //GetNewClient GetNewClient
