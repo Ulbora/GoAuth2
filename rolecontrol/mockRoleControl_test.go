@@ -1,11 +1,10 @@
+//Package rolecontrol ...
 package rolecontrol
 
 import (
 	"fmt"
 	"testing"
 )
-
-
 
 func TestMockOauthAssets_AddControledURLs(t *testing.T) {
 	var cass ControlledAsset
@@ -24,7 +23,7 @@ func TestMockOauthAssets_AddControledURLs(t *testing.T) {
 	var cus = []ControlledURL{cu}
 
 	var oa MockOauthAssets
-	
+
 	ac := oa.GetNewAssetControl()
 	suc := ac.AddControledURLs(&cus)
 	if !suc {
@@ -34,7 +33,7 @@ func TestMockOauthAssets_AddControledURLs(t *testing.T) {
 
 func TestMockOauthAssets_GetControlledAsset(t *testing.T) {
 	var oa MockOauthAssets
-	oa.MockSuccess = true 
+	oa.MockSuccess = true
 	oa.MockAllowedRole = "admin"
 	ac := oa.GetNewAssetControl()
 	suc, role := ac.GetControlledAsset("/test", "test")
@@ -46,7 +45,7 @@ func TestMockOauthAssets_GetControlledAsset(t *testing.T) {
 
 func TestMockOauthAssets_GetControlledAsset2(t *testing.T) {
 	var oa MockOauthAssets
-	oa.MockSuccess = true 
+	oa.MockSuccess = true
 	oa.MockAllowedRole = "superAdmin"
 	ac := oa.GetNewAssetControl()
 	suc, role := ac.GetControlledAsset("/test", "test2")
@@ -58,25 +57,24 @@ func TestMockOauthAssets_GetControlledAsset2(t *testing.T) {
 
 func TestMockOauthAssets_GetControlledAsset3(t *testing.T) {
 	var oa MockOauthAssets
-	oa.MockSuccess = false 
+	oa.MockSuccess = false
 	//oa.MockAllowedRole = "superAdmin"
 	ac := oa.GetNewAssetControl()
 	suc, role := ac.GetControlledAsset("/test1", "test2")
 	fmt.Println("role: ", role)
-	if suc  {
+	if suc {
 		t.Fail()
 	}
 }
 
-
 func TestMockOauthAssets_GetControlledAsset4(t *testing.T) {
 	var oa MockOauthAssets
-	oa.MockSuccess = false 
+	oa.MockSuccess = false
 	//oa.MockAllowedRole = "superAdmin"
 	ac := oa.GetNewAssetControl()
 	suc, role := ac.GetControlledAsset("/test", "test22")
 	fmt.Println("role: ", role)
-	if suc  {
+	if suc {
 		t.Fail()
 	}
 }

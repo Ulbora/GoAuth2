@@ -1,3 +1,4 @@
+//Package handlers ...
 package handlers
 
 import (
@@ -26,13 +27,11 @@ func TestOauthRestHandler_ProcessBody(t *testing.T) {
 	aJSON, _ := json.Marshal(robj)
 	r, _ := http.NewRequest("POST", sURL, bytes.NewBuffer(aJSON))
 	var obj testObj
-	suc,_ :=oh.ProcessBody(r, &obj)
-	if !suc || obj.Valid != true || obj.Code != "3"{
+	suc, _ := oh.ProcessBody(r, &obj)
+	if !suc || obj.Valid != true || obj.Code != "3" {
 		t.Fail()
 	}
 }
-
-
 
 func TestOauthRestHandler_ProcessBodyBadObj(t *testing.T) {
 	var oh OauthRestHandler
@@ -45,8 +44,8 @@ func TestOauthRestHandler_ProcessBodyBadObj(t *testing.T) {
 	aJSON, _ := json.Marshal(robj)
 	r, _ := http.NewRequest("POST", sURL, bytes.NewBuffer(aJSON))
 	var obj testObj
-	suc,_ := oh.ProcessBody(r, nil)
-	if suc || obj.Valid != false || obj.Code != ""{
+	suc, _ := oh.ProcessBody(r, nil)
+	if suc || obj.Valid != false || obj.Code != "" {
 		t.Fail()
 	}
 }

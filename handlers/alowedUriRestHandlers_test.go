@@ -1,3 +1,4 @@
+//Package handlers ...
 package handlers
 
 import (
@@ -16,7 +17,6 @@ import (
 
 func TestOauthRestHandler_AddAllowedURISuperBadMedia(t *testing.T) {
 	var oh OauthRestHandler
-
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true

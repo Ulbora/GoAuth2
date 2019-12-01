@@ -1,3 +1,4 @@
+//Package rolecontrol ...
 package rolecontrol
 
 import (
@@ -50,16 +51,15 @@ func TestOauthAssets_GetControlledAsset2(t *testing.T) {
 func TestOauthAssets_GetControlledAsset3(t *testing.T) {
 	suc, role := ac.GetControlledAsset("/test1", "test2")
 	fmt.Println("role: ", role)
-	if suc  {
+	if suc {
 		t.Fail()
 	}
 }
 
-
 func TestOauthAssets_GetControlledAsset4(t *testing.T) {
 	suc, role := ac.GetControlledAsset("/test", "test22")
 	fmt.Println("role: ", role)
-	if suc  {
+	if suc {
 		t.Fail()
 	}
 }

@@ -1,6 +1,5 @@
+//Package rolecontrol ...
 package rolecontrol
-
-
 
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
@@ -22,10 +21,9 @@ package rolecontrol
 
 */
 
-
 //MockOauthAssets MockOauthAssets
 type MockOauthAssets struct {
-	MockSuccess bool
+	MockSuccess     bool
 	MockAllowedRole string
 }
 
@@ -35,7 +33,7 @@ func (c *MockOauthAssets) AddControledURLs(urls *[]ControlledURL) bool {
 }
 
 //GetControlledAsset GetControlledAsset
-func (c *MockOauthAssets) GetControlledAsset(url string, ca string) (bool, string) {	
+func (c *MockOauthAssets) GetControlledAsset(url string, ca string) (bool, string) {
 	return c.MockSuccess, c.MockAllowedRole
 }
 

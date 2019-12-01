@@ -1,3 +1,4 @@
+//Package rolecontrol ...
 package rolecontrol
 
 import "fmt"
@@ -37,7 +38,7 @@ type ControlledURL struct {
 //AssetControl AssetControl
 type AssetControl interface {
 	AddControledURLs(urls *[]ControlledURL) bool
-	GetControlledAsset(url string, ca string)  (bool, string)
+	GetControlledAsset(url string, ca string) (bool, string)
 }
 
 //OauthAssets OauthAssets
