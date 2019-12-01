@@ -48,7 +48,7 @@ func (h *OauthRestHandler) GetNewRestHandler() RestHandler {
 }
 
 //CheckContent CheckContent
-func (h *OauthRestHandler) CheckContent(w http.ResponseWriter, r *http.Request) bool {
+func (h *OauthRestHandler) CheckContent(r *http.Request) bool {
 	var rtn bool
 	cType := r.Header.Get("Content-Type")
 	if cType == "application/json" {
@@ -56,6 +56,11 @@ func (h *OauthRestHandler) CheckContent(w http.ResponseWriter, r *http.Request) 
 		rtn = true
 	}
 	return rtn
+}
+
+//SetContentType SetContentType
+func (h *OauthRestHandler) SetContentType(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
 }
 
 //ProcessBody ProcessBody

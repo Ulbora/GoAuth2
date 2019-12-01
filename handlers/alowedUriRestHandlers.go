@@ -41,8 +41,9 @@ func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Req
 	fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &auscl)
 	if auth {
-		w.Header().Set("Content-Type", "application/json")
-		aasURIContOk := h.CheckContent(w, r)
+		// w.Header().Set("Content-Type", "application/json")
+		h.SetContentType(w)
+		aasURIContOk := h.CheckContent(r)
 		fmt.Println("conOk: ", aasURIContOk)
 		if !aasURIContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
@@ -108,8 +109,9 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 		auth := h.Client.Authorize(r, &aucl)
 
 		if auth {
-			w.Header().Set("Content-Type", "application/json")
-			aaURIContOk := h.CheckContent(w, r)
+			// w.Header().Set("Content-Type", "application/json")
+			h.SetContentType(w)
+			aaURIContOk := h.CheckContent(r)
 			fmt.Println("conOk: ", aaURIContOk)
 			if !aaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
@@ -151,8 +153,9 @@ func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.
 	fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &upuscl)
 	if auth {
-		w.Header().Set("Content-Type", "application/json")
-		uPasURIContOk := h.CheckContent(w, r)
+		// w.Header().Set("Content-Type", "application/json")
+		h.SetContentType(w)
+		uPasURIContOk := h.CheckContent(r)
 		fmt.Println("conOk: ", uPasURIContOk)
 		if !uPasURIContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
@@ -183,5 +186,65 @@ func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.
 		w.WriteHeader(http.StatusUnauthorized)
 		resJSON, _ := json.Marshal(fusrtn)
 		fmt.Fprint(w, string(resJSON))
+	}
+}
+
+//UpdateAllowedURI UpdateAllowedURI
+func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Request) {
+	var ucu m.ClientAllowedURI
+	upbsuc, uberr := h.ProcessBody(r, &ucu)
+	fmt.Println("upbsuc: ", upbsuc)
+	fmt.Println("ucu: ", ucu)
+	fmt.Println("uberr: ", uberr)
+	if upbsuc && uberr == nil {
+
+		//url of this endpoint
+		var upAuURL = "/ulbora/rs/clientAllowedUri/update"
+
+		//make sure the user in not trying to add a prohibited url that has "ulbora" in the url
+		//looks through a list of assets for the url and determines the role needed based on the asset part of the url
+		acsuc, role := h.AssetControl.GetControlledAsset(ucu.URI, "ulbora")
+
+		var aucl oc.Claim
+		if acsuc {
+			aucl.Role = role
+		} else {
+			aucl.Role = "admin"
+		}
+		aucl.URL = upAuURL
+		aucl.Scope = "write"
+		fmt.Println("client: ", h.Client)
+
+		//check that jwt token user role has permission to use the url of this endpoint
+		auth := h.Client.Authorize(r, &aucl)
+
+		if auth {
+			// w.Header().Set("Content-Type", "application/json")
+			h.SetContentType(w)
+			upaURIContOk := h.CheckContent(r)
+			fmt.Println("conOk: ", upaURIContOk)
+			if !upaURIContOk {
+				http.Error(w, "json required", http.StatusUnsupportedMediaType)
+			} else {
+				uuSuc := h.Manager.UpdateClientAllowedURI(&ucu)
+				fmt.Println("uuSuc: ", uuSuc)
+				var rtn Response
+				if uuSuc {
+					rtn.Success = uuSuc
+					w.WriteHeader(http.StatusOK)
+				} else {
+					w.WriteHeader(http.StatusInternalServerError)
+				}
+				resJSON, _ := json.Marshal(rtn)
+				fmt.Fprint(w, string(resJSON))
+			}
+		} else {
+			var frtn ResponseID
+			w.WriteHeader(http.StatusUnauthorized)
+			resJSON, _ := json.Marshal(frtn)
+			fmt.Fprint(w, string(resJSON))
+		}
+	} else {
+		http.Error(w, uberr.Error(), http.StatusBadRequest)
 	}
 }
