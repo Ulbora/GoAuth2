@@ -31,29 +31,97 @@ import (
 
 //AddAllowedURISuper AddAllowedURISuper
 func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Request) {
-	//var theURL = "/ulbora/rs/clientAllowedUriSuper/add"
-	//acsuc, role := h.AssetControl.GetControlledAsset(theURL, "ulbora")
-	var cl oc.Claim
-	cl.Role = "testRole"
-	cl.URL = "testURL"
-	cl.Scope = "web"
+	//url of this endpoint
+	var addsAuURL = "/ulbora/rs/clientAllowedUriSuper/add"
+
+	var auscl oc.Claim
+	auscl.Role = "superAdmin"
+	auscl.URL = addsAuURL
+	auscl.Scope = "write"
 	fmt.Println("client: ", h.Client)
-	auth := h.Client.Authorize(r, &cl)
+	auth := h.Client.Authorize(r, &auscl)
 	if auth {
 		w.Header().Set("Content-Type", "application/json")
-		aaURIContOk := h.CheckContent(w, r)
-		fmt.Println("conOk: ", aaURIContOk)
-		if !aaURIContOk {
+		aasURIContOk := h.CheckContent(w, r)
+		fmt.Println("conOk: ", aasURIContOk)
+		if !aasURIContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
-			var cu m.ClientAllowedURI
-			bsuc, berr := h.ProcessBody(r, &cu)
+			var cus m.ClientAllowedURI
+			bsuc, berr := h.ProcessBody(r, &cus)
 			fmt.Println("bsuc: ", bsuc)
-			fmt.Println("cu: ", cu)
+			fmt.Println("cu: ", cus)
 			fmt.Println("berr: ", berr)
 			if !bsuc && berr != nil {
 				http.Error(w, berr.Error(), http.StatusBadRequest)
 			} else {
+				ausSuc, ausID := h.Manager.AddClientAllowedURI(&cus)
+				fmt.Println("auSuc: ", ausSuc)
+				fmt.Println("auID: ", ausID)
+				var rtn ResponseID
+				if ausSuc && ausID != 0 {
+					rtn.Success = ausSuc
+					rtn.ID = ausID
+					w.WriteHeader(http.StatusOK)
+				} else {
+					w.WriteHeader(http.StatusInternalServerError)
+				}
+				resJSON, _ := json.Marshal(rtn)
+				fmt.Fprint(w, string(resJSON))
+			}
+		}
+	} else {
+		var fsrtn ResponseID
+		w.WriteHeader(http.StatusUnauthorized)
+		resJSON, _ := json.Marshal(fsrtn)
+		fmt.Fprint(w, string(resJSON))
+	}
+}
+
+//AddAllowedURI AddAllowedURI
+func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request) {
+	var cu m.ClientAllowedURI
+	bsuc, berr := h.ProcessBody(r, &cu)
+	fmt.Println("bsuc: ", bsuc)
+	fmt.Println("cu: ", cu)
+	fmt.Println("berr: ", berr)
+	if bsuc && berr == nil {
+
+		//url of this endpoint
+		var addAuURL = "/ulbora/rs/clientAllowedUri/add"
+
+		//make sure the user in not trying to add a prohibited url that has "ulbora" in the url
+		//looks through a list of assets for the url and determines the role needed based on the asset part of the url
+		acsuc, role := h.AssetControl.GetControlledAsset(cu.URI, "ulbora")
+
+		var aucl oc.Claim
+		if acsuc {
+			aucl.Role = role
+		} else {
+			aucl.Role = "admin"
+		}
+		aucl.URL = addAuURL
+		aucl.Scope = "write"
+		fmt.Println("client: ", h.Client)
+
+		//check that jwt token user role has permission to use the url of this endpoint
+		auth := h.Client.Authorize(r, &aucl)
+
+		if auth {
+			w.Header().Set("Content-Type", "application/json")
+			aaURIContOk := h.CheckContent(w, r)
+			fmt.Println("conOk: ", aaURIContOk)
+			if !aaURIContOk {
+				http.Error(w, "json required", http.StatusUnsupportedMediaType)
+			} else {
+				// var cu m.ClientAllowedURI
+				// bsuc, berr := h.ProcessBody(r, &cu)
+				// fmt.Println("bsuc: ", bsuc)
+				// fmt.Println("cu: ", cu)
+				// fmt.Println("berr: ", berr)
+				// if !bsuc && berr != nil {
+				// 	http.Error(w, berr.Error(), http.StatusBadRequest)
+				// } else {
 				auSuc, auID := h.Manager.AddClientAllowedURI(&cu)
 				fmt.Println("auSuc: ", auSuc)
 				fmt.Println("auID: ", auID)
@@ -67,13 +135,15 @@ func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Req
 				}
 				resJSON, _ := json.Marshal(rtn)
 				fmt.Fprint(w, string(resJSON))
+				//}
 			}
+		} else {
+			var frtn ResponseID
+			w.WriteHeader(http.StatusUnauthorized)
+			resJSON, _ := json.Marshal(frtn)
+			fmt.Fprint(w, string(resJSON))
 		}
 	} else {
-		var frtn ResponseID
-		w.WriteHeader(http.StatusUnauthorized)
-		resJSON, _ := json.Marshal(frtn)
-		fmt.Fprint(w, string(resJSON))
+		http.Error(w, berr.Error(), http.StatusBadRequest)
 	}
-
 }

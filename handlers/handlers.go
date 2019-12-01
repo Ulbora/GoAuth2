@@ -36,4 +36,5 @@ type Response struct {
 //RestHandler RestHandler
 type RestHandler interface {
 	AddAllowedURISuper(w http.ResponseWriter, r *http.Request)
+	AddAllowedURI(w http.ResponseWriter, r *http.Request)
 }

@@ -49,7 +49,11 @@ type OauthAssets struct {
 //AddControledURLs AddControledURLs
 func (c *OauthAssets) AddControledURLs(urls *[]ControlledURL) bool {
 	var rtn bool
+	//creates a map by url of prohibited sections to be used in a paticular url
 	c.m = make(map[string]*[]ControlledAsset)
+	//for example
+	//url https://addTest/admin/user
+	//could require role superUser
 	for _, u := range *urls {
 		c.m[u.URL] = &u.Asset
 	}
@@ -70,6 +74,10 @@ func (c *OauthAssets) GetControlledAsset(url string, ca string) (bool, string) {
 	if cas != nil {
 		fmt.Println("cas: ", cas)
 		for _, a := range *cas {
+			//example
+			//url https://addTest/admin/user
+			//with controlled asset "admin"
+			//could require role superUser
 			if a.ControlledAsset == ca {
 				suc = true
 				rtn = a.AllowedRole
