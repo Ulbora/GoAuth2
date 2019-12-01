@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
+	"github.com/gorilla/mux"
 )
 
 /*
@@ -41,7 +43,6 @@ func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Req
 	fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &auscl)
 	if auth {
-		// w.Header().Set("Content-Type", "application/json")
 		h.SetContentType(w)
 		aasURIContOk := h.CheckContent(r)
 		fmt.Println("conOk: ", aasURIContOk)
@@ -246,5 +247,43 @@ func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Reque
 		}
 	} else {
 		http.Error(w, uberr.Error(), http.StatusBadRequest)
+	}
+}
+
+//GetAllowedURI GetAllowedURI
+func (h *OauthRestHandler) GetAllowedURI(w http.ResponseWriter, r *http.Request) {
+	var getAuURL = "/ulbora/rs/clientAllowedUri/get"
+
+	var guscl oc.Claim
+	guscl.Role = "admin"
+	guscl.URL = getAuURL
+	guscl.Scope = "read"
+	//fmt.Println("client: ", h.Client)
+	auth := h.Client.Authorize(r, &guscl)
+	if auth {
+		//var id string
+		h.SetContentType(w)
+		vars := mux.Vars(r)
+		fmt.Println("vars: ", len(vars))
+		if vars != nil && len(vars) != 0 {
+			var idStr = vars["id"]
+			fmt.Println("vars: ", vars)
+			id, idErr := strconv.ParseInt(idStr, 10, 64)
+			if id != 0 && idErr == nil {
+				fmt.Println("id: ", id)
+				getAu := h.Manager.GetClientAllowedURI(id)
+				fmt.Println("getAu: ", getAu)
+				w.WriteHeader(http.StatusOK)
+				resJSON, _ := json.Marshal(getAu)
+				fmt.Fprint(w, string(resJSON))
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+			}
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
+
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
 	}
 }

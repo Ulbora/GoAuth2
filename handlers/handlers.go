@@ -39,4 +39,5 @@ type RestHandler interface {
 	AddAllowedURI(w http.ResponseWriter, r *http.Request)
 	UpdateAllowedURISuper(w http.ResponseWriter, r *http.Request)
 	UpdateAllowedURI(w http.ResponseWriter, r *http.Request)
+	GetAllowedURI(w http.ResponseWriter, r *http.Request)
 }
