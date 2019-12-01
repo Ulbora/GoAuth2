@@ -49,7 +49,7 @@ type OauthAssets struct {
 //AddControledURLs AddControledURLs
 func (c *OauthAssets) AddControledURLs(urls *[]ControlledURL) bool {
 	var rtn bool
-	//creates a map by url of prohibited sections to be used in a paticular url
+	//creates a map by url of prohibited sections to be used in a particular url
 	c.m = make(map[string]*[]ControlledAsset)
 	//for example
 	//url https://addTest/admin/user
