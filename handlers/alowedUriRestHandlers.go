@@ -114,14 +114,6 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 			if !aaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
-				// var cu m.ClientAllowedURI
-				// bsuc, berr := h.ProcessBody(r, &cu)
-				// fmt.Println("bsuc: ", bsuc)
-				// fmt.Println("cu: ", cu)
-				// fmt.Println("berr: ", berr)
-				// if !bsuc && berr != nil {
-				// 	http.Error(w, berr.Error(), http.StatusBadRequest)
-				// } else {
 				auSuc, auID := h.Manager.AddClientAllowedURI(&cu)
 				fmt.Println("auSuc: ", auSuc)
 				fmt.Println("auID: ", auID)
@@ -135,7 +127,6 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 				}
 				resJSON, _ := json.Marshal(rtn)
 				fmt.Fprint(w, string(resJSON))
-				//}
 			}
 		} else {
 			var frtn ResponseID
@@ -145,5 +136,52 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 		}
 	} else {
 		http.Error(w, berr.Error(), http.StatusBadRequest)
+	}
+}
+
+//UpdateAllowedURISuper UpdateAllowedURISuper
+func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.Request) {
+	//url of this endpoint
+	var upsAuURL = "/ulbora/rs/clientAllowedUriSuper/update"
+
+	var upuscl oc.Claim
+	upuscl.Role = "superAdmin"
+	upuscl.URL = upsAuURL
+	upuscl.Scope = "write"
+	fmt.Println("client: ", h.Client)
+	auth := h.Client.Authorize(r, &upuscl)
+	if auth {
+		w.Header().Set("Content-Type", "application/json")
+		uPasURIContOk := h.CheckContent(w, r)
+		fmt.Println("conOk: ", uPasURIContOk)
+		if !uPasURIContOk {
+			http.Error(w, "json required", http.StatusUnsupportedMediaType)
+		} else {
+			var upcus m.ClientAllowedURI
+			ubsuc, uberr := h.ProcessBody(r, &upcus)
+			fmt.Println("ubsuc: ", ubsuc)
+			fmt.Println("upcu: ", upcus)
+			fmt.Println("uberr: ", uberr)
+			if !ubsuc && uberr != nil {
+				http.Error(w, uberr.Error(), http.StatusBadRequest)
+			} else {
+				uPusSuc := h.Manager.UpdateClientAllowedURI(&upcus)
+				fmt.Println("auSuc: ", uPusSuc)
+				var rtn Response
+				if uPusSuc {
+					rtn.Success = uPusSuc
+					w.WriteHeader(http.StatusOK)
+				} else {
+					w.WriteHeader(http.StatusInternalServerError)
+				}
+				resJSON, _ := json.Marshal(rtn)
+				fmt.Fprint(w, string(resJSON))
+			}
+		}
+	} else {
+		var fusrtn Response
+		w.WriteHeader(http.StatusUnauthorized)
+		resJSON, _ := json.Marshal(fusrtn)
+		fmt.Fprint(w, string(resJSON))
 	}
 }
