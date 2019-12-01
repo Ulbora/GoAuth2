@@ -805,7 +805,6 @@ func TestOauthRestHandler_GetAllowedURIBadParam(t *testing.T) {
 	}
 }
 
-
 func TestOauthRestHandler_GetAllowedURINoParam(t *testing.T) {
 	var oh OauthRestHandler
 	var cuo m.ClientAllowedURI
