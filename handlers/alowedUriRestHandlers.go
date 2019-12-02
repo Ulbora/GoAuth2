@@ -323,3 +323,46 @@ func (h *OauthRestHandler) GetAllowedURIList(w http.ResponseWriter, r *http.Requ
 		w.WriteHeader(http.StatusUnauthorized)
 	}
 }
+
+//DeleteAllowedURI DeleteAllowedURI
+func (h *OauthRestHandler) DeleteAllowedURI(w http.ResponseWriter, r *http.Request) {
+	var getAudURL = "/ulbora/rs/clientAllowedUri/delete"
+
+	var gusdcl oc.Claim
+	gusdcl.Role = "admin"
+	gusdcl.URL = getAudURL
+	gusdcl.Scope = "read"
+	//fmt.Println("client: ", h.Client)
+	auth := h.Client.Authorize(r, &gusdcl)
+	if auth {
+		//var id string
+		h.SetContentType(w)
+		vars := mux.Vars(r)
+		fmt.Println("vars: ", len(vars))
+		if vars != nil && len(vars) != 0 {
+			var idStr = vars["id"]
+			fmt.Println("vars delete: ", vars)
+			id, idErr := strconv.ParseInt(idStr, 10, 64)
+			fmt.Println("id delete: ", id)
+			if id != 0 && idErr == nil {
+				fmt.Println("id: ", id)
+				getAud := h.Manager.DeleteClientAllowedURI(id)
+				var rtn Response
+				if getAud {
+					rtn.Success = getAud
+					w.WriteHeader(http.StatusOK)
+				} else {
+					w.WriteHeader(http.StatusInternalServerError)
+				}
+				resJSON, _ := json.Marshal(rtn)
+				fmt.Fprint(w, string(resJSON))
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+			}
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
+	}
+}

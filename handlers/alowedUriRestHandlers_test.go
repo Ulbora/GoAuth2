@@ -999,3 +999,175 @@ func TestOauthRestHandler_GetAllowedURIListNoParam(t *testing.T) {
 		t.Fail()
 	}
 }
+
+// delete uri
+
+func TestOauthRestHandler_DeleteAllowedURI(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "5",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteAllowedURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy Response
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 200 || w.Header().Get("Content-Type") != "application/json" || bdy.Success != true {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_DeleteAllowedURIFail(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = false
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "5",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteAllowedURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy Response
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 500 || w.Header().Get("Content-Type") != "application/json" {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_DeleteAllowedURINotAuth(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = false
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "5",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteAllowedURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 401 {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_DeleteAllowedURIBadParam(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "q",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteAllowedURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 400 || w.Header().Get("Content-Type") != "application/json" {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_DeleteAllowedURINoParam(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	// vars := map[string]string{
+	// 	"id": "q",
+	// }
+	// r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteAllowedURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 400 || w.Header().Get("Content-Type") != "application/json" {
+		t.Fail()
+	}
+}
