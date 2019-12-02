@@ -842,3 +842,160 @@ func TestOauthRestHandler_GetAllowedURINoParam(t *testing.T) {
 		t.Fail()
 	}
 }
+
+// get list
+
+func TestOauthRestHandler_GetAllowedURIlist(t *testing.T) {
+	var oh OauthRestHandler
+	var cuo m.ClientAllowedURI
+	cuo.ID = 4
+	cuo.URI = "/test/url"
+	cuo.ClientID = 10
+
+	var cuol = []m.ClientAllowedURI{cuo}
+
+	var man m.MockManager
+	man.MockClientAllowedURIList = cuol
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"clientId": "55",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.GetAllowedURIList(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy []m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	fmt.Println("len(bdy): ", len(bdy))
+	if w.Code != 200 || w.Header().Get("Content-Type") != "application/json" || len(bdy) != 1 {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_GetAllowedURIListNotAuth(t *testing.T) {
+	var oh OauthRestHandler
+	var cuo m.ClientAllowedURI
+	cuo.ID = 4
+	cuo.URI = "/test/url"
+	cuo.ClientID = 10
+
+	var man m.MockManager
+	man.MockClientAllowedURI = cuo
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = false
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "5",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.GetAllowedURIList(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 401 {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_GetAllowedURIListBadParam(t *testing.T) {
+	var oh OauthRestHandler
+	var cuo m.ClientAllowedURI
+	cuo.ID = 4
+	cuo.URI = "/test/url"
+	cuo.ClientID = 10
+
+	var man m.MockManager
+	man.MockClientAllowedURI = cuo
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	vars := map[string]string{
+		"id": "q",
+	}
+	r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.GetAllowedURIList(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 400 || w.Header().Get("Content-Type") != "application/json" {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_GetAllowedURIListNoParam(t *testing.T) {
+	var oh OauthRestHandler
+	var cuo m.ClientAllowedURI
+	cuo.ID = 4
+	cuo.URI = "/test/url"
+	cuo.ClientID = 10
+
+	var man m.MockManager
+	man.MockClientAllowedURI = cuo
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	// vars := map[string]string{
+	// 	"id": "q",
+	// }
+	// r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.GetAllowedURIList(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy m.ClientAllowedURI
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 400 || w.Header().Get("Content-Type") != "application/json" {
+		t.Fail()
+	}
+}

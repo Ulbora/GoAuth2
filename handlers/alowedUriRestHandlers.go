@@ -282,7 +282,43 @@ func (h *OauthRestHandler) GetAllowedURI(w http.ResponseWriter, r *http.Request)
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 		}
+	} else {
+		w.WriteHeader(http.StatusUnauthorized)
+	}
+}
 
+//GetAllowedURIList GetAllowedURIList
+func (h *OauthRestHandler) GetAllowedURIList(w http.ResponseWriter, r *http.Request) {
+	var getAulURL = "/ulbora/rs/clientAllowedUri/list"
+
+	var gulcl oc.Claim
+	gulcl.Role = "admin"
+	gulcl.URL = getAulURL
+	gulcl.Scope = "read"
+	//fmt.Println("client: ", h.Client)
+	auth := h.Client.Authorize(r, &gulcl)
+	if auth {
+		//var id string
+		h.SetContentType(w)
+		vars := mux.Vars(r)
+		fmt.Println("vars: ", len(vars))
+		if vars != nil && len(vars) != 0 {
+			var clientIDStr = vars["clientId"]
+			fmt.Println("vars: ", vars)
+			clientID, idErr := strconv.ParseInt(clientIDStr, 10, 64)
+			if clientID != 0 && idErr == nil {
+				fmt.Println("clientID: ", clientID)
+				getAul := h.Manager.GetClientAllowedURIList(clientID)
+				fmt.Println("getAul: ", getAul)
+				w.WriteHeader(http.StatusOK)
+				resJSON, _ := json.Marshal(getAul)
+				fmt.Fprint(w, string(resJSON))
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+			}
+		} else {
+			w.WriteHeader(http.StatusBadRequest)
+		}
 	} else {
 		w.WriteHeader(http.StatusUnauthorized)
 	}
