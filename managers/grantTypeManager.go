@@ -28,9 +28,9 @@ import (
 
 //ClientGrantType ClientGrantType
 type ClientGrantType struct {
-	ID        int64
-	GrantType string
-	ClientID  int64
+	ID        int64  `json:"id"`
+	GrantType string `json:"grantType"`
+	ClientID  int64  `json:"clientId"`
 }
 
 //AddClientGrantType AddClientGrantType

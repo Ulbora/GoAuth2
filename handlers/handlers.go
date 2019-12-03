@@ -42,4 +42,8 @@ type RestHandler interface {
 	GetAllowedURI(w http.ResponseWriter, r *http.Request)
 	GetAllowedURIList(w http.ResponseWriter, r *http.Request)
 	DeleteAllowedURI(w http.ResponseWriter, r *http.Request)
+
+	AddGrantType(w http.ResponseWriter, r *http.Request)
+	GetGrantTypeList(w http.ResponseWriter, r *http.Request)
+	DeleteGrantType(w http.ResponseWriter, r *http.Request)
 }
