@@ -73,9 +73,9 @@ github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:35.81,41.25 6 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:41.25,59.11 8 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:59.11,64.20 4 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:64.20,66.5 1 1
-github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:66.10,71.27 5 1
+github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:66.10,71.28 5 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:78.5,79.35 2 1
-github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:71.27,75.6 3 1
+github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:71.28,75.6 3 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:75.11,77.6 1 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:81.9,86.4 4 1
 github.com/Ulbora/GoAuth2/handlers/grantTypeRestHandlers.go:87.8,89.3 1 1

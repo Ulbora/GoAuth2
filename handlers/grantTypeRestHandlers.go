@@ -64,13 +64,13 @@ func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) 
 			if !aaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
-				auSuc, auID := h.Manager.AddClientGrantType(&cg)
-				fmt.Println("gtSuc: ", auSuc)
-				fmt.Println("gtID: ", auID)
+				gtaSuc, gtID := h.Manager.AddClientGrantType(&cg)
+				fmt.Println("gtaSuc: ", gtaSuc)
+				fmt.Println("gtID: ", gtID)
 				var rtn ResponseID
-				if auSuc && auID != 0 {
-					rtn.Success = auSuc
-					rtn.ID = auID
+				if gtaSuc && gtID != 0 {
+					rtn.Success = gtaSuc
+					rtn.ID = gtID
 					w.WriteHeader(http.StatusOK)
 				} else {
 					w.WriteHeader(http.StatusInternalServerError)
@@ -79,9 +79,9 @@ func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) 
 				fmt.Fprint(w, string(resJSON))
 			}
 		} else {
-			var frtn ResponseID
+			var gtfrtn ResponseID
 			w.WriteHeader(http.StatusUnauthorized)
-			resJSON, _ := json.Marshal(frtn)
+			resJSON, _ := json.Marshal(gtfrtn)
 			fmt.Fprint(w, string(resJSON))
 		}
 	} else {
