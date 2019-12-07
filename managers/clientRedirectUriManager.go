@@ -28,9 +28,9 @@ import (
 
 //ClientRedirectURI ClientRedirectURI
 type ClientRedirectURI struct {
-	ID       int64
-	URI      string
-	ClientID int64
+	ID       int64  `json:"id"`
+	URI      string `json:"uri"`
+	ClientID int64  `json:"clientId"`
 }
 
 //AddClientRedirectURI AddClientRedirectURI

@@ -331,7 +331,7 @@ func (h *OauthRestHandler) DeleteAllowedURI(w http.ResponseWriter, r *http.Reque
 	var gusdcl oc.Claim
 	gusdcl.Role = "admin"
 	gusdcl.URL = getAudURL
-	gusdcl.Scope = "read"
+	gusdcl.Scope = "write"
 	//fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &gusdcl)
 	if auth {

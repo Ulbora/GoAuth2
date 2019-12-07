@@ -46,4 +46,8 @@ type RestHandler interface {
 	AddGrantType(w http.ResponseWriter, r *http.Request)
 	GetGrantTypeList(w http.ResponseWriter, r *http.Request)
 	DeleteGrantType(w http.ResponseWriter, r *http.Request)
+
+	AddRedirectURI(w http.ResponseWriter, r *http.Request)
+	GetRedirectURIList(w http.ResponseWriter, r *http.Request)
+	DeleteRedirectURI(w http.ResponseWriter, r *http.Request)
 }

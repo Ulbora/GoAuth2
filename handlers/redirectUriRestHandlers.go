@@ -31,43 +31,42 @@ import (
 
 */
 
-//AddGrantType AddGrantType
-func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) {
-	var cg m.ClientGrantType
-	gsuc, gerr := h.ProcessBody(r, &cg)
-	fmt.Println("gsuc: ", gsuc)
-	fmt.Println("cg: ", cg)
-	fmt.Println("gerr: ", gerr)
-	if gsuc && gerr == nil {
+//AddRedirectURI AddRedirectURI
+func (h *OauthRestHandler) AddRedirectURI(w http.ResponseWriter, r *http.Request) {
+	var cr m.ClientRedirectURI
+	rusuc, ruerr := h.ProcessBody(r, &cr)
+	fmt.Println("rusuc: ", rusuc)
+	fmt.Println("cr: ", cr)
+	fmt.Println("ruerr: ", ruerr)
+	if rusuc && ruerr == nil {
 
 		//url of this endpoint
-		var addAuURL = "/ulbora/rs/clientGrantType/add"
+		var addRURL = "/ulbora/rs/clientRedirectUri/add"
 
-		var gtcl oc.Claim
-		gtcl.Role = "admin"
-
-		gtcl.URL = addAuURL
-		gtcl.Scope = "write"
+		var rucl oc.Claim
+		rucl.Role = "admin"
+		rucl.URL = addRURL
+		rucl.Scope = "write"
 		fmt.Println("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
-		auth := h.Client.Authorize(r, &gtcl)
+		auth := h.Client.Authorize(r, &rucl)
 
 		if auth {
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
-			aaURIContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", aaURIContOk)
-			if !aaURIContOk {
+			rdURIContOk := h.CheckContent(r)
+			fmt.Println("conOk: ", rdURIContOk)
+			if !rdURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
-				gtaSuc, gtID := h.Manager.AddClientGrantType(&cg)
-				fmt.Println("gtaSuc: ", gtaSuc)
-				fmt.Println("gtID: ", gtID)
+				ruSuc, ruID := h.Manager.AddClientRedirectURI(&cr)
+				fmt.Println("ruSuc: ", ruSuc)
+				fmt.Println("ruID: ", ruID)
 				var rtn ResponseID
-				if gtaSuc && gtID != 0 {
-					rtn.Success = gtaSuc
-					rtn.ID = gtID
+				if ruSuc && ruID != 0 {
+					rtn.Success = ruSuc
+					rtn.ID = ruID
 					w.WriteHeader(http.StatusOK)
 				} else {
 					w.WriteHeader(http.StatusInternalServerError)
@@ -76,41 +75,41 @@ func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) 
 				fmt.Fprint(w, string(resJSON))
 			}
 		} else {
-			var gtfrtn ResponseID
+			var rurtn ResponseID
 			w.WriteHeader(http.StatusUnauthorized)
-			resJSON, _ := json.Marshal(gtfrtn)
+			resJSON, _ := json.Marshal(rurtn)
 			fmt.Fprint(w, string(resJSON))
 		}
 	} else {
-		http.Error(w, gerr.Error(), http.StatusBadRequest)
+		http.Error(w, ruerr.Error(), http.StatusBadRequest)
 	}
 }
 
-//GetGrantTypeList GetGrantTypeList
-func (h *OauthRestHandler) GetGrantTypeList(w http.ResponseWriter, r *http.Request) {
-	var getAulURL = "/ulbora/rs/clientGrantType/list"
+//GetRedirectURIList GetRedirectURIList
+func (h *OauthRestHandler) GetRedirectURIList(w http.ResponseWriter, r *http.Request) {
+	var getRURL = "/ulbora/rs/clientRedirectUri/list"
 
-	var gtlcl oc.Claim
-	gtlcl.Role = "admin"
-	gtlcl.URL = getAulURL
-	gtlcl.Scope = "read"
+	var rugcl oc.Claim
+	rugcl.Role = "admin"
+	rugcl.URL = getRURL
+	rugcl.Scope = "read"
 	//fmt.Println("client: ", h.Client)
-	auth := h.Client.Authorize(r, &gtlcl)
+	auth := h.Client.Authorize(r, &rugcl)
 	if auth {
 		//var id string
 		h.SetContentType(w)
-		gtlvars := mux.Vars(r)
-		fmt.Println("vars: ", len(gtlvars))
-		if gtlvars != nil && len(gtlvars) != 0 {
-			var gtclientIDStr = gtlvars["clientId"]
-			fmt.Println("vars: ", gtlvars)
-			clientID, gtlidErr := strconv.ParseInt(gtclientIDStr, 10, 64)
-			if clientID != 0 && gtlidErr == nil {
+		rugvars := mux.Vars(r)
+		fmt.Println("vars: ", len(rugvars))
+		if rugvars != nil && len(rugvars) != 0 {
+			var rugclientIDStr = rugvars["clientId"]
+			fmt.Println("vars: ", rugvars)
+			clientID, rugidErr := strconv.ParseInt(rugclientIDStr, 10, 64)
+			if clientID != 0 && rugidErr == nil {
 				fmt.Println("clientID: ", clientID)
-				getgtl := h.Manager.GetClientGrantTypeList(clientID)
-				fmt.Println("getgtl: ", getgtl)
+				getrul := h.Manager.GetClientRedirectURIList(clientID)
+				fmt.Println("getrul: ", getrul)
 				w.WriteHeader(http.StatusOK)
-				resJSON, _ := json.Marshal(getgtl)
+				resJSON, _ := json.Marshal(getrul)
 				fmt.Fprint(w, string(resJSON))
 			} else {
 				w.WriteHeader(http.StatusBadRequest)
@@ -123,32 +122,32 @@ func (h *OauthRestHandler) GetGrantTypeList(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-//DeleteGrantType DeleteGrantType
-func (h *OauthRestHandler) DeleteGrantType(w http.ResponseWriter, r *http.Request) {
-	var getAudURL = "/ulbora/rs/clientGrantType/delete"
+//DeleteRedirectURI DeleteRedirectURI
+func (h *OauthRestHandler) DeleteRedirectURI(w http.ResponseWriter, r *http.Request) {
+	var drURL = "/ulbora/rs/clientRedirectUri/delete"
 
-	var gtdcl oc.Claim
-	gtdcl.Role = "admin"
-	gtdcl.URL = getAudURL
-	gtdcl.Scope = "write"
+	var rudcl oc.Claim
+	rudcl.Role = "admin"
+	rudcl.URL = drURL
+	rudcl.Scope = "write"
 	//fmt.Println("client: ", h.Client)
-	auth := h.Client.Authorize(r, &gtdcl)
+	auth := h.Client.Authorize(r, &rudcl)
 	if auth {
 		//var id string
 		h.SetContentType(w)
-		gtdvars := mux.Vars(r)
-		fmt.Println("vars: ", len(gtdvars))
-		if gtdvars != nil && len(gtdvars) != 0 {
-			var gtlidStr = gtdvars["id"]
-			fmt.Println("vars delete: ", gtdvars)
-			id, idErr := strconv.ParseInt(gtlidStr, 10, 64)
+		druvars := mux.Vars(r)
+		fmt.Println("vars: ", len(druvars))
+		if druvars != nil && len(druvars) != 0 {
+			var druidStr = druvars["id"]
+			fmt.Println("vars delete: ", druidStr)
+			id, idErr := strconv.ParseInt(druidStr, 10, 64)
 			fmt.Println("id delete: ", id)
 			if id != 0 && idErr == nil {
 				fmt.Println("id: ", id)
-				gtdsuc := h.Manager.DeleteClientGrantType(id)
+				rudsuc := h.Manager.DeleteClientRedirectURI(id)
 				var rtn Response
-				if gtdsuc {
-					rtn.Success = gtdsuc
+				if rudsuc {
+					rtn.Success = rudsuc
 					w.WriteHeader(http.StatusOK)
 				} else {
 					w.WriteHeader(http.StatusInternalServerError)
