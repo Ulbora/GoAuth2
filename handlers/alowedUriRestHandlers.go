@@ -94,7 +94,7 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 
 		//make sure the user in not trying to add a prohibited url that has "ulbora" in the url
 		//looks through a list of assets for the url and determines the role needed based on the asset part of the url
-		acsuc, role := h.AssetControl.GetControlledAsset(cu.URI, "ulbora")
+		acsuc, role := h.AssetControl.GetControlledAsset(addAuURL, "ulbora")
 
 		var aucl oc.Claim
 		if acsuc {
@@ -204,7 +204,7 @@ func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Reque
 
 		//make sure the user in not trying to add a prohibited url that has "ulbora" in the url
 		//looks through a list of assets for the url and determines the role needed based on the asset part of the url
-		acsuc, role := h.AssetControl.GetControlledAsset(ucu.URI, "ulbora")
+		acsuc, role := h.AssetControl.GetControlledAsset(upAuURL, "ulbora")
 
 		var aucl oc.Claim
 		if acsuc {

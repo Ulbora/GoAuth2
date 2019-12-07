@@ -28,9 +28,9 @@ import (
 
 //ClientRole ClientRole
 type ClientRole struct {
-	ID       int64
-	Role     string
-	ClientID int64
+	ID       int64  `json:"id"`
+	Role     string `json:"role"`
+	ClientID int64  `json:"clientId"`
 }
 
 //AddClientRole AddClientRole

@@ -50,4 +50,9 @@ type RestHandler interface {
 	AddRedirectURI(w http.ResponseWriter, r *http.Request)
 	GetRedirectURIList(w http.ResponseWriter, r *http.Request)
 	DeleteRedirectURI(w http.ResponseWriter, r *http.Request)
+
+	AddRoleSuper(w http.ResponseWriter, r *http.Request)
+	AddRole(w http.ResponseWriter, r *http.Request)
+	GetRoleList(w http.ResponseWriter, r *http.Request)
+	DeleteRole(w http.ResponseWriter, r *http.Request)
 }
