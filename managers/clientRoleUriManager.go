@@ -28,8 +28,8 @@ import (
 
 //ClientRoleURI ClientRoleURI
 type ClientRoleURI struct {
-	ClientRoleID       int64
-	ClientAllowedURIID int64
+	ClientRoleID       int64 `json:"clientRoleId"`
+	ClientAllowedURIID int64 `json:"clientAllowedUriId"`
 }
 
 //AddClientRoleURI AddClientRoleURI

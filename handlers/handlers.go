@@ -55,4 +55,8 @@ type RestHandler interface {
 	AddRole(w http.ResponseWriter, r *http.Request)
 	GetRoleList(w http.ResponseWriter, r *http.Request)
 	DeleteRole(w http.ResponseWriter, r *http.Request)
+
+	AddRoleURI(w http.ResponseWriter, r *http.Request)
+	GetRoleURIList(w http.ResponseWriter, r *http.Request)
+	DeleteRoleURI(w http.ResponseWriter, r *http.Request)
 }
