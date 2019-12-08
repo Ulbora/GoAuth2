@@ -1,3 +1,4 @@
+//Package handlers ...
 package handlers
 
 import (
@@ -244,7 +245,7 @@ func (h *OauthRestHandler) GetClientSearchList(w http.ResponseWriter, r *http.Re
 	gcltscl.Scope = "read"
 	//fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &gcltscl)
-	if auth {		
+	if auth {
 		h.SetContentType(w)
 		acltsContOk := h.CheckContent(r)
 		fmt.Println("conOk: ", acltsContOk)
@@ -285,7 +286,7 @@ func (h *OauthRestHandler) DeleteClient(w http.ResponseWriter, r *http.Request) 
 	cltdcl.Scope = "write"
 	//fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &cltdcl)
-	if auth {		
+	if auth {
 		h.SetContentType(w)
 		cltdvars := mux.Vars(r)
 		fmt.Println("vars: ", len(cltdvars))
