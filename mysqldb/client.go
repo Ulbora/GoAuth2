@@ -1,3 +1,4 @@
+//Package mysqldb ...
 package mysqldb
 
 /*
@@ -22,8 +23,6 @@ package mysqldb
 
 import (
 	//"fmt"
-
-	
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 
