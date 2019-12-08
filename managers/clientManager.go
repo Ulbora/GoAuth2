@@ -28,14 +28,14 @@ import (
 
 //Client Client
 type Client struct {
-	ClientID     int64  `json:"clientId"`
-	Secret       string `json:"secret"`
-	Name         string `json:"name"`
-	WebSite      string `json:"webSite"`
-	Email        string `json:"email"`
-	Enabled      bool   `json:"enabled"`
-	Paid         bool   `json:"paid"`
-	RedirectURIs *[]ClientRedirectURI
+	ClientID     int64                `json:"clientId"`
+	Secret       string               `json:"secret"`
+	Name         string               `json:"name"`
+	WebSite      string               `json:"webSite"`
+	Email        string               `json:"email"`
+	Enabled      bool                 `json:"enabled"`
+	Paid         bool                 `json:"paid"`
+	RedirectURIs *[]ClientRedirectURI `json:"redirectUrls"`
 }
 
 // //ClientRedirectURI ClientRedirectURI

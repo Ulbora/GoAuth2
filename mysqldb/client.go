@@ -23,6 +23,8 @@ package mysqldb
 import (
 	//"fmt"
 
+	
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 
 	//"log"
@@ -174,8 +176,10 @@ func (d *MySQLOauthDB) SearchClients(name string) *[]odb.Client {
 	if !d.testConnection() {
 		d.DB.Connect()
 	}
+	var searchName = "%" + name + "%"
+	//fmt.Println("searchName: ", searchName)
 	var a []interface{}
-	a = append(a, name)
+	a = append(a, searchName)
 	rows := d.DB.GetList(searchClientByName, a...)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows

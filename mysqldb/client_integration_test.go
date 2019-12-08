@@ -118,7 +118,7 @@ func TestMySQLDBi_GetClients(t *testing.T) {
 }
 
 func TestMySQLDBi_SearchClients(t *testing.T) {
-	cs := odbbi.SearchClients("tester")
+	cs := odbbi.SearchClients("test")
 	fmt.Println("client found in search: ", cs)
 	for _, c := range *cs {
 		fmt.Println("client found in searchClients: ", c)

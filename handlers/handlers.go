@@ -59,4 +59,12 @@ type RestHandler interface {
 	AddRoleURI(w http.ResponseWriter, r *http.Request)
 	GetRoleURIList(w http.ResponseWriter, r *http.Request)
 	DeleteRoleURI(w http.ResponseWriter, r *http.Request)
+
+	AddClient(w http.ResponseWriter, r *http.Request)
+	UpdateClient(w http.ResponseWriter, r *http.Request)
+	GetClient(w http.ResponseWriter, r *http.Request)
+	GetClientAdmin(w http.ResponseWriter, r *http.Request)
+	GetClientList(w http.ResponseWriter, r *http.Request)
+	GetClientSearchList(w http.ResponseWriter, r *http.Request)
+	DeleteClient(w http.ResponseWriter, r *http.Request)
 }
