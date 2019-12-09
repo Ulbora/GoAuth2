@@ -24,13 +24,13 @@ import "fmt"
 
 //ValidateAccessTokenReq ValidateAccessTokenReq
 type ValidateAccessTokenReq struct {
-	AccessToken string
-	Hashed      bool
-	UserID      string
-	ClientID    int64
-	Role        string
-	URI         string
-	Scope       string
+	AccessToken string `json:"accessToken"`
+	Hashed      bool   `json:"hashed"`
+	UserID      string `json:"userId"`
+	ClientID    int64  `json:"clientId"`
+	Role        string `json:"role"`
+	URI         string `json:"uri"`
+	Scope       string `json:"scope"`
 }
 
 //ValidateAccessToken ValidateAccessToken

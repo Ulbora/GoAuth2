@@ -68,4 +68,6 @@ type RestHandler interface {
 	GetClientList(w http.ResponseWriter, r *http.Request)
 	GetClientSearchList(w http.ResponseWriter, r *http.Request)
 	DeleteClient(w http.ResponseWriter, r *http.Request)
+
+	ValidateAccessToken(w http.ResponseWriter, r *http.Request)
 }
