@@ -32,6 +32,8 @@ import (
 const (
 	accessDeniedErrorURL = "/oauthError?error=access_denied"
 	authorizeAppURL      = "/authorizeApp"
+	invalidGrantErrorURL = "/oauthError?error=invalid_grant"
+	loginURL             = "/login"
 )
 
 //OauthWebHandler OauthWebHandler
@@ -58,10 +60,14 @@ func (h *OauthWebHandler) GetNewWebHandler() WebHandler {
 
 func (h *OauthWebHandler) getSession(r *http.Request) (*ses.Session, bool) {
 	var suc bool
-	h.Session.InitSessionStore()
-	s, err := h.Session.GetSession(r)
-	if err == nil {
-		suc = true
+	var srtn *ses.Session
+	if r != nil {
+		h.Session.InitSessionStore()
+		s, err := h.Session.GetSession(r)
+		if err == nil {
+			suc = true
+			srtn = s
+		}
 	}
-	return s, suc
+	return srtn, suc
 }

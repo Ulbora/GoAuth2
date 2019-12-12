@@ -110,8 +110,15 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 					s.Save(r, w)
 					http.Redirect(w, r, authorizeAppURL, http.StatusFound)
 				}
+			} else {
+				http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)
 			}
-
+		} else {
+			s.Values["authReqInfo"] = ari
+			s.Save(r, w)
+			http.Redirect(w, r, loginURL, http.StatusFound)
 		}
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
