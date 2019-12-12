@@ -153,11 +153,11 @@ func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 					pg.ClientName = authRes.ClientName
 					pg.WebSite = authRes.WebSite
 					pg.Scope = ari.Scope
-					h.Templates.ExecuteTemplate(w, "authorizeApp.html", &pg)
+					h.Templates.ExecuteTemplate(w, authorizeHTML, &pg)
 				} else {
 					var epg PageParams
 					epg.Error = invalidRedirectError
-					h.Templates.ExecuteTemplate(w, "oauthError.html", &epg)
+					h.Templates.ExecuteTemplate(w, oauthErrorHTML, &epg)
 				}
 			} else if ari.ResponseType == tokenRespType {
 				var auti m.Implicit
@@ -170,21 +170,21 @@ func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 					ipg.ClientName = iauthr.ClientName
 					ipg.WebSite = iauthr.WebSite
 					ipg.Scope = ari.Scope
-					h.Templates.ExecuteTemplate(w, "authorizeApp.html", &ipg)
+					h.Templates.ExecuteTemplate(w, authorizeHTML, &ipg)
 				} else {
 					var iepg PageParams
 					iepg.Error = invalidRedirectError
-					h.Templates.ExecuteTemplate(w, "oauthError.html", &iepg)
+					h.Templates.ExecuteTemplate(w, oauthErrorHTML, &iepg)
 				}
 			} else {
 				var ertepg PageParams
 				ertepg.Error = invalidRedirectError
-				h.Templates.ExecuteTemplate(w, "oauthError.html", &ertepg)
+				h.Templates.ExecuteTemplate(w, oauthErrorHTML, &ertepg)
 			}
 		} else {
 			var pg PageParams
 			pg.Error = invalidReqestError
-			h.Templates.ExecuteTemplate(w, "oauthError.html", &pg)
+			h.Templates.ExecuteTemplate(w, oauthErrorHTML, &pg)
 		}
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)

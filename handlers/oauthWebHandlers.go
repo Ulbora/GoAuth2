@@ -35,6 +35,9 @@ const (
 	authorizeAppURL      = "/authorizeApp"
 	invalidGrantErrorURL = "/oauthError?error=invalid_grant"
 	loginURL             = "/login"
+
+	authorizeHTML  = "authorizeApp.html"
+	oauthErrorHTML = "oauthError.html"
 )
 
 //OauthWebHandler OauthWebHandler
