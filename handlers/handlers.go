@@ -23,6 +23,13 @@ import "net/http"
 
 */
 
+const (
+	codeRespType     = "code"
+	implicitRespType = "implicit"
+	clientRespType   = "client_credentials"
+	passwordRespType = "password"
+)
+
 //ResponseID ResponseID
 type ResponseID struct {
 	Success bool  `json:"success"`
@@ -70,4 +77,18 @@ type RestHandler interface {
 	DeleteClient(w http.ResponseWriter, r *http.Request)
 
 	ValidateAccessToken(w http.ResponseWriter, r *http.Request)
+}
+
+//WebHandler WebHandler
+type WebHandler interface {
+	Authorize(w http.ResponseWriter, r *http.Request)
+	// AuthorizeApp(w http.ResponseWriter, r *http.Request)
+	// ApplicationAuthorization(w http.ResponseWriter, r *http.Request)
+	// OauthError(w http.ResponseWriter, r *http.Request)
+
+	// Login(w http.ResponseWriter, r *http.Request)
+	// LoginUser(w http.ResponseWriter, r *http.Request)
+
+	// Token(w http.ResponseWriter, r *http.Request)
+	// RefreshToken(w http.ResponseWriter, r *http.Request)
 }
