@@ -83,12 +83,32 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 					if ausuc && acode != 0 && acodeStr != "" {
 						http.Redirect(w, r, redirectURLAuth+"?code="+acodeStr+"&state="+stateAuth, http.StatusFound)
 					} else {
-						http.Redirect(w, r, "/oauthError?error=access_denied", http.StatusFound)
+						http.Redirect(w, r, accessDeniedErrorURL, http.StatusFound)
 					}
 				} else {
 					s.Values["authReqInfo"] = ari
 					s.Save(r, w)
-					http.Redirect(w, r, "/authorizeApp", http.StatusFound)
+					http.Redirect(w, r, authorizeAppURL, http.StatusFound)
+				}
+			} else if respTypeAuth == tokenRespType {
+				var aut m.Implicit
+				aut.ClientID = clientIDAuth
+				aut.UserID = userAuth.(string)
+				aut.Scope = scopeAuth
+				aut.RedirectURI = redirectURLAuth
+				iauthed := h.Manager.CheckImplicitApplicationAuthorization(&aut)
+				fmt.Println("iauthed: ", iauthed)
+				if iauthed {
+					isuc, im := h.Manager.AuthorizeImplicit(&aut)
+					if isuc && im.Token != "" {
+						http.Redirect(w, r, redirectURLAuth+"?token="+im.Token+"&token_type=bearer&state="+stateAuth, http.StatusFound)
+					} else {
+						http.Redirect(w, r, accessDeniedErrorURL, http.StatusFound)
+					}
+				} else {
+					s.Values["authReqInfo"] = ari
+					s.Save(r, w)
+					http.Redirect(w, r, authorizeAppURL, http.StatusFound)
 				}
 			}
 

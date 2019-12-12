@@ -29,6 +29,11 @@ import (
 
 */
 
+const (
+	accessDeniedErrorURL = "/oauthError?error=access_denied"
+	authorizeAppURL      = "/authorizeApp"
+)
+
 //OauthWebHandler OauthWebHandler
 type OauthWebHandler struct {
 	Manager m.Manager

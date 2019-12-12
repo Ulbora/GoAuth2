@@ -25,6 +25,7 @@ import "net/http"
 
 const (
 	codeRespType     = "code"
+	tokenRespType    = "token"
 	implicitRespType = "implicit"
 	clientRespType   = "client_credentials"
 	passwordRespType = "password"
