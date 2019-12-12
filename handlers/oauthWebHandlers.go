@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"html/template"
 	"net/http"
 
 	m "github.com/Ulbora/GoAuth2/managers"
@@ -38,8 +39,9 @@ const (
 
 //OauthWebHandler OauthWebHandler
 type OauthWebHandler struct {
-	Manager m.Manager
-	Session gs.GoSession
+	Manager   m.Manager
+	Session   gs.GoSession
+	Templates *template.Template
 }
 
 //AuthorizeRequestInfo AuthorizeRequestInfo

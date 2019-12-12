@@ -29,6 +29,11 @@ const (
 	implicitRespType = "implicit"
 	clientRespType   = "client_credentials"
 	passwordRespType = "password"
+
+	invalidReqestError   = "Invalid Request"
+	invalidRedirectError = "Invalid redirect URI"
+
+	authAppPageTitle = "Authorize Application"
 )
 
 //ResponseID ResponseID
@@ -83,7 +88,7 @@ type RestHandler interface {
 //WebHandler WebHandler
 type WebHandler interface {
 	Authorize(w http.ResponseWriter, r *http.Request)
-	// AuthorizeApp(w http.ResponseWriter, r *http.Request)
+	AuthorizeApp(w http.ResponseWriter, r *http.Request)
 	// ApplicationAuthorization(w http.ResponseWriter, r *http.Request)
 	// OauthError(w http.ResponseWriter, r *http.Request)
 

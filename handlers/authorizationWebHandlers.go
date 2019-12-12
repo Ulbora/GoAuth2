@@ -28,6 +28,15 @@ import (
 
 */
 
+//PageParams PageParams
+type PageParams struct {
+	Title      string
+	ClientName string
+	WebSite    string
+	Scope      string
+	Error      string
+}
+
 //Authorize Authorize
 func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 	//h.Session.InitSessionStore()
@@ -117,6 +126,65 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 			s.Values["authReqInfo"] = ari
 			s.Save(r, w)
 			http.Redirect(w, r, loginURL, http.StatusFound)
+		}
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+//AuthorizeApp AuthorizeApp
+func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
+	s, suc := h.getSession(r)
+	if suc {
+		arii := s.Values["authReqInfo"]
+		fmt.Println("arii", arii)
+		if arii != nil {
+			ari := arii.(AuthorizeRequestInfo)
+			fmt.Println("ari", ari)
+			if ari.ResponseType == codeRespType {
+				var au m.AuthCode
+				au.ClientID = ari.ClientID
+				au.RedirectURI = ari.RedirectURI
+				authRes := h.Manager.ValidateAuthCodeClientAndCallback(&au)
+				if authRes.Valid {
+					fmt.Println("authRes", authRes)
+					var pg PageParams
+					pg.Title = authAppPageTitle
+					pg.ClientName = authRes.ClientName
+					pg.WebSite = authRes.WebSite
+					pg.Scope = ari.Scope
+					h.Templates.ExecuteTemplate(w, "authorizeApp.html", &pg)
+				} else {
+					var epg PageParams
+					epg.Error = invalidRedirectError
+					h.Templates.ExecuteTemplate(w, "oauthError.html", &epg)
+				}
+			} else if ari.ResponseType == tokenRespType {
+				var auti m.Implicit
+				auti.ClientID = ari.ClientID
+				auti.RedirectURI = ari.RedirectURI
+				iauthr := h.Manager.ValidateImplicitClientAndCallback(&auti)
+				if iauthr.Valid {
+					var ipg PageParams
+					ipg.Title = authAppPageTitle
+					ipg.ClientName = iauthr.ClientName
+					ipg.WebSite = iauthr.WebSite
+					ipg.Scope = ari.Scope
+					h.Templates.ExecuteTemplate(w, "authorizeApp.html", &ipg)
+				} else {
+					var iepg PageParams
+					iepg.Error = invalidRedirectError
+					h.Templates.ExecuteTemplate(w, "oauthError.html", &iepg)
+				}
+			} else {
+				var ertepg PageParams
+				ertepg.Error = invalidRedirectError
+				h.Templates.ExecuteTemplate(w, "oauthError.html", &ertepg)
+			}
+		} else {
+			var pg PageParams
+			pg.Error = invalidReqestError
+			h.Templates.ExecuteTemplate(w, "oauthError.html", &pg)
 		}
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
