@@ -190,3 +190,63 @@ func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
+
+//ApplicationAuthorizationByUser ApplicationAuthorizationByUser
+func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, r *http.Request) {
+	s, suc := h.getSession(r)
+	if suc {
+		aaut := r.URL.Query().Get("authorize")
+		fmt.Println("authorize", aaut)
+
+		aaarii := s.Values["authReqInfo"]
+		user := s.Values["user"]
+		fmt.Println("aaarii", aaarii)
+		if aaarii != nil && user != nil {
+
+			aaari := aaarii.(AuthorizeRequestInfo)
+			fmt.Println("ari", aaari)
+			if aaut == "true" && aaari.ResponseType == codeRespType {
+				var aac m.AuthCode
+				aac.ClientID = aaari.ClientID
+				aac.UserID = user.(string)
+				aac.Scope = aaari.Scope
+				aac.RedirectURI = aaari.RedirectURI
+				authSuc, authCode, authCodeStr := h.Manager.AuthorizeAuthCode(&aac)
+				if authSuc && authCode != 0 && authCodeStr != "" {
+					fmt.Println("authSuc", authSuc)
+					fmt.Println("authCode", authCode)
+					fmt.Println("authCodeStr", authCodeStr)
+					http.Redirect(w, r, aaari.RedirectURI+"?code="+authCodeStr+"&state="+aaari.State, http.StatusFound)
+				} else {
+					var aaacpg PageParams
+					aaacpg.Error = accessDenidError
+					h.Templates.ExecuteTemplate(w, oauthErrorHTML, &aaacpg)
+				}
+			} else if aaut == "true" && aaari.ResponseType == tokenRespType {
+				var aai m.Implicit
+				aai.ClientID = aaari.ClientID
+				aai.UserID = user.(string)
+				aai.Scope = aaari.Scope
+				aai.RedirectURI = aaari.RedirectURI
+				aaiSuc, irtn := h.Manager.AuthorizeImplicit(&aai)
+				fmt.Println("aaiSuc", aaiSuc)
+				fmt.Println("irtn", irtn)
+				if aaiSuc && irtn.Token != "" {
+					http.Redirect(w, r, aaari.RedirectURI+"?token="+irtn.Token+"&token_type=bearer&state="+aaari.State, http.StatusFound)
+				} else {
+					var aaipg PageParams
+					aaipg.Error = accessDenidError
+					h.Templates.ExecuteTemplate(w, oauthErrorHTML, &aaipg)
+				}
+			} else {
+				http.Redirect(w, r, aaari.RedirectURI+"?error=access_denied&state="+aaari.State, http.StatusFound)
+			}
+		} else {
+			var pg PageParams
+			pg.Error = invalidReqestError
+			h.Templates.ExecuteTemplate(w, oauthErrorHTML, &pg)
+		}
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}

@@ -32,6 +32,7 @@ const (
 
 	invalidReqestError   = "Invalid Request"
 	invalidRedirectError = "Invalid redirect URI"
+	accessDenidError     = "access_denied"
 
 	authAppPageTitle = "Authorize Application"
 )
@@ -89,7 +90,7 @@ type RestHandler interface {
 type WebHandler interface {
 	Authorize(w http.ResponseWriter, r *http.Request)
 	AuthorizeApp(w http.ResponseWriter, r *http.Request)
-	// ApplicationAuthorization(w http.ResponseWriter, r *http.Request)
+	ApplicationAuthorizationByUser(w http.ResponseWriter, r *http.Request)
 	// OauthError(w http.ResponseWriter, r *http.Request)
 
 	// Login(w http.ResponseWriter, r *http.Request)
