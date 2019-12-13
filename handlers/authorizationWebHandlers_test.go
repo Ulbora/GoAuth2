@@ -800,8 +800,8 @@ func TestOauthWebHandler_AuthorizeByUserTokenBadSession(t *testing.T) {
 	h.ApplicationAuthorizationByUser(w, nil)
 	fmt.Println("code: ", w.Code)
 	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?token=lllkldskldfk&token_type=bearer&state=12eee" {
+
+	if w.Code != 500 {
 		t.Fail()
 	}
 }
@@ -843,8 +843,51 @@ func TestOauthWebHandler_AuthorizeByUserTokenNoInfo(t *testing.T) {
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
 	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?token=lllkldskldfk&token_type=bearer&state=12eee" {
+
+	if w.Code != 200 {
+		t.Fail()
+	}
+}
+
+func TestOauthWebHandler_Error(t *testing.T) {
+	var om m.MockManager
+	om.MockAuthCodeAuthorized = true
+	om.MockAuthCodeAuthorizeSuccess = true
+	om.MockImplicitAuthorizeSuccess = true
+	var acc m.ImplicitReturn
+	acc.ID = 55
+	acc.Token = "lllkldskldfk"
+
+	om.MockImplicitReturn = acc
+	om.MockAuthCode = 55
+	om.MockAuthCodeString = "rr666"
+
+	var ari AuthorizeRequestInfo
+	ari.ResponseType = "token"
+	ari.ClientID = 1234
+	ari.RedirectURI = "http://test.com/test"
+	ari.Scope = "web"
+	ari.State = "12eee"
+
+	var wh OauthWebHandler
+	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
+	wh.Manager = &om
+	h := wh.GetNewWebHandler()
+	r, _ := http.NewRequest("GET", "/test?error=someError", nil)
+	//r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	s, suc := wh.getSession(r)
+	fmt.Println("suc: ", suc)
+	s.Values["loggedIn"] = true
+	s.Values["user"] = "tester"
+	s.Values["authReqInfo"] = ari
+
+	s.Save(r, w)
+	h.OauthError(w, r)
+	fmt.Println("code: ", w.Code)
+	fmt.Println("location: ", w.HeaderMap["Location"])
+
+	if w.Code != 200 {
 		t.Fail()
 	}
 }

@@ -91,7 +91,7 @@ type WebHandler interface {
 	Authorize(w http.ResponseWriter, r *http.Request)
 	AuthorizeApp(w http.ResponseWriter, r *http.Request)
 	ApplicationAuthorizationByUser(w http.ResponseWriter, r *http.Request)
-	// OauthError(w http.ResponseWriter, r *http.Request)
+	OauthError(w http.ResponseWriter, r *http.Request)
 
 	// Login(w http.ResponseWriter, r *http.Request)
 	// LoginUser(w http.ResponseWriter, r *http.Request)

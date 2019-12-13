@@ -250,3 +250,12 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
+
+//OauthError OauthError
+func (h *OauthWebHandler) OauthError(w http.ResponseWriter, r *http.Request) {
+	authError := r.URL.Query().Get("error")
+	var epg PageParams
+	epg.Error = authError
+	h.Templates.ExecuteTemplate(w, oauthErrorHTML, &epg)
+
+}
