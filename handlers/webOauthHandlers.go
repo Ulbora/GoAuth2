@@ -37,6 +37,7 @@ const (
 	loginURL             = "/login"
 
 	authorizeHTML  = "authorizeApp.html"
+	loginHTML      = "login"
 	oauthErrorHTML = "oauthError.html"
 )
 

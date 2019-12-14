@@ -257,5 +257,4 @@ func (h *OauthWebHandler) OauthError(w http.ResponseWriter, r *http.Request) {
 	var epg PageParams
 	epg.Error = authError
 	h.Templates.ExecuteTemplate(w, oauthErrorHTML, &epg)
-
 }

@@ -35,6 +35,7 @@ const (
 	accessDenidError     = "access_denied"
 
 	authAppPageTitle = "Authorize Application"
+	loginPageTitle   = "GoAuth2 Login Page"
 )
 
 //ResponseID ResponseID
@@ -93,8 +94,8 @@ type WebHandler interface {
 	ApplicationAuthorizationByUser(w http.ResponseWriter, r *http.Request)
 	OauthError(w http.ResponseWriter, r *http.Request)
 
-	// Login(w http.ResponseWriter, r *http.Request)
-	// LoginUser(w http.ResponseWriter, r *http.Request)
+	Login(w http.ResponseWriter, r *http.Request)
+	LoginUser(w http.ResponseWriter, r *http.Request)
 
 	// Token(w http.ResponseWriter, r *http.Request)
 	// RefreshToken(w http.ResponseWriter, r *http.Request)
