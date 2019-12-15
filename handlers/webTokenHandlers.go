@@ -70,8 +70,27 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 			atsuc, token, tokenErr = h.Manager.GetAuthCodeToken(&actk)
 			fmt.Println("atsuc: ", atsuc)
 
-		// case passwordGrantType:
-		// 	fmt.Println("grant type: ", grantType)
+		case passwordGrantType:
+			fmt.Println("grant type: ", grantType)
+			username := r.FormValue("username")
+			fmt.Println("username: ", username)
+			password := r.FormValue("password")
+			fmt.Println("password: ", password)
+			var lg m.Login
+			lg.ClientID = clientID
+			lg.Username = username
+			lg.Password = password
+			suc := h.Manager.UserLogin(&lg)
+			fmt.Println("login suc", suc)
+			if suc {
+				var pt m.PasswordTokenReq
+				pt.Username = username
+				pt.ClientID = clientID
+				atsuc, token, tokenErr = h.Manager.GetPasswordToken(&pt)
+				fmt.Println("atsuc: ", atsuc)
+			} else {
+				tokenErr = unauthorizedClientError
+			}
 		// case credentialGrantType:
 		// 	fmt.Println("grant type: ", grantType)
 		// case refreshTokenGrantType:

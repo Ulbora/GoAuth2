@@ -35,9 +35,10 @@ const (
 	credentialGrantType        = "client_credentials"
 	refreshTokenGrantType      = "refresh_token"
 
-	invalidReqestError   = "Invalid Request"
-	invalidRedirectError = "Invalid redirect URI"
-	accessDenidError     = "access_denied"
+	invalidReqestError      = "Invalid Request"
+	invalidRedirectError    = "Invalid redirect URI"
+	accessDenidError        = "access_denied"
+	unauthorizedClientError = "unauthorized_client"
 
 	authAppPageTitle = "Authorize Application"
 	loginPageTitle   = "GoAuth2 Login Page"
