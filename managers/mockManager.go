@@ -61,6 +61,8 @@ type MockManager struct {
 	MockAuthCodeRefreshTokenSuccess bool
 	MockPasswordRefreshTokenSuccess bool
 
+	MockTokenError string
+
 	MockValidateAccessTokenSuccess bool
 
 	MockUserLoginSuccess bool
@@ -230,28 +232,28 @@ func (m *MockManager) ValidateImplicitClientAndCallback(imp *Implicit) *Implicit
 //token manager
 
 //GetAuthCodeToken GetAuthCodeToken
-func (m *MockManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
-	return m.MockAuthCodeTokenSuccess, &m.MockToken
+func (m *MockManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token, string) {
+	return m.MockAuthCodeTokenSuccess, &m.MockToken, m.MockTokenError
 }
 
 //GetCredentialsToken GetCredentialsToken
-func (m *MockManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token) {
-	return m.MockCredentialsTokenSuccess, &m.MockToken
+func (m *MockManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token, string) {
+	return m.MockCredentialsTokenSuccess, &m.MockToken, m.MockTokenError
 }
 
 //GetPasswordToken GetPasswordToken
-func (m *MockManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token) {
-	return m.MockPasswordTokenSuccess, &m.MockToken
+func (m *MockManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, string) {
+	return m.MockPasswordTokenSuccess, &m.MockToken, m.MockTokenError
 }
 
 //GetAuthCodeAccesssTokenWithRefreshToken GetAuthCodeAccesssTokenWithRefreshToken
-func (m *MockManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
-	return m.MockAuthCodeRefreshTokenSuccess, &m.MockToken
+func (m *MockManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string) {
+	return m.MockAuthCodeRefreshTokenSuccess, &m.MockToken, m.MockTokenError
 }
 
 //GetPasswordAccesssTokenWithRefreshToken GetPasswordAccesssTokenWithRefreshToken
-func (m *MockManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
-	return m.MockPasswordRefreshTokenSuccess, &m.MockToken
+func (m *MockManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string) {
+	return m.MockPasswordRefreshTokenSuccess, &m.MockToken, m.MockTokenError
 }
 
 //validate Token

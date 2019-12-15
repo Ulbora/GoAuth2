@@ -77,3 +77,8 @@ func (h *OauthWebHandler) getSession(r *http.Request) (*ses.Session, bool) {
 	}
 	return srtn, suc
 }
+
+//SetContentType SetContentType
+func (h *OauthWebHandler) SetContentType(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+}

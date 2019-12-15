@@ -430,7 +430,7 @@ func TestMockManager_GetAuthCodeToken(t *testing.T) {
 	var m Manager
 	m = &man
 	var imp AuthCodeTokenReq
-	suc, tk := m.GetAuthCodeToken(&imp)
+	suc, tk, _ := m.GetAuthCodeToken(&imp)
 	if !suc || tk.AccessToken != "1234" {
 		t.Fail()
 	}
@@ -446,7 +446,7 @@ func TestMockManager_GetCredentialsToken(t *testing.T) {
 	var m Manager
 	m = &man
 	var imp CredentialsTokenReq
-	suc, tk := m.GetCredentialsToken(&imp)
+	suc, tk, _ := m.GetCredentialsToken(&imp)
 	if !suc || tk.AccessToken != "1234" {
 		t.Fail()
 	}
@@ -462,7 +462,7 @@ func TestMockManager_GetPasswordToken(t *testing.T) {
 	var m Manager
 	m = &man
 	var imp PasswordTokenReq
-	suc, tk := m.GetPasswordToken(&imp)
+	suc, tk, _ := m.GetPasswordToken(&imp)
 	if !suc || tk.AccessToken != "1234" {
 		t.Fail()
 	}
@@ -478,7 +478,7 @@ func TestMockManager_GetAuthCodeAccesssTokenWithRefreshToken(t *testing.T) {
 	var m Manager
 	m = &man
 	var imp RefreshTokenReq
-	suc, tk := m.GetAuthCodeAccesssTokenWithRefreshToken(&imp)
+	suc, tk, _ := m.GetAuthCodeAccesssTokenWithRefreshToken(&imp)
 	if !suc || tk.AccessToken != "1234" {
 		t.Fail()
 	}
@@ -494,7 +494,7 @@ func TestMockManager_GetPasswordAccesssTokenWithRefreshToken(t *testing.T) {
 	var m Manager
 	m = &man
 	var imp RefreshTokenReq
-	suc, tk := m.GetPasswordAccesssTokenWithRefreshToken(&imp)
+	suc, tk, _ := m.GetPasswordAccesssTokenWithRefreshToken(&imp)
 	if !suc || tk.AccessToken != "1234" {
 		t.Fail()
 	}

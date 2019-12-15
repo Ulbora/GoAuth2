@@ -30,6 +30,11 @@ const (
 	clientRespType   = "client_credentials"
 	passwordRespType = "password"
 
+	authorizationCodeGrantType = "authorization_code"
+	passwordGrantType          = "password"
+	credentialGrantType        = "client_credentials"
+	refreshTokenGrantType      = "refresh_token"
+
 	invalidReqestError   = "Invalid Request"
 	invalidRedirectError = "Invalid redirect URI"
 	accessDenidError     = "access_denied"
@@ -97,6 +102,6 @@ type WebHandler interface {
 	Login(w http.ResponseWriter, r *http.Request)
 	LoginUser(w http.ResponseWriter, r *http.Request)
 
-	// Token(w http.ResponseWriter, r *http.Request)
+	Token(w http.ResponseWriter, r *http.Request)
 	// RefreshToken(w http.ResponseWriter, r *http.Request)
 }

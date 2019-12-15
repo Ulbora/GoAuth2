@@ -99,11 +99,11 @@ type Manager interface {
 	ValidateImplicitClientAndCallback(imp *Implicit) *ImplicitClient
 
 	//token manager
-	GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token)
-	GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token)
-	GetPasswordToken(pt *PasswordTokenReq) (bool, *Token)
-	GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
-	GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token)
+	GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token, string)
+	GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token, string)
+	GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, string)
+	GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string)
+	GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string)
 
 	// //validate Token
 	ValidateAccessToken(at *ValidateAccessTokenReq) bool

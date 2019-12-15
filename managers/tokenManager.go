@@ -57,16 +57,24 @@ type PasswordTokenReq struct {
 
 //Token Token
 type Token struct {
-	AccessToken  string
-	TokenType    string
-	ExpiresIn    int64
-	RefreshToken string
+	AccessToken  string `json:"access_token"`
+	TokenType    string `json:"token_type"`
+	ExpiresIn    int64  `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
 }
 
+const (
+	invalidClientError  = "invalid_client"
+	invalidGrantError   = "invalid_grant"
+	accessDeniedError   = "access_denied"
+	invalidRequestError = "invalid_request"
+)
+
 //GetAuthCodeToken GetAuthCodeToken
-func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
+func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token, string) {
 	var rtn Token
 	var suc bool
+	var tokenErr string
 	client := m.Db.GetClient(act.ClientID)
 	fmt.Println("client: ", client)
 	if client != nil && client.Secret == act.Secret && client.Enabled {
@@ -83,6 +91,7 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
 						var rvk odb.AuthCodeRevolk
 						rvk.AuthorizationCode = acode.AuthorizationCode
 						rvsuc, rvid := m.Db.AddAuthCodeRevolk(nil, &rvk)
+						tokenErr = invalidClientError
 						fmt.Println("rvsuc: ", rvsuc)
 						fmt.Println("rvid: ", rvid)
 					} else {
@@ -106,20 +115,33 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token) {
 								} else {
 									suc = true
 								}
+							} else {
+								tokenErr = invalidGrantError
 							}
+						} else {
+							tokenErr = invalidGrantError
 						}
 					}
+				} else {
+					tokenErr = invalidClientError
 				}
+			} else {
+				tokenErr = invalidClientError
 			}
+		} else {
+			tokenErr = invalidGrantError
 		}
+	} else {
+		tokenErr = invalidClientError
 	}
-	return suc, &rtn
+	return suc, &rtn, tokenErr
 }
 
 //GetCredentialsToken GetCredentialsToken
-func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token) {
+func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Token, string) {
 	var rtn Token
 	var suc bool
+	var tokenErr string
 	client := m.Db.GetClient(ct.ClientID)
 	fmt.Println("client: ", client)
 	if client != nil && client.Secret == ct.Secret && client.Enabled {
@@ -163,14 +185,20 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 				}
 			}
 		}
+	} else {
+		tokenErr = invalidClientError
 	}
-	return suc, &rtn
+	if !suc && tokenErr == "" {
+		tokenErr = accessDeniedError
+	}
+	return suc, &rtn, tokenErr
 }
 
 //GetPasswordToken GetPasswordToken
-func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token) {
+func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, string) {
 	var rtn Token
 	var suc bool
+	var tokenErr string
 	client := m.Db.GetClient(pt.ClientID)
 	fmt.Println("pw client: ", client)
 	if client != nil && client.Enabled {
@@ -222,14 +250,20 @@ func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token) {
 				}
 			}
 		}
+	} else {
+		tokenErr = invalidClientError
 	}
-	return suc, &rtn
+	if !suc && tokenErr == "" {
+		tokenErr = accessDeniedError
+	}
+	return suc, &rtn, tokenErr
 }
 
 //GetAuthCodeAccesssTokenWithRefreshToken GetAuthCodeAccesssTokenWithRefreshToken
-func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
+func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string) {
 	var rtn Token
 	var suc bool
+	var tokenErr string
 	if rt.ClientID != 0 && rt.Secret != "" {
 		client := m.Db.GetClient(rt.ClientID)
 		fmt.Println("client in get with ref: ", client)
@@ -287,14 +321,20 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 				}
 			}
 		}
+	} else {
+		tokenErr = invalidRequestError
 	}
-	return suc, &rtn
+	if !suc && tokenErr == "" {
+		tokenErr = invalidClientError
+	}
+	return suc, &rtn, tokenErr
 }
 
 //GetPasswordAccesssTokenWithRefreshToken GetPasswordAccesssTokenWithRefreshToken
-func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token) {
+func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenReq) (bool, *Token, string) {
 	var rtn Token
 	var suc bool
+	var tokenErr string
 	if rt.ClientID != 0 {
 		client := m.Db.GetClient(rt.ClientID)
 		fmt.Println("client in get with ref: ", client)
@@ -349,6 +389,11 @@ func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenR
 				}
 			}
 		}
+	} else {
+		tokenErr = invalidRequestError
 	}
-	return suc, &rtn
+	if !suc && tokenErr == "" {
+		tokenErr = invalidClientError
+	}
+	return suc, &rtn, tokenErr
 }
