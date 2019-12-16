@@ -91,14 +91,37 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 			} else {
 				tokenErr = unauthorizedClientError
 			}
-		// case credentialGrantType:
-		// 	fmt.Println("grant type: ", grantType)
-		// case refreshTokenGrantType:
-		// 	fmt.Println("grant type: ", grantType)
+		case credentialGrantType:
+			fmt.Println("grant type: ", grantType)
+			secret := r.FormValue("client_secret")
+			fmt.Println("secret: ", secret)
+			var ct m.CredentialsTokenReq
+			ct.ClientID = clientID
+			ct.Secret = secret
+			atsuc, token, tokenErr = h.Manager.GetCredentialsToken(&ct)
+			fmt.Println("atsuc: ", atsuc)
+		case refreshTokenGrantType:
+			fmt.Println("grant type: ", grantType)
+			secret := r.FormValue("client_secret")
+			fmt.Println("secret: ", secret)
+			refToken := r.FormValue("refresh_token")
+			fmt.Println("refToken: ", refToken)
+			if secret != "" {
+				var acrt m.RefreshTokenReq
+				acrt.ClientID = clientID
+				acrt.Secret = secret
+				acrt.RefreshToken = refToken
+				atsuc, token, tokenErr = h.Manager.GetAuthCodeAccesssTokenWithRefreshToken(&acrt)
+				fmt.Println("atsuc: ", atsuc)
+			} else {
+				var pwrt m.RefreshTokenReq
+				pwrt.ClientID = clientID
+				pwrt.RefreshToken = refToken
+				atsuc, token, tokenErr = h.Manager.GetPasswordAccesssTokenWithRefreshToken(&pwrt)
+			}
 		default:
 			caseDef = true
 		}
-
 		if atsuc {
 			h.SetContentType(w)
 			w.WriteHeader(http.StatusOK)

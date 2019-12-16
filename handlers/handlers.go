@@ -104,5 +104,4 @@ type WebHandler interface {
 	LoginUser(w http.ResponseWriter, r *http.Request)
 
 	Token(w http.ResponseWriter, r *http.Request)
-	// RefreshToken(w http.ResponseWriter, r *http.Request)
 }
