@@ -73,7 +73,7 @@ func (h *OauthWebHandler) GetNewWebHandler() WebHandler {
 func (h *OauthWebHandler) getSession(r *http.Request) (*sessions.Session, bool) {
 	//fmt.Println("getSession--------------------------------------------------")
 	var suc bool
-	var srtn *sessions.Session = nil
+	var srtn *sessions.Session
 	if h.Store == nil {
 		h.Session.Name = "goauth2"
 		h.Session.MaxAge = 3600
