@@ -124,6 +124,7 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 		}
 		if atsuc {
 			h.SetContentType(w)
+			h.SetSecurityHeader(w)
 			w.WriteHeader(http.StatusOK)
 			resJSON, _ := json.Marshal(token)
 			fmt.Fprint(w, string(resJSON))
@@ -132,10 +133,10 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 		} else {
 			var te TokenError
 			te.Error = tokenErr
+			h.SetContentType(w)
 			w.WriteHeader(http.StatusUnauthorized)
 			resJSON, _ := json.Marshal(te)
 			fmt.Fprint(w, string(resJSON))
-			w.WriteHeader(http.StatusUnauthorized)
 		}
 	} else {
 		http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)

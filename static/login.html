@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+{{template "head"}}
+
+<body>
+    <div class="ui container">
+        <div class="oauth-login-form">
+            {{if ne .Error ""}}
+            <div class="ui error message">
+                <div class="header">{{.Error}}</div>
+            </div>
+            {{end}}
+            <form class="ui form" method="post" action="/login">
+                <h2 class="ui dividing header">Login to GoAuth2</h2>
+                <div class="field">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="username" required>
+                </div>
+                <div class="field">
+                    <label>Password</label>
+                    <input type="text" name="password" placeholder="password" required>
+                </div>
+                <button class="ui button" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

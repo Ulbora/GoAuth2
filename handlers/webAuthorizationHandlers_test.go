@@ -300,7 +300,7 @@ func TestOauthWebHandler_AuthorizeApp(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.AuthorizeApp(w, r)
@@ -340,7 +340,7 @@ func TestOauthWebHandler_AuthorizeAppNotValid(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.AuthorizeApp(w, r)
@@ -460,7 +460,7 @@ func TestOauthWebHandler_AuthorizeAppToken(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.AuthorizeApp(w, r)
@@ -500,7 +500,7 @@ func TestOauthWebHandler_AuthorizeAppTokenNotAuth(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.AuthorizeApp(w, r)
@@ -540,7 +540,7 @@ func TestOauthWebHandler_AuthorizeAppTokenNotResponsType(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.AuthorizeApp(w, r)
@@ -580,7 +580,7 @@ func TestOauthWebHandler_AuthorizeByUserCode(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
@@ -622,7 +622,7 @@ func TestOauthWebHandler_AuthorizeByUserCodeFailedAuth(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
@@ -665,7 +665,7 @@ func TestOauthWebHandler_AuthorizeByUserToken(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
@@ -708,7 +708,7 @@ func TestOauthWebHandler_AuthorizeByUserTokenFailedAuth(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
@@ -751,7 +751,7 @@ func TestOauthWebHandler_AuthorizeByUserBadResponseType(t *testing.T) {
 	fmt.Println("suc: ", suc)
 	s.Values["loggedIn"] = true
 	s.Values["user"] = "tester"
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)

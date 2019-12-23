@@ -40,12 +40,34 @@ type PageParams struct {
 //Authorize Authorize
 func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 	//h.Session.InitSessionStore()
+	//fmt.Println("in authorize--------------------------------------")
 	s, suc := h.getSession(r)
+	// fmt.Println("s", s)
+	// fmt.Println("store s", s.Store())
+	// fmt.Println("name in getSession s", s.Name())
+	// fmt.Println("id getSession s", s.ID)
+	// fmt.Println("Options in getSession s", s.Options)
+	// fmt.Println("SessionKey in getSession", h.Session.SessionKey)
+
 	if suc {
 		loggedInAuth := s.Values["loggedIn"]
 		userAuth := s.Values["user"]
 		fmt.Println("loggedIn: ", loggedInAuth)
 		fmt.Println("user: ", userAuth)
+
+		//session, _ := store.Get(r, "temp-name")
+
+		// fmt.Println("store session", session.Store())
+		// fmt.Println("name in getSession session", session.Name())
+		// fmt.Println("id getSession session", session.ID)
+		// fmt.Println("Options in getSession session", session.Options)
+
+		//loggedIn2 := session.Values["loggedIn"]
+		//fmt.Println("loggedIn2", loggedIn2)
+
+		larii := s.Values["authReqInfo"]
+
+		fmt.Println("arii-----auth", larii)
 
 		respTypeAuth := r.URL.Query().Get("response_type")
 		fmt.Println("respType: ", respTypeAuth)
@@ -73,7 +95,7 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 		ari.Scope = scopeAuth
 		ari.State = scopeAuth
 
-		if loggedInAuth == true && userAuth != "" {
+		if loggedInAuth == true && userAuth != nil {
 			fmt.Println("loggedIn: ", loggedInAuth)
 			fmt.Println("user: ", userAuth)
 			if respTypeAuth == codeRespType {
@@ -97,6 +119,8 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 				} else {
 					s.Values["authReqInfo"] = ari
 					s.Save(r, w)
+					larii := s.Values["authReqInfo"]
+					fmt.Println("arii-----", larii)
 					http.Redirect(w, r, authorizeAppURL, http.StatusFound)
 				}
 			} else if respTypeAuth == tokenRespType {
@@ -123,8 +147,16 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 				http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)
 			}
 		} else {
+			//session, _ := store.Get(r, "temp-name")
+			//session.Values["authReqInfo"] = "ari"
+			//err := session.Save(r, w)
+			//fmt.Println("sesErr", err)
 			s.Values["authReqInfo"] = ari
-			s.Save(r, w)
+			//s.Values["testval"] = "someTest"
+			sesErr := s.Save(r, w)
+			fmt.Println("sesErr", sesErr)
+			//larii := s.Values["authReqInfo"]
+			//fmt.Println("arii-----", larii)
 			http.Redirect(w, r, loginURL, http.StatusFound)
 		}
 	} else {
@@ -136,10 +168,15 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 	s, suc := h.getSession(r)
 	if suc {
+		loggedInAuth := s.Values["loggedIn"]
+		userAuth := s.Values["user"]
+		fmt.Println("loggedIn: ", loggedInAuth)
+		fmt.Println("user: ", userAuth)
+
 		arii := s.Values["authReqInfo"]
 		fmt.Println("arii", arii)
 		if arii != nil {
-			ari := arii.(AuthorizeRequestInfo)
+			ari := arii.(*AuthorizeRequestInfo)
 			fmt.Println("ari", ari)
 			if ari.ResponseType == codeRespType {
 				var au m.AuthCode
@@ -203,7 +240,7 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 		fmt.Println("aaarii", aaarii)
 		if aaarii != nil && user != nil {
 
-			aaari := aaarii.(AuthorizeRequestInfo)
+			aaari := aaarii.(*AuthorizeRequestInfo)
 			fmt.Println("ari", aaari)
 			if aaut == "true" && aaari.ResponseType == codeRespType {
 				var aac m.AuthCode

@@ -95,6 +95,7 @@ type RestHandler interface {
 
 //WebHandler WebHandler
 type WebHandler interface {
+	Index(w http.ResponseWriter, r *http.Request)
 	Authorize(w http.ResponseWriter, r *http.Request)
 	AuthorizeApp(w http.ResponseWriter, r *http.Request)
 	ApplicationAuthorizationByUser(w http.ResponseWriter, r *http.Request)

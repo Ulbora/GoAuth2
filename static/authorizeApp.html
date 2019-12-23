@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+{{template "head"}}
+
+<body>
+    <div class="ui container">
+        <div class="message">
+            <h2>Authorize Application</h2>
+            <h4><strong style="color: red;">{{.ClientName}}</strong> would like to access your account.</h4>
+        </div>
+        <div class="authorize-app">
+            <div class="authorize-app-left">
+                <h4>Permission Review</h4>
+                <div class="authorize-app-element">
+                    <ul>
+                        <li>{{.Scope}}</li>
+                    </ul>
+                </div>
+                <div class="authorize-app-element">
+                    <div class="authorize-app-button-left">
+                        <button type="button" class="positive ui button"
+                            onclick="location.href='applicationAuthorize?authorize=true';">Authorize</button>
+                    </div>
+                    <div class="authorize-app-button-right">
+                        <button type="button" class="negative ui button"
+                            onclick="location.href='applicationAuthorize?authorize=false';">Deny</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="authorize-app-right">
+                <h4>{{.ClientName}}</h4>
+                <h5><a href="{{.WebSite}}" target="_blank">{{.WebSite}}</a></h5>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

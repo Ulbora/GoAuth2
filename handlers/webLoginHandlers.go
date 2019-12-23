@@ -29,22 +29,62 @@ import (
 
 */
 
+//var store = sessions.NewCookieStore([]byte("12345"))
+
 //Login  login handler
 func (h *OauthWebHandler) Login(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("login test")
+	//fmt.Println("login --------------------------------------------------")
+	// s, _ := h.getSession(r)
+	// fmt.Println("s", s)
+	// fmt.Println("store s", s.Store())
+	// fmt.Println("name in getSession s", s.Name())
+	// fmt.Println("id getSession s", s.ID)
+	// fmt.Println("Options in getSession s", s.Options)
+	// fmt.Println("session name", s.Name())
+	// fmt.Println("SessionKey in getSession", h.Session.SessionKey)
+
+	// loggedInAuth := s.Values["loggedIn"]
+	// userAuth := s.Values["user"]
+	// fmt.Println("loggedIn: ", loggedInAuth)
+	// fmt.Println("user: ", userAuth)
+
+	// larii := s.Values["authReqInfo"]
+
+	// fmt.Println("arii-----login", larii)
+	// someTest := s.Values["testval"]
+
+	// fmt.Println("someTest-----login", someTest)
+
+	//session, _ := store.Get(r, "temp-name")
+	//fmt.Println("store options ", store.Options)
+
+	//tval := session.Values["authReqInfo"]
+	//fmt.Println("tval-----login", tval)
+
+	loginErr := r.URL.Query().Get("error")
 	var lpg PageParams
+	lpg.Error = loginErr
 	lpg.Title = loginPageTitle
+	fmt.Println("login params: ", lpg)
 	h.Templates.ExecuteTemplate(w, loginHTML, &lpg)
 }
 
 //LoginUser LoginUser
 func (h *OauthWebHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
+	//fmt.Println("in login form submit--------------------------------------")
 	s, suc := h.getSession(r)
 	if suc {
+		// fmt.Println("store s", s.Store())
+		// fmt.Println("name in getSession s", s.Name())
+		// fmt.Println("id getSession s", s.ID)
+		// fmt.Println("Options in getSession s", s.Options)
+		// fmt.Println("session name", s.Name())
+		// fmt.Println("SessionKey in getSession", h.Session.SessionKey)
+
 		larii := s.Values["authReqInfo"]
 		fmt.Println("arii", larii)
 		if larii != nil {
-			lari := larii.(AuthorizeRequestInfo)
+			lari := larii.(*AuthorizeRequestInfo)
 			fmt.Println("ari", lari)
 			username := r.FormValue("username")
 			password := r.FormValue("password")
@@ -55,22 +95,32 @@ func (h *OauthWebHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 			lg.Username = username
 			lg.Password = password
 			suc := h.Manager.UserLogin(&lg)
+			fmt.Println("login suc", suc)
 			if suc {
-				fmt.Println("login suc", suc)
 				if lari.ResponseType == codeRespType || lari.ResponseType == tokenRespType {
 					s.Values["loggedIn"] = true
 					s.Values["user"] = username
-					s.Save(r, w)
+					serr := s.Save(r, w)
+					fmt.Println("serr", serr)
+					//session, sserr := store.Get(r, "temp-name")
+					//fmt.Println("sserr", sserr)
+					//session.Store()
+					//session.Options.Path = "/oauth/"
+					//session.Values["loggedIn"] = true
+					//fmt.Println("store", session.Store())
+					//session.Save(r, w)
+
 					clintStr := strconv.FormatInt(lari.ClientID, 10)
 					http.Redirect(w, r, "/oauth/authorize?response_type="+lari.ResponseType+"&client_id="+clintStr+"&redirect_uri="+lari.RedirectURI+"&scope="+lari.Scope+"&state="+lari.State, http.StatusFound)
 				} else {
 					http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)
 				}
 			} else {
-				http.Redirect(w, r, loginURL, http.StatusFound)
+				http.Redirect(w, r, loginFailedURL, http.StatusFound)
 			}
 		} else {
-			http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)
+			// http.Redirect(w, r, invalidGrantErrorURL, http.StatusFound)
+			http.Redirect(w, r, loginFailedURL, http.StatusFound)
 		}
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)

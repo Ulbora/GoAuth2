@@ -59,7 +59,7 @@ func TestOauthWebHandlerLogin_LoginUser(t *testing.T) {
 	s, suc := wh.getSession(r)
 	fmt.Println("suc: ", suc)
 
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 	s.Save(r, w)
 
 	h.LoginUser(w, r)
@@ -95,7 +95,7 @@ func TestOauthWebHandlerLogin_LoginUserBadGrant(t *testing.T) {
 	s, suc := wh.getSession(r)
 	fmt.Println("suc: ", suc)
 
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 	s.Save(r, w)
 
 	h.LoginUser(w, r)
@@ -131,7 +131,7 @@ func TestOauthWebHandlerLogin_LoginUserFailLogin(t *testing.T) {
 	s, suc := wh.getSession(r)
 	fmt.Println("suc: ", suc)
 
-	s.Values["authReqInfo"] = ari
+	s.Values["authReqInfo"] = &ari
 	s.Save(r, w)
 
 	h.LoginUser(w, r)
@@ -139,7 +139,7 @@ func TestOauthWebHandlerLogin_LoginUserFailLogin(t *testing.T) {
 	fmt.Println("location: ", w.HeaderMap["Location"])
 	loc := w.HeaderMap["Location"]
 
-	if w.Code != 302 || loc[0] != "/login" {
+	if w.Code != 302 || loc[0] != "/login?error=Login Failed" {
 		t.Fail()
 	}
 }
@@ -175,7 +175,7 @@ func TestOauthWebHandlerLogin_LoginUserNoSessionInfo(t *testing.T) {
 	fmt.Println("location: ", w.HeaderMap["Location"])
 	loc := w.HeaderMap["Location"]
 
-	if w.Code != 302 || loc[0] != "/oauthError?error=invalid_grant" {
+	if w.Code != 302 || loc[0] != "/login?error=Login Failed" {
 		t.Fail()
 	}
 }

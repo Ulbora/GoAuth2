@@ -2,12 +2,14 @@
 package handlers
 
 import (
+	"encoding/gob"
+	"fmt"
 	"html/template"
 	"net/http"
 
 	m "github.com/Ulbora/GoAuth2/managers"
 	gs "github.com/Ulbora/go-sessions"
-	ses "github.com/gorilla/sessions"
+	"github.com/gorilla/sessions"
 )
 
 /*
@@ -35,9 +37,11 @@ const (
 	authorizeAppURL      = "/authorizeApp"
 	invalidGrantErrorURL = "/oauthError?error=invalid_grant"
 	loginURL             = "/login"
+	loginFailedURL       = "/login?error=Login Failed"
 
 	authorizeHTML  = "authorizeApp.html"
-	loginHTML      = "login"
+	indexHTML      = "index.html"
+	loginHTML      = "login.html"
 	oauthErrorHTML = "oauthError.html"
 )
 
@@ -46,6 +50,8 @@ type OauthWebHandler struct {
 	Manager   m.Manager
 	Session   gs.GoSession
 	Templates *template.Template
+	Store     *sessions.CookieStore
+	//SessInit  bool
 }
 
 //AuthorizeRequestInfo AuthorizeRequestInfo
@@ -64,21 +70,55 @@ func (h *OauthWebHandler) GetNewWebHandler() WebHandler {
 	return wh
 }
 
-func (h *OauthWebHandler) getSession(r *http.Request) (*ses.Session, bool) {
+func (h *OauthWebHandler) getSession(r *http.Request) (*sessions.Session, bool) {
+	//fmt.Println("getSession--------------------------------------------------")
 	var suc bool
-	var srtn *ses.Session
+	var srtn *sessions.Session = nil
+	if h.Store == nil {
+		h.Session.Name = "goauth2"
+		h.Session.MaxAge = 3600
+		h.Store = h.Session.InitSessionStore()
+		//errors without this
+		gob.Register(&AuthorizeRequestInfo{})
+	}
 	if r != nil {
-		h.Session.InitSessionStore()
-		s, err := h.Session.GetSession(r)
+		// fmt.Println("secure in getSession", h.Session.Secure)
+		// fmt.Println("name in getSession", h.Session.Name)
+		// fmt.Println("MaxAge in getSession", h.Session.MaxAge)
+		// fmt.Println("SessionKey in getSession", h.Session.SessionKey)
+
+		//h.Session.HTTPOnly = true
+
+		//h.Session.InitSessionStore()
+		s, err := h.Store.Get(r, h.Session.Name)
+		//s, err := store.Get(r, "temp-name")
+		//s, err := store.Get(r, "goauth2")
+
+		loggedInAuth := s.Values["loggedIn"]
+		userAuth := s.Values["user"]
+		fmt.Println("loggedIn: ", loggedInAuth)
+		fmt.Println("user: ", userAuth)
+
+		larii := s.Values["authReqInfo"]
+		fmt.Println("arii-----login", larii)
+
+		fmt.Println("session error in getSession: ", err)
 		if err == nil {
 			suc = true
 			srtn = s
 		}
 	}
+	//fmt.Println("exit getSession--------------------------------------------------")
 	return srtn, suc
 }
 
 //SetContentType SetContentType
 func (h *OauthWebHandler) SetContentType(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
+}
+
+//SetSecurityHeader SetSecurityHeader
+func (h *OauthWebHandler) SetSecurityHeader(w http.ResponseWriter) {
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
 }
