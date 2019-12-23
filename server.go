@@ -76,6 +76,7 @@ func main() {
 	router.HandleFunc("/oauthError", wh.OauthError).Methods("GET")
 
 	//REST routes--------------------------------------
+	//Client
 	router.HandleFunc("/rs/client/add", rh.AddClient).Methods("POST")
 	router.HandleFunc("/rs/client/update", rh.UpdateClient).Methods("PUT")
 	router.HandleFunc("/rs/client/get/{id}", rh.GetClient).Methods("GET")
@@ -84,10 +85,12 @@ func main() {
 	router.HandleFunc("/rs/client/search", rh.GetClientSearchList).Methods("POST")
 	router.HandleFunc("/rs/client/delete/{id}", rh.DeleteClient).Methods("DELETE")
 
+	//clientGrantType
 	router.HandleFunc("/rs/clientGrantType/add", rh.AddGrantType).Methods("POST")
 	router.HandleFunc("/rs/clientGrantType/list/{clientId}", rh.GetGrantTypeList).Methods("GET")
 	router.HandleFunc("/rs/clientGrantType/delete/{id}", rh.DeleteGrantType).Methods("DELETE")
 
+	//clientAllowedUri
 	router.HandleFunc("/rs/clientAllowedUriSuper/add", rh.AddAllowedURISuper).Methods("POST")
 	router.HandleFunc("/rs/clientAllowedUri/add", rh.AddAllowedURI).Methods("POST")
 	router.HandleFunc("/rs/clientAllowedUriSuper/update", rh.UpdateAllowedURISuper).Methods("PUT")
@@ -95,6 +98,13 @@ func main() {
 	router.HandleFunc("/rs/clientAllowedUri/get/{id}", rh.GetAllowedURI).Methods("GET")
 	router.HandleFunc("/rs/clientAllowedUri/list/{clientId}", rh.GetAllowedURIList).Methods("GET")
 	router.HandleFunc("/rs/clientAllowedUri/delete/{id}", rh.DeleteAllowedURI).Methods("DELETE")
+
+	//clientRedirectUri
+	router.HandleFunc("/rs/clientRedirectUri/add", rh.AddRedirectURI).Methods("POST")
+	router.HandleFunc("/rs/clientRedirectUri/list/{clientId}", rh.GetRedirectURIList).Methods("GET")
+	router.HandleFunc("/rs/clientRedirectUri/delete/{id}", rh.DeleteRedirectURI).Methods("DELETE")
+
+	//clientRole
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
@@ -185,6 +195,13 @@ func useMockRest() *hd.OauthRestHandler {
 
 	om.MockClientAllowedURI = au
 	om.MockClientAllowedURIList = []m.ClientAllowedURI{au}
+
+	var ru m.ClientRedirectURI
+	ru.ID = 4
+	ru.URI = "/testuri"
+	ru.ClientID = 554
+
+	om.MockClientRedirectURIList = []m.ClientRedirectURI{ru}
 
 	var rh hd.OauthRestHandler
 	rh.Manager = &om
