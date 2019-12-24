@@ -693,7 +693,9 @@ Example Response
 ```
 DELETE:
 
-URL: http://localhost:3000/rs/clientRoleUri/delete/510/34
+URL: http://localhost:3000/rs/clientRoleUri/delete/{clientRoleId}/{clientAllowedUriId}
+
+URL: http://localhost:3000/rs/clientRoleUri/delete/24/167
   
 ```
 
