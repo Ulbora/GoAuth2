@@ -693,7 +693,34 @@ Example Response
 ```
 DELETE:
 
+URL: http://localhost:3000/rs/clientRoleUri/delete/510/34
+  
+```
+
+```
+Example Response   
+
+{
+  "success": true,
+  "message": ""
+}
+
+```
+
+
+## Delete Client Role URI with POST
+
+```
+POST:
+
 URL: http://localhost:3000/rs/clientRoleUri/delete
+
+Example Request
+
+{  
+   "clientRoleId":24,
+   "clientAllowedUriId":167
+}
   
 ```
 
