@@ -31,8 +31,8 @@ type ControlledAsset struct {
 
 //ControlledURL ControlledURL
 type ControlledURL struct {
-	URL   string
-	Asset []ControlledAsset
+	URL   string            `json:"url"`
+	Asset []ControlledAsset `json:"assets"`
 }
 
 //AssetControl AssetControl
@@ -61,7 +61,7 @@ func (c *OauthAssets) AddControledURLs(urls *[]ControlledURL) bool {
 		rtn = true
 	}
 	fmt.Println("assess: ", c.m)
-	fmt.Println("assess list: ", c.m["/test"])
+	fmt.Println("assess list: ", c.m["/ulbora/rs/clientAllowedUri/add"])
 
 	return rtn
 }

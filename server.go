@@ -21,6 +21,7 @@ package main
 */
 
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -36,16 +37,31 @@ import (
 
 //GO111MODULE=on go mod init github.com/Ulbora/GoAuth2
 func main() {
+
+	mock := flag.Bool("mock", false, "use mock backend")
+	assets := flag.String("assets", "", "Assets to control")
+	flag.Parse()
+
+	fmt.Println("mock: ", *mock)
+	fmt.Println("assets: ", *assets)
 	var dbi db.Database
 	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
 	dbi = &mydb
 	dbi.Connect()
 
+	// var mydb mdb.MyDBMock
+	// dbi = &mydb
+	// dbi.Connect()
+
 	var wh hd.WebHandler
+	var rh hd.RestHandler
+
 	owh := hd.UseMockWeb()
 	wh = owh.GetNewWebHandler()
-
-	var rh hd.RestHandler
 	orh := hd.UseMockRest()
 	rh = orh.GetNewRestHandler()
 
@@ -123,3 +139,35 @@ func main() {
 	http.ListenAndServe(":"+port, router)
 
 }
+
+// [
+//    {
+//       "url":"/ulbora/rs/clientAllowedUri/add",
+//       "assets":[
+//          {
+//             "controlledAsset":"ulbora",
+//             "allowedRole":"superAdmin"
+//          }
+//       ]
+//    },
+//    {
+//       "url":"/ulbora/rs/clientAllowedUri/update",
+//       "assets":[
+//          {
+//             "controlledAsset":"ulbora",
+//             "allowedRole":"superAdmin"
+//          }
+//       ]
+//    },
+//    {
+//       "url":"/ulbora/rs/clientRole/add",
+//       "assets":[
+//          {
+//             "controlledAsset":"superAdmin",
+//             "allowedRole":"superAdmin"
+//          }
+//       ]
+//    }
+// ]
+
+// WwogICB7CiAgICAgICJ1cmwiOiIvdWxib3JhL3JzL2NsaWVudEFsbG93ZWRVcmkvYWRkIiwKICAgICAgImFzc2V0cyI6WwogICAgICAgICB7CiAgICAgICAgICAgICJjb250cm9sbGVkQXNzZXQiOiJ1bGJvcmEiLAogICAgICAgICAgICAiYWxsb3dlZFJvbGUiOiJzdXBlckFkbWluIgogICAgICAgICB9CiAgICAgIF0KICAgfSwKICAgewogICAgICAidXJsIjoiL3VsYm9yYS9ycy9jbGllbnRBbGxvd2VkVXJpL3VwZGF0ZSIsCiAgICAgICJhc3NldHMiOlsKICAgICAgICAgewogICAgICAgICAgICAiY29udHJvbGxlZEFzc2V0IjoidWxib3JhIiwKICAgICAgICAgICAgImFsbG93ZWRSb2xlIjoic3VwZXJBZG1pbiIKICAgICAgICAgfQogICAgICBdCiAgIH0sCiAgIHsKICAgICAgInVybCI6Ii91bGJvcmEvcnMvY2xpZW50Um9sZS9hZGQiLAogICAgICAiYXNzZXRzIjpbCiAgICAgICAgIHsKICAgICAgICAgICAgImNvbnRyb2xsZWRBc3NldCI6InN1cGVyQWRtaW4iLAogICAgICAgICAgICAiYWxsb3dlZFJvbGUiOiJzdXBlckFkbWluIgogICAgICAgICB9CiAgICAgIF0KICAgfQpd
