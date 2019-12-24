@@ -29,9 +29,6 @@ import (
 
 	//"encoding/json"
 	hd "github.com/Ulbora/GoAuth2/handlers"
-	m "github.com/Ulbora/GoAuth2/managers"
-	oa "github.com/Ulbora/GoAuth2/oauthclient"
-	rc "github.com/Ulbora/GoAuth2/rolecontrol"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 	"github.com/gorilla/mux"
@@ -45,11 +42,11 @@ func main() {
 	dbi.Connect()
 
 	var wh hd.WebHandler
-	owh := useMockWeb()
+	owh := hd.UseMockWeb()
 	wh = owh.GetNewWebHandler()
 
 	var rh hd.RestHandler
-	orh := useMockRest()
+	orh := hd.UseMockRest()
 	rh = orh.GetNewRestHandler()
 
 	owh.Templates = template.Must(template.ParseFiles("./static/head.html", "./static/index.html",
@@ -105,113 +102,24 @@ func main() {
 	router.HandleFunc("/rs/clientRedirectUri/delete/{id}", rh.DeleteRedirectURI).Methods("DELETE")
 
 	//clientRole
+	router.HandleFunc("/rs/clientRole/add", rh.AddRole).Methods("POST")
+	router.HandleFunc("/rs/clientRoleSuper/add", rh.AddRoleSuper).Methods("POST")
+	router.HandleFunc("/rs/clientRole/list/{clientId}", rh.GetRoleList).Methods("GET")
+	router.HandleFunc("/rs/clientRole/delete/{id}", rh.DeleteRole).Methods("DELETE")
+
+	//clientRoleUri
+	router.HandleFunc("/rs/clientRoleUri/add", rh.AddRoleURI).Methods("POST")
+	router.HandleFunc("/rs/clientRoleUri/list/{clientRoleId}", rh.GetRoleURIList).Methods("GET")
+	//---- added post delete for backwards compatibility
+	router.HandleFunc("/rs/clientRoleUri/delete", rh.DeleteRoleURI).Methods("POST")
+	router.HandleFunc("/rs/clientRoleUri/delete/{clientRoleId}/{clientAllowedUriId}", rh.DeleteRoleURI).Methods("DELETE")
+
+	//validate token
+	router.HandleFunc("/rs/token/validate", rh.ValidateAccessToken).Methods("POST")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
 	fmt.Println("Starting server Oauth2 Server on " + port)
 	http.ListenAndServe(":"+port, router)
 
-}
-
-func useMockWeb() *hd.OauthWebHandler {
-	var om m.MockManager
-	om.MockAuthCodeAuthorized = true
-	om.MockImplicitAuthorized = true
-	var acc m.AuthCodeClient
-	//acc.Valid = true
-	acc.ClientName = "Test Client"
-	acc.WebSite = "www.TestClient.com"
-	om.MockAuthCodeClient = acc
-
-	var ic m.ImplicitClient
-	ic.Valid = true
-	ic.ClientName = "Test Client"
-	ic.WebSite = "www.TestClient.com"
-	om.MockImplicitClient = ic
-	om.MockAuthCodeAuthorizeSuccess = true
-	om.MockUserLoginSuccess = true
-	om.MockAuthCode = 55
-	om.MockAuthCodeString = "rr666"
-
-	om.MockImplicitAuthorizeSuccess = true
-	var ir m.ImplicitReturn
-	ir.ID = 3
-	ir.Token = "12345"
-	om.MockImplicitReturn = ir
-
-	var tkn m.Token
-	tkn.AccessToken = "65165165"
-	tkn.TokenType = "Bearer"
-	tkn.RefreshToken = "16161"
-	tkn.ExpiresIn = 50000
-
-	om.MockAuthCodeTokenSuccess = true
-	om.MockCredentialsTokenSuccess = true
-	om.MockAuthCodeRefreshTokenSuccess = true
-	om.MockPasswordTokenSuccess = true
-	om.MockToken = tkn
-	om.MockTokenError = "token failed"
-
-	var wh hd.OauthWebHandler
-	wh.Manager = &om
-	return &wh
-}
-
-func useMockRest() *hd.OauthRestHandler {
-	var om m.MockManager
-	om.MockInsertSuccess1 = true
-	om.MockInsertID1 = 34
-	om.MockUpdateSuccess1 = true
-	om.MockDeleteSuccess1 = true
-
-	var mc m.Client
-	mc.ClientID = 510
-	mc.Secret = "12345"
-	mc.Name = "test client"
-	mc.WebSite = "www.testclient.com"
-	mc.Email = "tester@testclient.com"
-	mc.Enabled = true
-
-	var cuo m.ClientRedirectURI
-	cuo.ID = 4
-	cuo.URI = "/test"
-	cuo.ClientID = 10
-	mc.RedirectURIs = &[]m.ClientRedirectURI{cuo}
-	om.MockClient = mc
-
-	om.MockClientList = []m.Client{mc}
-
-	var gt m.ClientGrantType
-	gt.ID = 2
-	gt.GrantType = "code"
-	gt.ClientID = 22
-
-	om.MockClientGrantTypeList = []m.ClientGrantType{gt}
-
-	var au m.ClientAllowedURI
-	au.ID = 5
-	au.URI = "/testurl"
-	au.ClientID = 4
-
-	om.MockClientAllowedURI = au
-	om.MockClientAllowedURIList = []m.ClientAllowedURI{au}
-
-	var ru m.ClientRedirectURI
-	ru.ID = 4
-	ru.URI = "/testuri"
-	ru.ClientID = 554
-
-	om.MockClientRedirectURIList = []m.ClientRedirectURI{ru}
-
-	var rh hd.OauthRestHandler
-	rh.Manager = &om
-
-	var clt oa.MockOauthClient
-	clt.MockValid = true
-	rh.Client = &clt
-
-	var ac rc.MockOauthAssets
-	ac.MockSuccess = true
-	rh.AssetControl = &ac
-	return &rh
 }

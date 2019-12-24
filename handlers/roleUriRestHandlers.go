@@ -134,39 +134,59 @@ func (h *OauthRestHandler) DeleteRoleURI(w http.ResponseWriter, r *http.Request)
 	//fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &ruidcl)
 	if auth {
-		//var id string
 		h.SetContentType(w)
 		ruidvars := mux.Vars(r)
 		fmt.Println("vars del ru: ", len(ruidvars))
-		if ruidvars != nil && len(ruidvars) == 2 {
+		var clientRoleID int64
+		var clientAllowedURIID int64
 
+		if ruidvars != nil && len(ruidvars) == 2 {
 			var cridStr = ruidvars["clientRoleId"]
 			fmt.Println("vars delete crid: ", cridStr)
 			crid, cridErr := strconv.ParseInt(cridStr, 10, 64)
-
+			if crid != 0 && cridErr == nil {
+				clientRoleID = crid
+			}
 			var cauidStr = ruidvars["clientAllowedUriId"]
 			fmt.Println("vars delete cauidStr: ", cauidStr)
 			cauid, cauidErr := strconv.ParseInt(cauidStr, 10, 64)
-
-			fmt.Println("crid delete: ", crid)
-			if crid != 0 && cridErr == nil && cauid != 0 && cauidErr == nil {
-				fmt.Println("crid: ", crid)
-				var crui m.ClientRoleURI
-				crui.ClientRoleID = crid
-				crui.ClientAllowedURIID = cauid
-				cruidsuc := h.Manager.DeleteClientRoleURI(&crui)
-				var crudrtn Response
-				if cruidsuc {
-					crudrtn.Success = cruidsuc
-					w.WriteHeader(http.StatusOK)
-				} else {
-					w.WriteHeader(http.StatusInternalServerError)
-				}
-				resJSON, _ := json.Marshal(crudrtn)
-				fmt.Fprint(w, string(resJSON))
-			} else {
-				w.WriteHeader(http.StatusBadRequest)
+			if cauid != 0 && cauidErr == nil {
+				clientAllowedURIID = cauid
 			}
+		} else {
+			rlsContOk := h.CheckContent(r)
+			fmt.Println("conOk: ", rlsContOk)
+			if !rlsContOk {
+				http.Error(w, "json required", http.StatusUnsupportedMediaType)
+			} else {
+				var crui m.ClientRoleURI
+				rlssuc, rlserr := h.ProcessBody(r, &crui)
+				fmt.Println("rlssuc: ", rlssuc)
+				fmt.Println("crui: ", crui)
+				fmt.Println("rlserr: ", rlserr)
+				if !rlssuc && rlserr != nil {
+					http.Error(w, rlserr.Error(), http.StatusBadRequest)
+				} else {
+					clientRoleID = crui.ClientRoleID
+					clientAllowedURIID = crui.ClientAllowedURIID
+				}
+			}
+		}
+		if clientRoleID != 0 && clientAllowedURIID != 0 {
+			fmt.Println("clientRoleID: ", clientRoleID)
+			var crui m.ClientRoleURI
+			crui.ClientRoleID = clientRoleID
+			crui.ClientAllowedURIID = clientAllowedURIID
+			cruidsuc := h.Manager.DeleteClientRoleURI(&crui)
+			var crudrtn Response
+			if cruidsuc {
+				crudrtn.Success = cruidsuc
+				w.WriteHeader(http.StatusOK)
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+			resJSON, _ := json.Marshal(crudrtn)
+			fmt.Fprint(w, string(resJSON))
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 		}

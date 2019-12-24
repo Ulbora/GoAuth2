@@ -513,7 +513,84 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURINoParam(t *testing.T) {
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
-	if w.Code != 400 || w.Header().Get("Content-Type") != "application/json" {
+	fmt.Println("code: ", w.Code)
+	if w.Code != 415 {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandlerRoleURI_DeleteRoleURIJson(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"clientRoleId":3, "clientAllowedUriId": 2}`))
+	r, _ := http.NewRequest("GET", "/ffllist", aJSON)
+	r.Header.Set("Content-Type", "application/json")
+	// vars := map[string]string{
+	// 	"clientRoleId":       "5",
+	// 	"clientAllowedUriId": "6",
+	// }
+	//r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteRoleURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy Response
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 200 || w.Header().Get("Content-Type") != "application/json" || bdy.Success != true {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandlerRoleURI_DeleteRoleURIJsonNoBody(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockDeleteSuccess1 = true
+	oh.Manager = &man
+
+	var asc ac.MockOauthAssets
+	oh.AssetControl = &asc
+
+	var oct oc.MockOauthClient
+	oct.MockValid = true
+	oh.Client = &oct
+	fmt.Println("oh.Client: ", oh.Client)
+
+	h := oh.GetNewRestHandler()
+
+	//aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"clientRoleId":3, "clientAllowedUriId": 2}`))
+	r, _ := http.NewRequest("GET", "/ffllist", nil)
+	r.Header.Set("Content-Type", "application/json")
+	// vars := map[string]string{
+	// 	"clientRoleId":       "5",
+	// 	"clientAllowedUriId": "6",
+	// }
+	//r = mux.SetURLVars(r, vars)
+	w := httptest.NewRecorder()
+	h.DeleteRoleURI(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy Response
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	fmt.Println("code: ", w.Code)
+	fmt.Println(" w.Header()", w.Header().Get("Content-Type"))
+	if w.Code != 400 {
 		t.Fail()
 	}
 }
