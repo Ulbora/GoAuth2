@@ -91,7 +91,7 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 //CheckAuthCodeApplicationAuthorization CheckAuthCodeApplicationAuthorization
 func (m *OauthManager) CheckAuthCodeApplicationAuthorization(ac *AuthCode) (authorized bool) {
 	if ac.ClientID != 0 && ac.UserID != "" && ac.Scope != "" {
-		facs := m.Db.GetAuthorizationCodeByScope(ac.ClientID, ac.UserID, ac.UserID)
+		facs := m.Db.GetAuthorizationCodeByScope(ac.ClientID, ac.UserID, ac.Scope)
 		if len(*facs) > 0 && (*facs)[0].AuthorizationCode != 0 {
 			authorized = true
 		}

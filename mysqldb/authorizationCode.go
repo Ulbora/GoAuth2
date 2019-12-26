@@ -146,8 +146,10 @@ func (d *MySQLOauthDB) GetAuthorizationCode(clientID int64, userID string) *[]od
 		foundRows := rows.Rows
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			rowContent := parseAuthCodeRow(&foundRow)
-			rtn = append(rtn, *rowContent)
+			if len(foundRow) > 0 {
+				rowContent := parseAuthCodeRow(&foundRow)
+				rtn = append(rtn, *rowContent)
+			}
 		}
 	}
 	// rtn := parseAuthCodeRow(&row.Row)
@@ -219,41 +221,48 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 	//make this a list call
 	acodeList := d.GetAuthorizationCode(clientID, userID)
 	fmt.Println("auth code list: ", acodeList)
-	for _, acode := range *acodeList {
-		if acode.AuthorizationCode > 0 {
-			at := d.GetAccessToken(acode.AccessTokenID)
-			var rtid int64
-			if at.RefreshTokenID > 0 {
-				rt := d.GetRefreshToken(at.RefreshTokenID)
-				rtid = rt.ID
-			}
-			tx := d.DB.BeginTransaction()
-			// authCodeRevokeProcessor.deleteAuthCodeRevoke do this
-			rvkDel := d.DeleteAuthCodeRevolk(tx, acode.AuthorizationCode)
-			fmt.Println("delete refresh token: ", rvkDel)
-			if rvkDel {
-				sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
-				fmt.Println("delete scope: ", sdel)
-				// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
-				if sdel {
-					var a []interface{}
-					//a = append(a, clientID, userID)
-					//acdel := tx.Delete(deleteAuthCode, a...)
-					a = append(a, acode.AuthorizationCode)
-					acdel := tx.Delete(deleteAuthCodeByCode, a...)
-					fmt.Println("delete authCode: ", acdel)
-					if acdel {
-						atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
-						fmt.Println("delete AccessToken: ", atdel)
-						if atdel {
-							var cont = true
-							if rtid > 0 {
-								cont = d.DeleteRefreshToken(tx, rtid)
-								fmt.Println("delete RefreshToken: ", cont)
-							}
-							if cont {
-								suc = true
-								tx.Commit()
+	fmt.Println("auth code list: ", len(*acodeList))
+	if len(*acodeList) == 0 {
+		suc = true
+	} else {
+		for _, acode := range *acodeList {
+			if acode.AuthorizationCode > 0 {
+				at := d.GetAccessToken(acode.AccessTokenID)
+				var rtid int64
+				if at.RefreshTokenID > 0 {
+					rt := d.GetRefreshToken(at.RefreshTokenID)
+					rtid = rt.ID
+				}
+				tx := d.DB.BeginTransaction()
+				// authCodeRevokeProcessor.deleteAuthCodeRevoke do this
+				rvkDel := d.DeleteAuthCodeRevolk(tx, acode.AuthorizationCode)
+				fmt.Println("delete refresh token: ", rvkDel)
+				if rvkDel {
+					sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
+					fmt.Println("delete scope: ", sdel)
+					// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
+					if sdel {
+						var a []interface{}
+						//a = append(a, clientID, userID)
+						//acdel := tx.Delete(deleteAuthCode, a...)
+						a = append(a, acode.AuthorizationCode)
+						acdel := tx.Delete(deleteAuthCodeByCode, a...)
+						fmt.Println("delete authCode: ", acdel)
+						if acdel {
+							atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
+							fmt.Println("delete AccessToken: ", atdel)
+							if atdel {
+								var cont = true
+								if rtid > 0 {
+									cont = d.DeleteRefreshToken(tx, rtid)
+									fmt.Println("delete RefreshToken: ", cont)
+								}
+								if cont {
+									suc = true
+									tx.Commit()
+								} else {
+									tx.Rollback()
+								}
 							} else {
 								tx.Rollback()
 							}
@@ -266,8 +275,6 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 				} else {
 					tx.Rollback()
 				}
-			} else {
-				tx.Rollback()
 			}
 		}
 	}

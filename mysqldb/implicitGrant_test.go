@@ -369,6 +369,60 @@ func TestMySQLOauthDBIg_DeleteImplicitGrant(t *testing.T) {
 	}
 }
 
+func TestMySQLOauthDBIg_DeleteImplicitGrant2(t *testing.T) {
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbIg = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	// mydb.MockInsertSuccess1 = true
+	// mydb.MockInsertID1 = 5
+
+	// mydb.MockInsertSuccess2 = true
+	// mydb.MockInsertID2 = 6
+
+	// mydb.MockInsertSuccess3 = true
+	// mydb.MockInsertID3 = 7
+
+	mydb.MockDeleteSuccess1 = true
+	mydb.MockDeleteSuccess2 = true
+	mydb.MockDeleteSuccess3 = true
+	mydb.MockDeleteSuccess4 = true
+
+	// var getRow db.DbRow
+	// getRow.Row = []string{"1", "2", "user", "4", ""}
+	// mydb.MockRow1 = &getRow
+
+	var rows [][]string
+	row1 := []string{}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+	fmt.Println("rows in test", mydb.MockRows1)
+	fmt.Println("rows in test len", len(mydb.MockRows1.Rows))
+	//mydb.MockRows2 = &dbrows
+	//mydb.MockRows3 = &dbrows
+
+	var moadb MySQLOauthDB
+	moadb.DB = dbIg
+
+	odbIg = &moadb
+
+	dbIg.Connect()
+
+	res := odbIg.DeleteImplicitGrant(cidIg, "1234")
+	if !res {
+		t.Fail()
+	}
+}
+
 func TestMySQLOauthDBIg_DeleteImplicitGrantFail1(t *testing.T) {
 	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"

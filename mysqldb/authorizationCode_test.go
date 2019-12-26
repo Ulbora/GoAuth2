@@ -898,6 +898,70 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCode(t *testing.T) {
 	}
 }
 
+func TestMySQLOauthDBAC_DeleteAuthorizationCode2(t *testing.T) {
+	var mydb mdb.MyDBMock
+	dbAc = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	mydb.MockDeleteSuccess1 = true
+
+	mydb.MockDeleteSuccess2 = true
+
+	mydb.MockDeleteSuccess3 = true
+	mydb.MockInsertID3 = 1
+
+	mydb.MockDeleteSuccess4 = true
+	mydb.MockInsertID4 = 1
+
+	mydb.MockDeleteSuccess5 = true
+
+	mydb.MockDeleteSuccess6 = true
+
+	mydb.MockDeleteSuccess7 = true
+
+	mydb.MockUpdateSuccess1 = true
+
+	mydb.MockUpdateSuccess2 = true
+
+	var tt = time.Now()
+
+	var getRow db.DbRow
+	getRow.Row = []string{"1", "test1token", tt.Format("2006-01-02 15:04:05"), "1"}
+	mydb.MockRow1 = &getRow
+
+	var getRow2 db.DbRow
+	getRow2.Row = []string{"1", "test1refreshtoken"}
+	mydb.MockRow2 = &getRow2
+
+	var rows [][]string
+	row1 := []string{}
+	rows = append(rows, row1)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+
+	var rows2 [][]string
+	row2 := []string{"1", "2", "test1", "13445bb", "true"}
+	rows2 = append(rows2, row2)
+	var dbrows2 db.DbRows
+	dbrows2.Rows = rows2
+	mydb.MockRows2 = &dbrows2
+
+	var moadb MySQLOauthDB
+	moadb.DB = dbAc
+
+	odbAc = &moadb
+
+	res := odbAc.DeleteAuthorizationCode(cidAc, "1234")
+	fmt.Println("auth code delete: ", res)
+	if !res {
+		t.Fail()
+	}
+}
+
 func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail1(t *testing.T) {
 	var mydb mdb.MyDBMock
 	dbAc = &mydb

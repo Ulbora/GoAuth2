@@ -84,11 +84,14 @@ func (d *MySQLOauthDB) GetPasswordGrant(clientID int64, userID string) *[]odb.Pa
 	a = append(a, clientID, userID)
 	rows := d.DB.GetList(getPasswordGrant, a...)
 	fmt.Println("rows in getbyscope: ", rows)
+	fmt.Println("rows", rows)
+	fmt.Println("rows", len(rows.Rows))
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
 		fmt.Println("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
+			fmt.Println("foundRows in get pg len: ", len(foundRow))
 			if len(foundRow) > 0 {
 				fmt.Println("foundRow in getbyscope: ", foundRow)
 				pgID, err := strconv.ParseInt((foundRow)[0], 10, 64)
@@ -122,42 +125,48 @@ func (d *MySQLOauthDB) DeletePasswordGrant(clientID int64, userID string) bool {
 	}
 	pwgList := d.GetPasswordGrant(clientID, userID)
 	fmt.Println("pwgList: ", pwgList)
-	for _, pw := range *pwgList {
-		if pw.ID > 0 {
-			at := d.GetAccessToken(pw.AccessTokenID)
-			fmt.Println("at: ", at)
-			var rtid int64
-			if at.RefreshTokenID > 0 {
-				rt := d.GetRefreshToken(at.RefreshTokenID)
-				rtid = rt.ID
-			}
-			tx := d.DB.BeginTransaction()
-			var a []interface{}
-			a = append(a, pw.ID)
-			pwgdel := tx.Delete(deletePasswordGrantByID, a...)
-			fmt.Println("delete pwg: ", pwgdel)
-			if pwgdel {
-				atdel := d.DeleteAccessToken(tx, pw.AccessTokenID)
-				fmt.Println("delete AccessToken: ", atdel)
-				if atdel {
-					var cont = true
-					if rtid > 0 {
-						cont = d.DeleteRefreshToken(tx, rtid)
-						fmt.Println("delete RefreshToken: ", cont)
-					}
-					if cont {
-						suc = true
-						tx.Commit()
+	fmt.Println("pwgList len: ", len(*pwgList))
+	if len(*pwgList) == 0 {
+		suc = true
+	} else {
+		for _, pw := range *pwgList {
+			if pw.ID > 0 {
+				at := d.GetAccessToken(pw.AccessTokenID)
+				fmt.Println("at: ", at)
+				var rtid int64
+				if at.RefreshTokenID > 0 {
+					rt := d.GetRefreshToken(at.RefreshTokenID)
+					rtid = rt.ID
+				}
+				tx := d.DB.BeginTransaction()
+				var a []interface{}
+				a = append(a, pw.ID)
+				pwgdel := tx.Delete(deletePasswordGrantByID, a...)
+				fmt.Println("delete pwg: ", pwgdel)
+				if pwgdel {
+					atdel := d.DeleteAccessToken(tx, pw.AccessTokenID)
+					fmt.Println("delete AccessToken: ", atdel)
+					if atdel {
+						var cont = true
+						if rtid > 0 {
+							cont = d.DeleteRefreshToken(tx, rtid)
+							fmt.Println("delete RefreshToken: ", cont)
+						}
+						if cont {
+							suc = true
+							tx.Commit()
+						} else {
+							tx.Rollback()
+						}
 					} else {
 						tx.Rollback()
 					}
 				} else {
 					tx.Rollback()
 				}
-			} else {
-				tx.Rollback()
 			}
 		}
 	}
+
 	return suc
 }

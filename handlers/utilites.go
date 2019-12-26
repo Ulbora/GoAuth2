@@ -12,6 +12,7 @@ import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	oa "github.com/Ulbora/GoAuth2/oauthclient"
 	rc "github.com/Ulbora/GoAuth2/rolecontrol"
+	px "github.com/Ulbora/GoProxy"
 	db "github.com/Ulbora/dbinterface"
 	// mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -44,6 +45,8 @@ func UseWebHandler(dbi db.Database) *OauthWebHandler {
 	var oauthDbw odb.Oauth2DB
 	oauthDbw = &oauthMySqldbw
 	oauthManagerw.Db = oauthDbw
+	var userServiceProxy px.GoProxy
+	oauthManagerw.Proxy = userServiceProxy.GetNewProxy()
 
 	var wh OauthWebHandler
 	wh.Manager = &oauthManagerw

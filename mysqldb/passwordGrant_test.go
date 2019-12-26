@@ -1,6 +1,7 @@
 package mysqldb
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -276,6 +277,56 @@ func TestMySQLOauthDBPg_DeletePasswordGrant(t *testing.T) {
 	var dbrows db.DbRows
 	dbrows.Rows = rows
 	mydb.MockRows1 = &dbrows
+
+	var tt = time.Now()
+
+	var getRow db.DbRow
+	getRow.Row = []string{"1", "test1token", tt.Format("2006-01-02 15:04:05"), "1"}
+	mydb.MockRow1 = &getRow
+
+	var getRow2 db.DbRow
+	getRow2.Row = []string{"1", "test1refreshtoken"}
+	mydb.MockRow2 = &getRow2
+
+	var moadb MySQLOauthDB
+	moadb.DB = dbPg
+
+	odbPg = &moadb
+
+	dbPg.Connect()
+
+	res := odbPg.DeletePasswordGrant(cidPg, "1234")
+	if !res {
+		t.Fail()
+	}
+}
+
+func TestMySQLOauthDBPg_DeletePasswordGrant2(t *testing.T) {
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbPg = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	mydb.MockDeleteSuccess1 = true
+
+	mydb.MockDeleteSuccess2 = true
+
+	mydb.MockDeleteSuccess3 = true
+
+	var rows [][]string
+	row := []string{}
+	rows = append(rows, row)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+	fmt.Println("rows in test", mydb.MockRows1)
+	fmt.Println("rows in test len", len(mydb.MockRows1.Rows))
 
 	var tt = time.Now()
 

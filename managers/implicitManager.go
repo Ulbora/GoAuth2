@@ -98,7 +98,7 @@ func (m *OauthManager) AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn) 
 //CheckImplicitApplicationAuthorization CheckImplicitApplicationAuthorization
 func (m *OauthManager) CheckImplicitApplicationAuthorization(imp *Implicit) (authorized bool) {
 	if imp.ClientID != 0 && imp.UserID != "" && imp.Scope != "" {
-		facs := m.Db.GetImplicitGrantByScope(imp.ClientID, imp.UserID, imp.UserID)
+		facs := m.Db.GetImplicitGrantByScope(imp.ClientID, imp.UserID, imp.Scope)
 		if len(*facs) > 0 && (*facs)[0].ID != 0 {
 			authorized = true
 		}

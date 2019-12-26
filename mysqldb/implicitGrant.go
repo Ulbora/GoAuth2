@@ -90,12 +90,18 @@ func (d *MySQLOauthDB) GetImplicitGrant(clientID int64, userID string) *[]odb.Im
 	var a []interface{}
 	a = append(a, clientID, userID)
 	rows := d.DB.GetList(getImplicitGrant, a...)
+	fmt.Println("rows", rows)
+	fmt.Println("rows", len(rows.Rows))
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
+		fmt.Println("foundRows in get len: ", len(foundRows))
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			rowContent := parseImplicitGrantRow(&foundRow)
-			rtn = append(rtn, *rowContent)
+			fmt.Println("foundRows in get ig len: ", len(foundRow))
+			if len(foundRow) > 0 {
+				rowContent := parseImplicitGrantRow(&foundRow)
+				rtn = append(rtn, *rowContent)
+			}
 		}
 	}
 	// rtn := parseAuthCodeRow(&row.Row)
@@ -151,33 +157,38 @@ func (d *MySQLOauthDB) DeleteImplicitGrant(clientID int64, userID string) bool {
 	}
 	igList := d.GetImplicitGrant(clientID, userID)
 	fmt.Println("ImplicitGrant list in delete: ", igList)
-	for _, ig := range *igList {
-		if ig.ID > 0 {
-			//at := d.GetAccessToken(ig.AccessTokenID)
-			tx := d.DB.BeginTransaction()
-			sdel := d.DeleteImplicitGrantScopeList(tx, ig.ID)
-			fmt.Println("delete scope: ", sdel)
-			if sdel {
-				var a []interface{}
-				a = append(a, ig.ID)
-				igdel := tx.Delete(deleteImplicitGrantByID, a...)
-				fmt.Println("delete ImplicitGrant: ", igdel)
-				if igdel {
-					atdel := d.DeleteAccessToken(tx, ig.AccessTokenID)
-					fmt.Println("delete AccessToken: ", atdel)
-					//if atdel {
-					if atdel {
-						suc = true
-						tx.Commit()
+	fmt.Println("ImplicitGrant len list in delete: ", len(*igList))
+	if len(*igList) == 0 {
+		suc = true
+	} else {
+		for _, ig := range *igList {
+			if ig.ID > 0 {
+				//at := d.GetAccessToken(ig.AccessTokenID)
+				tx := d.DB.BeginTransaction()
+				sdel := d.DeleteImplicitGrantScopeList(tx, ig.ID)
+				fmt.Println("delete scope: ", sdel)
+				if sdel {
+					var a []interface{}
+					a = append(a, ig.ID)
+					igdel := tx.Delete(deleteImplicitGrantByID, a...)
+					fmt.Println("delete ImplicitGrant: ", igdel)
+					if igdel {
+						atdel := d.DeleteAccessToken(tx, ig.AccessTokenID)
+						fmt.Println("delete AccessToken: ", atdel)
+						//if atdel {
+						if atdel {
+							suc = true
+							tx.Commit()
+						} else {
+							tx.Rollback()
+						}
+						//}
 					} else {
 						tx.Rollback()
 					}
-					//}
 				} else {
 					tx.Rollback()
 				}
-			} else {
-				tx.Rollback()
 			}
 		}
 	}

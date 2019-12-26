@@ -47,14 +47,14 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 	if hashedStr == "true" {
 		hashed = true
 	}
-	fmt.Println("tokenHeader", tokenHeader)
+	//fmt.Println("tokenHeader", tokenHeader)
 	fmt.Println("clientIDStr", clientIDStr)
 	fmt.Println("clientID", clientID)
 	fmt.Println("userID", userID)
 	fmt.Println("hashed", hashed)
 	if tokenHeader != "" {
 		tokenArray := strings.Split(tokenHeader, " ")
-		fmt.Println("tokenArray", tokenArray)
+		//fmt.Println("tokenArray", tokenArray)
 		if len(tokenArray) == 2 {
 			fmt.Println("tokenArray[1]", tokenArray[1])
 			var vr m.ValidateAccessTokenReq
@@ -63,7 +63,7 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 			vr.UserID = userID
 			vr.ClientID = clientID
 			vr.Role = c.Role
-			vr.UserID = c.URL
+			vr.URI = c.URL
 			vr.Scope = c.Scope
 			rtn = o.Manager.ValidateAccessToken(&vr)
 			fmt.Println("valid: ", rtn)

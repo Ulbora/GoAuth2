@@ -107,24 +107,28 @@ func (d *MySQLOauthDB) DeleteCredentialsGrant(clientID int64) bool {
 	}
 	cgList := d.GetCredentialsGrant(clientID)
 	fmt.Println("cgList: ", cgList)
-	for _, cg := range *cgList {
-		if cg.ID > 0 {
-			tx := d.DB.BeginTransaction()
-			var a []interface{}
-			a = append(a, cg.ID)
-			cgdel := tx.Delete(deleteCredentialsGrant, a...)
-			fmt.Println("delete cg: ", cgdel)
-			if cgdel {
-				atdel := d.DeleteAccessToken(tx, cg.AccessTokenID)
-				fmt.Println("delete AccessToken: ", atdel)
-				if atdel {
-					suc = true
-					tx.Commit()
+	if len(*cgList) == 0 {
+		suc = true
+	} else {
+		for _, cg := range *cgList {
+			if cg.ID > 0 {
+				tx := d.DB.BeginTransaction()
+				var a []interface{}
+				a = append(a, cg.ID)
+				cgdel := tx.Delete(deleteCredentialsGrant, a...)
+				fmt.Println("delete cg: ", cgdel)
+				if cgdel {
+					atdel := d.DeleteAccessToken(tx, cg.AccessTokenID)
+					fmt.Println("delete AccessToken: ", atdel)
+					if atdel {
+						suc = true
+						tx.Commit()
+					} else {
+						tx.Rollback()
+					}
 				} else {
 					tx.Rollback()
 				}
-			} else {
-				tx.Rollback()
 			}
 		}
 	}

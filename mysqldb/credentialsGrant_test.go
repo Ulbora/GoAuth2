@@ -182,6 +182,41 @@ func TestMySQLOauthDBCg_DeleteCredentialsGrant(t *testing.T) {
 	}
 }
 
+func TestMySQLOauthDBCg_DeleteCredentialsGrant2(t *testing.T) {
+	var mydb mdb.MyDBMock
+	mydb.Host = "localhost:3306"
+	mydb.User = "admin"
+	mydb.Password = "admin"
+	mydb.Database = "ulbora_oauth2_server"
+	dbPg = &mydb
+
+	var mTestRow db.DbRow
+	mTestRow.Row = []string{}
+	mydb.MockTestRow = &mTestRow
+
+	mydb.MockDeleteSuccess1 = true
+
+	mydb.MockDeleteSuccess2 = true
+
+	var rows [][]string
+	row := []string{}
+	rows = append(rows, row)
+	var dbrows db.DbRows
+	dbrows.Rows = rows
+	mydb.MockRows1 = &dbrows
+
+	var moadb MySQLOauthDB
+	moadb.DB = dbPg
+
+	odbCg = &moadb
+
+	dbCg.Connect()
+
+	res := odbCg.DeleteCredentialsGrant(cidCg)
+	if !res {
+		t.Fail()
+	}
+}
 func TestMySQLOauthDBCg_DeleteCredentialsGrantFail1(t *testing.T) {
 	var mydb mdb.MyDBMock
 	mydb.Host = "localhost:3306"

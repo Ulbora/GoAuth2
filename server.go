@@ -45,25 +45,58 @@ func main() {
 	fmt.Println("mock: ", *mock)
 	fmt.Println("assets: ", *assets)
 	var dbi db.Database
-	var mydb mdb.MyDBMock
-	mydb.Host = "localhost:3306"
-	mydb.User = "admin"
-	mydb.Password = "admin"
-	mydb.Database = "ulbora_oauth2_server"
+	var mydb mdb.MyDB
+	var goauth2Host string
+	var goauth2User string
+	var goauth2Password string
+	var goauth2Database string
+
+	if os.Getenv("GOAUTH2_HOST") != "" {
+		goauth2Host = os.Getenv("GOAUTH2_HOST")
+	} else {
+		goauth2Host = "localhost:3306"
+	}
+
+	if os.Getenv("GOAUTH2_USER") != "" {
+		goauth2User = os.Getenv("GOAUTH2_USER")
+	} else {
+		goauth2User = "admin"
+	}
+
+	if os.Getenv("GOAUTH2_PASSWORD") != "" {
+		goauth2Password = os.Getenv("GOAUTH2_PASSWORD")
+	} else {
+		goauth2Password = "admin"
+	}
+
+	if os.Getenv("GOAUTH2_DATABASE") != "" {
+		goauth2Database = os.Getenv("GOAUTH2_DATABASE")
+	} else {
+		goauth2Database = "ulbora_oauth2_server"
+	}
+
+	mydb.Host = goauth2Host
+	mydb.User = goauth2User
+	mydb.Password = goauth2Password
+	mydb.Database = goauth2Database
 	dbi = &mydb
 	dbi.Connect()
 
-	// var mydb mdb.MyDBMock
-	// dbi = &mydb
-	// dbi.Connect()
-
 	var wh hd.WebHandler
 	var rh hd.RestHandler
+	var owh *hd.OauthWebHandler
 
-	owh := hd.UseMockWeb()
-	wh = owh.GetNewWebHandler()
-	orh := hd.UseMockRest()
-	rh = orh.GetNewRestHandler()
+	if *mock {
+		owh = hd.UseMockWeb()
+		wh = owh.GetNewWebHandler()
+		orh := hd.UseMockRest()
+		rh = orh.GetNewRestHandler()
+	} else {
+		owh = hd.UseWebHandler(dbi)
+		wh = owh.GetNewWebHandler()
+		orh := hd.UseRestHandler(dbi, *assets)
+		rh = orh.GetNewRestHandler()
+	}
 
 	owh.Templates = template.Must(template.ParseFiles("./static/head.html", "./static/index.html",
 		"./static/login.html", "./static/authorizeApp.html", "./static/oauthError.html"))

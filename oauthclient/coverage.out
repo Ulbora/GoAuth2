@@ -2,9 +2,9 @@ mode: set
 github.com/Ulbora/GoAuth2/oauthclient/mockOauthClient.go:37.69,63.2 1 1
 github.com/Ulbora/GoAuth2/oauthclient/mockOauthClient.go:66.49,70.2 3 1
 github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:39.65,47.25 8 1
-github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:50.2,55.23 6 1
+github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:51.2,55.23 5 1
 github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:72.2,72.12 1 1
 github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:47.25,49.3 1 1
-github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:55.23,58.27 3 1
+github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:55.23,58.27 2 1
 github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:58.27,70.4 11 1
 github.com/Ulbora/GoAuth2/oauthclient/oauthClient.go:76.45,80.2 3 1

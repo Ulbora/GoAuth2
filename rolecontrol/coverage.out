@@ -1,7 +1,4 @@
 mode: set
-github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:31.72,33.2 1 1
-github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:36.84,38.2 1 1
-github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:41.61,45.2 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:50.68,57.26 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:60.2,60.18 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:63.2,66.12 3 1
@@ -13,3 +10,6 @@ github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:74.16,76.26 2 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:76.26,81.31 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:81.31,84.10 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:92.57,96.2 3 1
+github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:31.72,33.2 1 1
+github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:36.84,38.2 1 1
+github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:41.61,45.2 3 1

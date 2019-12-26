@@ -36,9 +36,10 @@ type ValidateAccessTokenReq struct {
 //ValidateAccessToken ValidateAccessToken
 func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 	var rtn bool
-	if at.AccessToken != "" && at.UserID != "" && at.ClientID != 0 {
+	//fix issue with no user needed with client grant
+	if at.AccessToken != "" && at.ClientID != 0 {
 		var userID string
-		if at.Hashed {
+		if at.Hashed && at.UserID != "" {
 			userID = unHashUser(at.UserID)
 			fmt.Println("unhashed user: ", userID)
 		} else {
@@ -48,8 +49,17 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 		fmt.Println("tkkey", tkkey)
 		atsuc, pwatpl := m.ValidateJwt(at.AccessToken, tkkey)
 		fmt.Println("atsuc", atsuc)
+		fmt.Println("userPass", userID == unHashUser(pwatpl.UserID))
+		fmt.Println("user", userID)
+		fmt.Println("userUnhash", unHashUser(pwatpl.UserID))
+		fmt.Println("pwatpl.UserID", pwatpl.UserID)
 		fmt.Println("pwatpl", pwatpl)
-		if atsuc && userID == unHashUser(pwatpl.UserID) && pwatpl.TokenType == accessTokenType &&
+		var noUser bool
+		if pwatpl.UserID == "" {
+			noUser = true
+		}
+		fmt.Println("noUser", noUser)
+		if atsuc && (noUser || userID == unHashUser(pwatpl.UserID)) && pwatpl.TokenType == accessTokenType &&
 			pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
 			fmt.Println("inside if")
 			var roleFound bool

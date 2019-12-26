@@ -20,6 +20,7 @@ package mysqldb
 
 */
 import (
+	"fmt"
 	"log"
 	"strconv"
 
@@ -37,7 +38,8 @@ func (d *MySQLOauthDB) testConnection() bool {
 	var a []interface{}
 	log.Println("d.DB: ", d.DB)
 	rowPtr := d.DB.Test(oauthTest, a...)
-	log.Println("after testConnection test")
+	fmt.Println("rowPtr", rowPtr)
+	log.Println("after testConnection test", rowPtr)
 	if len(rowPtr.Row) != 0 {
 		foundRow := rowPtr.Row
 		int64Val, err := strconv.ParseInt(foundRow[0], 10, 0)
