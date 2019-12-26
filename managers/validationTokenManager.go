@@ -29,7 +29,7 @@ type ValidateAccessTokenReq struct {
 	UserID      string `json:"userId"`
 	ClientID    int64  `json:"clientId"`
 	Role        string `json:"role"`
-	URI         string `json:"uri"`
+	URI         string `json:"url"`
 	Scope       string `json:"scope"`
 }
 
