@@ -117,9 +117,10 @@ http://localhost:3000/oauth/token?client_id=403&client_secret=554444vfg55ggfff22
 ```
    Example
    POST:
+   
 http://localhost:3000/oauth/token
 
-grant_type=password&client_id=403&username=someUser&password=someUser
+grant_type=password&client_id=403&username=someUser&password=somePw
 
 ```
 
