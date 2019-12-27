@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
 )
 
@@ -32,7 +33,9 @@ import (
 
 //OauthClient OauthClient
 type OauthClient struct {
-	Manager m.Manager
+	Manager         m.Manager
+	TokenCompressed bool
+	JwtCompress     cp.JwtCompress
 }
 
 //Authorize Authorize
@@ -56,9 +59,15 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 		tokenArray := strings.Split(tokenHeader, " ")
 		//fmt.Println("tokenArray", tokenArray)
 		if len(tokenArray) == 2 {
-			fmt.Println("tokenArray[1]", tokenArray[1])
+			var token string
+			if o.TokenCompressed {
+				token = o.JwtCompress.UnCompressJwt(tokenArray[1])
+			} else {
+				token = tokenArray[1]
+			}
+			fmt.Println("token:", token)
 			var vr m.ValidateAccessTokenReq
-			vr.AccessToken = tokenArray[1]
+			vr.AccessToken = token
 			vr.Hashed = hashed
 			vr.UserID = userID
 			vr.ClientID = clientID

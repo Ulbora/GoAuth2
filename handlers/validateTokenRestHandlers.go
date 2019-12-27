@@ -38,6 +38,10 @@ type ValidationResponse struct {
 func (h *OauthRestHandler) ValidateAccessToken(w http.ResponseWriter, r *http.Request) {
 	var vdtr m.ValidateAccessTokenReq
 	vdtsuc, gerr := h.ProcessBody(r, &vdtr)
+	if h.TokenCompressed {
+		vdtr.AccessToken = h.JwtCompress.UnCompressJwt(vdtr.AccessToken)
+		fmt.Println("uncompressed token in validate: ", vdtr.AccessToken)
+	}
 	fmt.Println("vdtsuc: ", vdtsuc)
 	fmt.Println("vdtr: ", vdtr)
 	fmt.Println("gerr: ", gerr)

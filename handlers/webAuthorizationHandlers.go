@@ -93,7 +93,7 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 		ari.ClientID = clientIDAuth
 		ari.RedirectURI = redirectURLAuth
 		ari.Scope = scopeAuth
-		ari.State = scopeAuth
+		ari.State = stateAuth
 
 		if loggedInAuth == true && userAuth != nil {
 			fmt.Println("loggedIn: ", loggedInAuth)
@@ -134,6 +134,9 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 				if iauthed {
 					isuc, im := h.Manager.AuthorizeImplicit(&aut)
 					if isuc && im.Token != "" {
+						if h.TokenCompressed {
+							im.Token = h.JwtCompress.CompressJwt(im.Token)
+						}
 						http.Redirect(w, r, redirectURLAuth+"?token="+im.Token+"&token_type=bearer&state="+stateAuth, http.StatusFound)
 					} else {
 						http.Redirect(w, r, accessDeniedErrorURL, http.StatusFound)
@@ -269,6 +272,9 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 				fmt.Println("aaiSuc", aaiSuc)
 				fmt.Println("irtn", irtn)
 				if aaiSuc && irtn.Token != "" {
+					if h.TokenCompressed {
+						irtn.Token = h.JwtCompress.CompressJwt(irtn.Token)
+					}
 					http.Redirect(w, r, aaari.RedirectURI+"?token="+irtn.Token+"&token_type=bearer&state="+aaari.State, http.StatusFound)
 				} else {
 					var aaipg PageParams

@@ -37,6 +37,7 @@ type ValidateAccessTokenReq struct {
 func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 	var rtn bool
 	//fix issue with no user needed with client grant
+	fmt.Println("at role", at.Role)
 	if at.AccessToken != "" && at.ClientID != 0 {
 		var userID string
 		if at.Hashed && at.UserID != "" {
@@ -55,7 +56,7 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 		fmt.Println("pwatpl.UserID", pwatpl.UserID)
 		fmt.Println("pwatpl", pwatpl)
 		var noUser bool
-		if pwatpl.UserID == "" {
+		if pwatpl.UserID == "" || at.UserID == "" {
 			noUser = true
 		}
 		fmt.Println("noUser", noUser)

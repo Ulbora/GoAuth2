@@ -38,7 +38,7 @@ import (
 */
 
 //UseWebHandler UseWebHandler
-func UseWebHandler(dbi db.Database) *OauthWebHandler {
+func UseWebHandler(dbi db.Database, compressJtw bool) *OauthWebHandler {
 	var oauthManagerw m.OauthManager
 	var oauthMySqldbw msdb.MySQLOauthDB
 	oauthMySqldbw.DB = dbi
@@ -50,11 +50,12 @@ func UseWebHandler(dbi db.Database) *OauthWebHandler {
 
 	var wh OauthWebHandler
 	wh.Manager = &oauthManagerw
+	wh.TokenCompressed = compressJtw
 	return &wh
 }
 
 //UseRestHandler UseRestHandler
-func UseRestHandler(dbi db.Database, assets string) *OauthRestHandler {
+func UseRestHandler(dbi db.Database, assets string, compressJtw bool) *OauthRestHandler {
 	var oauthManager m.OauthManager
 	var oauthMySqldb msdb.MySQLOauthDB
 	oauthMySqldb.DB = dbi
@@ -67,6 +68,7 @@ func UseRestHandler(dbi db.Database, assets string) *OauthRestHandler {
 
 	var clt oa.OauthClient
 	clt.Manager = &oauthManager
+	clt.TokenCompressed = compressJtw
 	rh.Client = &clt
 
 	var curs []rc.ControlledURL
@@ -81,5 +83,6 @@ func UseRestHandler(dbi db.Database, assets string) *OauthRestHandler {
 	var ac rc.OauthAssets
 	ac.AddControledURLs(&curs)
 	rh.AssetControl = &ac
+	rh.TokenCompressed = compressJtw
 	return &rh
 }

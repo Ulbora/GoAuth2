@@ -240,7 +240,7 @@ func (h *OauthRestHandler) GetClientSearchList(w http.ResponseWriter, r *http.Re
 	var getCltsURL = "/ulbora/rs/client/search"
 
 	var gcltscl oc.Claim
-	gcltscl.Role = "admin"
+	gcltscl.Role = "superAdmin"
 	gcltscl.URL = getCltsURL
 	gcltscl.Scope = "read"
 	//fmt.Println("client: ", h.Client)

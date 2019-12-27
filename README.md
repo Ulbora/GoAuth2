@@ -8,7 +8,7 @@ A complete standalone Oauth2 Server RFC 6749 implementation written in Golang an
 GoAuth2 is an Oauth2 server implementation written in Golang. Currently authorization code, 
 implicit, and client credentials grant, and password grant types are supported.
 
-GoAuth2 issues an enhanced JWT token that can be used to secure individual REST endpoints for users using roles. REST endpoints can be coded to validate the JWT token using the user's role.
+GoAuth2 issues a compressed enhanced JWT token that can be used to secure individual REST endpoints for users using roles. REST endpoints can be coded to validate the JWT token using the user's role. There is also a access token REST service that can validate a compressed token. Token compression can be turned off at startup if desired.
 
 ### GoAuth2 will provide the security infrastructure for the new Ulbora Labs eCommerce Platform project, 66GoCart.
 #### (66GoCart is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. 66GoCart frontend soltutions can be written in golang or any other language.)

@@ -39,11 +39,13 @@ import (
 func main() {
 
 	mock := flag.Bool("mock", false, "use mock backend")
+	compressJwt := flag.Bool("compressJwt", false, "compress Jwt access token")
 	assets := flag.String("assets", "", "Assets to control")
 	flag.Parse()
 
 	fmt.Println("mock: ", *mock)
 	fmt.Println("assets: ", *assets)
+	fmt.Println("compressJwt: ", *compressJwt)
 	var dbi db.Database
 	var mydb mdb.MyDB
 	var goauth2Host string
@@ -92,9 +94,9 @@ func main() {
 		orh := hd.UseMockRest()
 		rh = orh.GetNewRestHandler()
 	} else {
-		owh = hd.UseWebHandler(dbi)
+		owh = hd.UseWebHandler(dbi, *compressJwt)
 		wh = owh.GetNewWebHandler()
-		orh := hd.UseRestHandler(dbi, *assets)
+		orh := hd.UseRestHandler(dbi, *assets, *compressJwt)
 		rh = orh.GetNewRestHandler()
 	}
 

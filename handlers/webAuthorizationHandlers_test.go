@@ -123,6 +123,38 @@ func TestOauthWebHandler_AuthorizeImplicit(t *testing.T) {
 	}
 }
 
+func TestOauthWebHandler_AuthorizeImplicitCompressed(t *testing.T) {
+	var om m.MockManager
+	om.MockImplicitAuthorized = true
+	om.MockImplicitAuthorizeSuccess = true
+	var impRtn m.ImplicitReturn
+	impRtn.ID = 5
+	impRtn.Token = "gjfldflkl"
+	om.MockImplicitReturn = impRtn
+	//om.MockAuthCode = 55
+	//om.MockAuthCodeString = "rr666"
+
+	var wh OauthWebHandler
+	wh.Manager = &om
+	wh.TokenCompressed = true
+	h := wh.GetNewWebHandler()
+	r, _ := http.NewRequest("GET", "/test?response_type=token&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
+	//r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	s, suc := wh.getSession(r)
+	fmt.Println("suc: ", suc)
+	s.Values["loggedIn"] = true
+	s.Values["user"] = "tester"
+	s.Save(r, w)
+	h.Authorize(w, r)
+	fmt.Println("code: ", w.Code)
+	fmt.Println("location: ", w.HeaderMap["Location"])
+	loc := w.HeaderMap["Location"]
+	if w.Code != 302 || loc[0] != "http://tester.com/test?token=eNpKz0rLSUnLyc4BBAAA//8SXAOx&token_type=bearer&state=123" {
+		t.Fail()
+	}
+}
+
 func TestOauthWebHandler_AuthorizeImplicitNotAuth(t *testing.T) {
 	var om m.MockManager
 	om.MockImplicitAuthorized = false
@@ -673,6 +705,50 @@ func TestOauthWebHandler_AuthorizeByUserToken(t *testing.T) {
 	fmt.Println("location: ", w.HeaderMap["Location"])
 	loc := w.HeaderMap["Location"]
 	if w.Code != 302 || loc[0] != "http://test.com/test?token=lllkldskldfk&token_type=bearer&state=12eee" {
+		t.Fail()
+	}
+}
+
+func TestOauthWebHandler_AuthorizeByUserTokenCompressed(t *testing.T) {
+	var om m.MockManager
+	om.MockAuthCodeAuthorized = true
+	om.MockAuthCodeAuthorizeSuccess = true
+	om.MockImplicitAuthorizeSuccess = true
+	var acc m.ImplicitReturn
+	acc.ID = 55
+	acc.Token = "lllkldskldfk"
+
+	om.MockImplicitReturn = acc
+	om.MockAuthCode = 55
+	om.MockAuthCodeString = "rr666"
+
+	var ari AuthorizeRequestInfo
+	ari.ResponseType = "token"
+	ari.ClientID = 1234
+	ari.RedirectURI = "http://test.com/test"
+	ari.Scope = "web"
+	ari.State = "12eee"
+
+	var wh OauthWebHandler
+	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
+	wh.Manager = &om
+	wh.TokenCompressed = true
+	h := wh.GetNewWebHandler()
+	r, _ := http.NewRequest("GET", "/test?response_type=token&authorize=true", nil)
+	//r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	s, suc := wh.getSession(r)
+	fmt.Println("suc: ", suc)
+	s.Values["loggedIn"] = true
+	s.Values["user"] = "tester"
+	s.Values["authReqInfo"] = &ari
+
+	s.Save(r, w)
+	h.ApplicationAuthorizationByUser(w, r)
+	fmt.Println("code: ", w.Code)
+	fmt.Println("location: ", w.HeaderMap["Location"])
+	loc := w.HeaderMap["Location"]
+	if w.Code != 302 || loc[0] != "http://test.com/test?token=eNrKycnJzkkpzs5JScsGBAAA//8gswT/&token_type=bearer&state=12eee" {
 		t.Fail()
 	}
 }

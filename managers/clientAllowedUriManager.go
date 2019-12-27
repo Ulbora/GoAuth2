@@ -29,7 +29,7 @@ import (
 //ClientAllowedURI ClientAllowedURI
 type ClientAllowedURI struct {
 	ID       int64  `json:"id"`
-	URI      string `json:"url"`
+	URI      string `json:"uri"`
 	ClientID int64  `json:"clientId"`
 }
 

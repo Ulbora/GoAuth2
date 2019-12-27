@@ -126,6 +126,9 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 			h.SetContentType(w)
 			h.SetSecurityHeader(w)
 			w.WriteHeader(http.StatusOK)
+			if h.TokenCompressed {
+				token.AccessToken = h.JwtCompress.CompressJwt(token.AccessToken)
+			}
 			resJSON, _ := json.Marshal(token)
 			fmt.Fprint(w, string(resJSON))
 		} else if caseDef {

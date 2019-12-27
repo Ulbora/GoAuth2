@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"net/http"
 
+	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
 	gs "github.com/Ulbora/go-sessions"
 	"github.com/gorilla/sessions"
@@ -47,10 +48,12 @@ const (
 
 //OauthWebHandler OauthWebHandler
 type OauthWebHandler struct {
-	Manager   m.Manager
-	Session   gs.GoSession
-	Templates *template.Template
-	Store     *sessions.CookieStore
+	Manager         m.Manager
+	Session         gs.GoSession
+	Templates       *template.Template
+	Store           *sessions.CookieStore
+	TokenCompressed bool
+	JwtCompress     cp.JwtCompress
 	//SessInit  bool
 }
 

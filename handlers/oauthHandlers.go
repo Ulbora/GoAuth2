@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
 	oa "github.com/Ulbora/GoAuth2/oauthclient"
 	rc "github.com/Ulbora/GoAuth2/rolecontrol"
@@ -35,9 +36,11 @@ import (
 
 //OauthRestHandler OauthRestHandler
 type OauthRestHandler struct {
-	Manager      m.Manager
-	Client       oa.Client
-	AssetControl rc.AssetControl
+	Manager         m.Manager
+	Client          oa.Client
+	AssetControl    rc.AssetControl
+	TokenCompressed bool
+	JwtCompress     cp.JwtCompress
 }
 
 //GetNewRestHandler GetNewRestHandler

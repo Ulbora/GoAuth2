@@ -11,6 +11,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
 )
 
@@ -26,6 +27,39 @@ func TestOauthRestHandler_ValidateToken(t *testing.T) {
 	h := oh.GetNewRestHandler()
 
 	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
+	//aJSON, _ := json.Marshal(robj)
+	//fmt.Println("aJSON: ", aJSON)
+	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
+	//r, _ := http.NewRequest("POST", "/ffllist", nil)
+	r.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	h.ValidateAccessToken(w, r)
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+	var bdy ValidationResponse
+	json.Unmarshal(body, &bdy)
+	fmt.Println("body: ", string(body))
+	if w.Code != 200 || w.Header().Get("Content-Type") != "application/json" || !bdy.Valid {
+		t.Fail()
+	}
+}
+
+func TestOauthRestHandler_ValidateTokenCompressed(t *testing.T) {
+	var oh OauthRestHandler
+
+	var man m.MockManager
+	man.MockValidateAccessTokenSuccess = true
+	oh.Manager = &man
+	oh.TokenCompressed = true
+
+	h := oh.GetNewRestHandler()
+	var token = "jdljdfldjslkjdsdfgdfgdffgdfgfdfgdfgdfgdfgdfdfdfdfdfdfdfdfgdgdfgdffgdfgdfdfgfdfgdfdfgddddgdgdgdgdgdgdgddggdgdgdgdggdfgdfgdfgdgflkldksldfks"
+	var jc cp.JwtCompress
+	tkn := jc.CompressJwt(token)
+	fmt.Println("compressed token in test", tkn)
+	fmt.Println("uncompressed token in test", jc.UnCompressJwt(tkn))
+
+	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"eNpUjFEKRDEIAy87JKD58/6w4NJHSwYcRVKkUKhJF4O87NDZ/rwx1+cedATAT/DnV6OVDj1BPb8AAAD//8ZtNs8=", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
