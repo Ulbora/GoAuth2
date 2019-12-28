@@ -46,7 +46,7 @@ func (m *OauthManager) AddClientAllowedURI(au *ClientAllowedURI) (bool, int64) {
 func (m *OauthManager) UpdateClientAllowedURI(au *ClientAllowedURI) bool {
 	var cu odb.ClientAllowedURI
 	cu.URI = au.URI
-	cu.ClientID = au.ClientID
+	cu.ID = au.ID
 	suc := m.Db.UpdateClientAllowedURI(&cu)
 	return suc
 }

@@ -145,6 +145,8 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 //UpdateAllowedURISuper UpdateAllowedURISuper
 func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.Request) {
 	//url of this endpoint
+	fmt.Println("inside UpdateAllowedURISuper------------------------------------")
+
 	var upsAuURL = "/ulbora/rs/clientAllowedUriSuper/update"
 
 	var upuscl oc.Claim
@@ -153,6 +155,7 @@ func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.
 	upuscl.Scope = "write"
 	fmt.Println("client: ", h.Client)
 	auth := h.Client.Authorize(r, &upuscl)
+	fmt.Println("auth: ", auth)
 	if auth {
 		// w.Header().Set("Content-Type", "application/json")
 		h.SetContentType(w)
