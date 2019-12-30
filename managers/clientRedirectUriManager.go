@@ -47,7 +47,7 @@ func (m *OauthManager) AddClientRedirectURI(ru *ClientRedirectURI) (bool, int64)
 //GetClientRedirectURIList GetClientRedirectURIList
 func (m *OauthManager) GetClientRedirectURIList(clientID int64) *[]ClientRedirectURI {
 	var rtn []ClientRedirectURI
-	ul := m.Db.GetClientAllowedURIList(clientID)
+	ul := m.Db.GetClientRedirectURIList(clientID)
 	for _, u := range *ul {
 		var ui ClientRedirectURI
 		ui.ID = u.ID

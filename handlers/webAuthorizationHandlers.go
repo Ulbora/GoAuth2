@@ -185,7 +185,9 @@ func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 				var au m.AuthCode
 				au.ClientID = ari.ClientID
 				au.RedirectURI = ari.RedirectURI
+				fmt.Println("au", au)
 				authRes := h.Manager.ValidateAuthCodeClientAndCallback(&au)
+				fmt.Println("authRes", authRes)
 				if authRes.Valid {
 					fmt.Println("authRes", authRes)
 					var pg PageParams

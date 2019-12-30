@@ -75,12 +75,20 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 			} else {
 				roleFound = true
 			}
+			fmt.Println("at.Scope", at.Scope)
 			if at.Scope != "" {
+				var foundWrite bool
 				for _, s := range pwatpl.ScopeList {
+					if s == "write" {
+						foundWrite = true
+					}
 					if s == at.Scope {
 						scopeFound = true
-						break
+						//break
 					}
+				}
+				if at.Scope == "read" && foundWrite {
+					scopeFound = true
 				}
 			} else {
 				for _, s := range pwatpl.ScopeList {
@@ -90,6 +98,8 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 					}
 				}
 			}
+			fmt.Println("roleFound", roleFound)
+			fmt.Println("scopeFound", scopeFound)
 			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound {
 				rtn = true
 			} else if (pwatpl.Grant == clientGrantType || pwatpl.Grant == passwordGrantType) && roleFound {

@@ -74,7 +74,7 @@ func main() {
 	if os.Getenv("GOAUTH2_DATABASE") != "" {
 		goauth2Database = os.Getenv("GOAUTH2_DATABASE")
 	} else {
-		goauth2Database = "ulbora_oauth2_server"
+		goauth2Database = "go_auth2"
 	}
 
 	mydb.Host = goauth2Host
