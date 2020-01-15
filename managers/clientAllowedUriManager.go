@@ -63,7 +63,7 @@ func (m *OauthManager) GetClientAllowedURI(id int64) *ClientAllowedURI {
 
 //GetClientAllowedURIList GetClientAllowedURIList
 func (m *OauthManager) GetClientAllowedURIList(clientID int64) *[]ClientAllowedURI {
-	var rtn []ClientAllowedURI
+	var rtn = []ClientAllowedURI{}
 	aul := m.Db.GetClientAllowedURIList(clientID)
 	for _, au := range *aul {
 		var u ClientAllowedURI

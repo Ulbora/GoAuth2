@@ -103,7 +103,7 @@ func (m *OauthManager) GetClient(id int64) *Client {
 	var rtn Client
 	c := m.Db.GetClient(id)
 	//fmt.Println("client in get: ", c)
-	if c.ClientID != 0 {
+	if c != nil && c.ClientID != 0 {
 		rtn.ClientID = c.ClientID
 		rtn.Secret = c.Secret
 		rtn.Name = c.Name
@@ -127,7 +127,7 @@ func (m *OauthManager) GetClient(id int64) *Client {
 
 //GetClientList GetClientList
 func (m *OauthManager) GetClientList() *[]Client {
-	var rtn []Client
+	var rtn = []Client{}
 	cs := m.Db.GetClients()
 	for _, c := range *cs {
 		cc := populateClient(c)
@@ -138,7 +138,7 @@ func (m *OauthManager) GetClientList() *[]Client {
 
 //GetClientSearchList GetClientSearchList
 func (m *OauthManager) GetClientSearchList(name string) *[]Client {
-	var rtn []Client
+	var rtn = []Client{}
 	cs := m.Db.SearchClients(name)
 	for _, c := range *cs {
 		cc := populateClient(c)

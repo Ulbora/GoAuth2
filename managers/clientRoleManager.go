@@ -46,7 +46,7 @@ func (m *OauthManager) AddClientRole(r *ClientRole) (bool, int64) {
 
 //GetClientRoleList GetClientRoleList
 func (m *OauthManager) GetClientRoleList(clientID int64) *[]ClientRole {
-	var rtn []ClientRole
+	var rtn = []ClientRole{}
 	rl := m.Db.GetClientRoleList(clientID)
 	for _, r := range *rl {
 		var cr ClientRole

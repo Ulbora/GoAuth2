@@ -44,7 +44,7 @@ func (m *OauthManager) AddClientRoleURI(r *ClientRoleURI) bool {
 
 //GetClientRoleAllowedURIList GetClientRoleAllowedURIList
 func (m *OauthManager) GetClientRoleAllowedURIList(roleID int64) *[]ClientRoleURI {
-	var rtn []ClientRoleURI
+	var rtn = []ClientRoleURI{}
 	rul := m.Db.GetClientRoleAllowedURIList(roleID)
 	for _, ru := range *rul {
 		var r ClientRoleURI

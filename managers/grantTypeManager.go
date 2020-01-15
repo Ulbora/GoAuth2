@@ -55,7 +55,7 @@ func (m *OauthManager) grantTypeTurnedOn(clientID int64, grantType string) bool 
 
 //GetClientGrantTypeList GetClientGrantTypeList
 func (m *OauthManager) GetClientGrantTypeList(clientID int64) *[]ClientGrantType {
-	var rtn []ClientGrantType
+	var rtn = []ClientGrantType{}
 	gtl := m.Db.GetClientGrantTypeList(clientID)
 	for _, gt := range *gtl {
 		var g ClientGrantType
