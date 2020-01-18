@@ -9,6 +9,7 @@ A complete standalone Oauth2 Server RFC 6749 implementation written in Golang an
 ### [Documentation](https://github.com/Ulbora/GoAuth2/wiki)
 
 
+
 GoAuth2 is an Oauth2 server implementation written in Golang. Currently authorization code, 
 implicit, and client credentials grant, and password grant types are supported.
 
