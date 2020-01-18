@@ -1,12 +1,12 @@
 # GoAuth2
 A complete standalone Oauth2 Server RFC 6749 implementation written in Golang and licensed under the GPL V3 license.
 
+### [Documentation](https://github.com/Ulbora/GoAuth2/wiki)
+
 [![Build Status](https://travis-ci.org/Ulbora/GoAuth2.svg?branch=master)](https://travis-ci.org/Ulbora/GoAuth2)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Ulbora_GoAuth2&metric=alert_status)](https://sonarcloud.io/dashboard?id=Ulbora_GoAuth2)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Ulbora/GoAuth2)](https://goreportcard.com/report/github.com/Ulbora/GoAuth2)
 
-
-### [Documentation](https://github.com/Ulbora/GoAuth2/wiki)
 
 
 
