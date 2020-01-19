@@ -13,7 +13,7 @@ A complete standalone Oauth2 Server RFC 6749 implementation written in Golang an
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Ulbora_GoAuth2&metric=alert_status)](https://sonarcloud.io/dashboard?id=Ulbora_GoAuth2)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Ulbora/GoAuth2)](https://goreportcard.com/report/github.com/Ulbora/GoAuth2)
 
-
+---
 
 
 GoAuth2 is an Oauth2 server implementation written in Golang. Currently authorization code, 
@@ -24,7 +24,7 @@ GoAuth2 issues a compressed enhanced JWT token that can be used to secure indivi
 ### GoAuth2 will provide the security infrastructure for the new Ulbora Labs eCommerce Platform project, 66GoCart.
 #### (66GoCart is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. 66GoCart frontend soltutions can be written in golang or any other language.)
 
-
+---
 
 This server should run behind nginx and nginx should handle certs.
 
