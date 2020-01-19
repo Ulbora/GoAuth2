@@ -1,6 +1,10 @@
 # GoAuth2
 A complete standalone Oauth2 Server RFC 6749 implementation written in Golang and licensed under the GPL V3 license.
 
+
+### [Installation](https://github.com/Ulbora/GoAuth2/wiki/Installation)
+
+
 ### [Documentation](https://github.com/Ulbora/GoAuth2/wiki)
 
 
