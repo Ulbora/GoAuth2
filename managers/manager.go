@@ -23,6 +23,7 @@ package managers
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	px "github.com/Ulbora/GoProxy"
+	au "github.com/Ulbora/auth_interface"
 )
 
 const (
@@ -108,11 +109,12 @@ type Manager interface {
 	// //validate Token
 	ValidateAccessToken(at *ValidateAccessTokenReq) bool
 
-	UserLogin(login *Login) bool
+	UserLogin(login *au.Login) bool
 }
 
 //OauthManager OauthManager
 type OauthManager struct {
-	Db    odb.Oauth2DB
-	Proxy px.Proxy
+	Db          odb.Oauth2DB
+	Proxy       px.Proxy
+	AuthService au.AuthInterface
 }

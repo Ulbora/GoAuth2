@@ -1,5 +1,7 @@
 package managers
 
+import au "github.com/Ulbora/auth_interface"
+
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
  All rights reserved.
@@ -264,6 +266,6 @@ func (m *MockManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 }
 
 //UserLogin UserLogin
-func (m *MockManager) UserLogin(login *Login) bool {
+func (m *MockManager) UserLogin(login *au.Login) bool {
 	return m.MockUserLoginSuccess
 }

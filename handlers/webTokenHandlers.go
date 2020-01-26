@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	m "github.com/Ulbora/GoAuth2/managers"
+	au "github.com/Ulbora/auth_interface"
 )
 
 /*
@@ -76,7 +77,7 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("username: ", username)
 			password := r.FormValue("password")
 			fmt.Println("password: ", password)
-			var lg m.Login
+			var lg au.Login
 			lg.ClientID = clientID
 			lg.Username = username
 			lg.Password = password

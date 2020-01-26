@@ -4,6 +4,8 @@ package managers
 import (
 	"fmt"
 	"testing"
+
+	au "github.com/Ulbora/auth_interface"
 )
 
 func TestMockManager_AddClient(t *testing.T) {
@@ -521,7 +523,7 @@ func TestMockManager_UserLogin(t *testing.T) {
 
 	var m Manager
 	m = &man
-	var l Login
+	var l au.Login
 	suc := m.UserLogin(&l)
 	if !suc {
 		t.Fail()

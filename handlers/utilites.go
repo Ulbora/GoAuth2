@@ -14,6 +14,7 @@ import (
 	rc "github.com/Ulbora/GoAuth2/rolecontrol"
 	px "github.com/Ulbora/GoProxy"
 	db "github.com/Ulbora/dbinterface"
+	dau "github.com/Ulbora/default_auth"
 	// mdb "github.com/Ulbora/dbinterface_mysql"
 )
 
@@ -38,7 +39,7 @@ import (
 */
 
 //UseWebHandler UseWebHandler
-func UseWebHandler(dbi db.Database, compressJtw bool) *OauthWebHandler {
+func UseWebHandler(dbi db.Database, compressJtw bool, authURL string) *OauthWebHandler {
 	var oauthManagerw m.OauthManager
 	var oauthMySqldbw msdb.MySQLOauthDB
 	oauthMySqldbw.DB = dbi
@@ -48,6 +49,12 @@ func UseWebHandler(dbi db.Database, compressJtw bool) *OauthWebHandler {
 	var userServiceProxy px.GoProxy
 	oauthManagerw.Proxy = userServiceProxy.GetNewProxy()
 
+	var proxy px.GoProxy
+	var da dau.DefaultAuth
+	da.AuthServerURL = authURL
+	da.Proxy = proxy.GetNewProxy()
+	oauthManagerw.AuthService = da.GetNew()
+
 	var wh OauthWebHandler
 	wh.Manager = &oauthManagerw
 	wh.TokenCompressed = compressJtw
@@ -55,13 +62,19 @@ func UseWebHandler(dbi db.Database, compressJtw bool) *OauthWebHandler {
 }
 
 //UseRestHandler UseRestHandler
-func UseRestHandler(dbi db.Database, assets string, compressJtw bool) *OauthRestHandler {
+func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string) *OauthRestHandler {
 	var oauthManager m.OauthManager
 	var oauthMySqldb msdb.MySQLOauthDB
 	oauthMySqldb.DB = dbi
 	var oauthDb odb.Oauth2DB
 	oauthDb = &oauthMySqldb
 	oauthManager.Db = oauthDb
+
+	var proxy px.GoProxy
+	var da dau.DefaultAuth
+	da.AuthServerURL = authURL
+	da.Proxy = proxy.GetNewProxy()
+	oauthManager.AuthService = da.GetNew()
 
 	var rh OauthRestHandler
 	rh.Manager = &oauthManager

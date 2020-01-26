@@ -1,5 +1,7 @@
 github.com/Ulbora/GoProxy v1.0.1 h1:7gFPaJdXDV3tFDSWYxpQx7SQmNKcZPrv4SMwxa+vFhA=
 github.com/Ulbora/GoProxy v1.0.1/go.mod h1:8qICy+U1tSywRYoy9RdP+Zm6G2nN2K1YcvMupVlkIYI=
+github.com/Ulbora/auth_interface v1.0.0 h1:VOlwvngE1XqmtIpuga0bC/pz6g5cCNeMnKQEeEXWVzw=
+github.com/Ulbora/auth_interface v1.0.0/go.mod h1:i8dptQU29zmoscU4NHtddNpBltSi9oLDQXylQgnqxFs=
 github.com/Ulbora/dbinterface v1.0.3 h1:To53y2igWp5p/SkFX4zubWQOQJ6DF4KbPRWFVHeRD2I=
 github.com/Ulbora/dbinterface v1.0.3/go.mod h1:msBriehF2JgLgSpNWq2Yc3MKy3/Rn9aChefibmW1xWM=
 github.com/Ulbora/dbinterface v1.0.5 h1:hzAsS92kIKIApFb6av1vGGz4+lRNOyfzhh5HXxoUiIg=
@@ -18,6 +20,8 @@ github.com/Ulbora/dbinterface_mysql v1.0.6 h1:NBWVtCmz5VwqXLHPlYSg3Um3hTu9uSVFLI
 github.com/Ulbora/dbinterface_mysql v1.0.6/go.mod h1:8XA1eoibXMbJNIfL5mvl7b77FZPSRewInYCNFRC65AQ=
 github.com/Ulbora/dbinterface_mysql v1.0.7 h1:rFOaRaKaARFLEd8hYxvFIbbN49FFI2j/m7iy10sGOas=
 github.com/Ulbora/dbinterface_mysql v1.0.7/go.mod h1:8XA1eoibXMbJNIfL5mvl7b77FZPSRewInYCNFRC65AQ=
+github.com/Ulbora/default_auth v1.0.0 h1:CaCbl50AOGdIScK9envXMNxgpP4lpeDTXLDTPaoRlSU=
+github.com/Ulbora/default_auth v1.0.0/go.mod h1:YiXsU5bzKm9Pa5m+Y2aUqy65Ta0NCRcsVslWzjTmsyk=
 github.com/Ulbora/go-sessions v1.0.0 h1:Y8WiW5fnsG7iVAadNhWqGVsbq8Rag/TzJ1fJWm58LQ4=
 github.com/Ulbora/go-sessions v1.0.0/go.mod h1:5CXZMqyt5XJDumnxoKqftZH/i3voi9k1UN47fuwxRLs=
 github.com/Ulbora/go-sessions v1.0.1 h1:QslZUmI54dg39qoQSzKcQP0fxb4LEhEnR12FZBJ5qsA=

@@ -3,10 +3,9 @@ package handlers
 
 import (
 	"fmt"
+	au "github.com/Ulbora/auth_interface"
 	"net/http"
 	"strconv"
-
-	m "github.com/Ulbora/GoAuth2/managers"
 )
 
 /*
@@ -90,7 +89,7 @@ func (h *OauthWebHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 			password := r.FormValue("password")
 			fmt.Println("username", username)
 			fmt.Println("password", password)
-			var lg m.Login
+			var lg au.Login
 			lg.ClientID = lari.ClientID
 			lg.Username = username
 			lg.Password = password

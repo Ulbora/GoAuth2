@@ -52,6 +52,7 @@ func main() {
 	var goauth2User string
 	var goauth2Password string
 	var goauth2Database string
+	var authURL string
 
 	if os.Getenv("GOAUTH2_HOST") != "" {
 		goauth2Host = os.Getenv("GOAUTH2_HOST")
@@ -77,6 +78,12 @@ func main() {
 		goauth2Database = "go_auth2"
 	}
 
+	if os.Getenv("AUTHENTICATION_SERVICE") != "" {
+		authURL = os.Getenv("AUTHENTICATION_SERVICE")
+	} else {
+		authURL = "http://localhost:3001/rs/user/login"
+	}
+
 	mydb.Host = goauth2Host
 	mydb.User = goauth2User
 	mydb.Password = goauth2Password
@@ -94,9 +101,9 @@ func main() {
 		orh := hd.UseMockRest()
 		rh = orh.GetNewRestHandler()
 	} else {
-		owh = hd.UseWebHandler(dbi, *compressJwt)
+		owh = hd.UseWebHandler(dbi, *compressJwt, authURL)
 		wh = owh.GetNewWebHandler()
-		orh := hd.UseRestHandler(dbi, *assets, *compressJwt)
+		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL)
 		rh = orh.GetNewRestHandler()
 	}
 

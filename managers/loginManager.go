@@ -21,13 +21,7 @@ package managers
 
 */
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"strconv"
+	au "github.com/Ulbora/auth_interface"
 )
 
 //px "github.com/Ulbora/GoProxy"
@@ -46,31 +40,7 @@ type LoginRes struct {
 }
 
 //UserLogin UserLogin
-func (m *OauthManager) UserLogin(login *Login) bool {
-	var rtn bool
-	var url string
-	if os.Getenv("AUTHENTICATION_SERVICE") != "" {
-		url = os.Getenv("AUTHENTICATION_SERVICE")
-	} else {
-		url = authenticationServiceLocal
-	}
-	aJSON, _ := json.Marshal(login)
-	req, rErr := http.NewRequest("POST", url, bytes.NewBuffer(aJSON))
-	if rErr != nil {
-		log.Println("Request error: ", rErr)
-	} else {
-		req.Header.Set("Content-Type", "application/json")
-		var lres LoginRes
-		fmt.Println("m.Proxy: ", m.Proxy)
-		suc, code := m.Proxy.Do(req, &lres)
-		fmt.Println("suc: ", suc)
-		fmt.Println("code: ", code)
-		fmt.Println("lres: ", lres)
-		fmt.Println("lres code: ", lres.Code)
-		fmt.Println("clientid: ", strconv.FormatInt(login.ClientID, 10))
-		if suc && code == http.StatusOK && strconv.FormatInt(login.ClientID, 10) == lres.Code {
-			rtn = lres.Valid
-		}
-	}
+func (m *OauthManager) UserLogin(login *au.Login) bool {
+	rtn := m.AuthService.UserLogin(login)
 	return rtn
 }
