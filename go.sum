@@ -1,5 +1,9 @@
 github.com/Ulbora/GoProxy v1.0.1 h1:7gFPaJdXDV3tFDSWYxpQx7SQmNKcZPrv4SMwxa+vFhA=
 github.com/Ulbora/GoProxy v1.0.1/go.mod h1:8qICy+U1tSywRYoy9RdP+Zm6G2nN2K1YcvMupVlkIYI=
+github.com/Ulbora/Level_Logger v1.0.1 h1:NPStKMCm6dmkFDSbPepK/0xUx3JWUVJgzosEbaO/XzE=
+github.com/Ulbora/Level_Logger v1.0.1/go.mod h1:epRidhkOBJSzCCon816WfFCO9vtai8VCmdI8S/xcTbA=
+github.com/Ulbora/Level_Logger v1.0.2 h1:uhuNi1oSQ1zSDhuYQS7NEHqtR4lAYPGyW2XGwJZtxmk=
+github.com/Ulbora/Level_Logger v1.0.2/go.mod h1:epRidhkOBJSzCCon816WfFCO9vtai8VCmdI8S/xcTbA=
 github.com/Ulbora/auth_interface v1.0.0 h1:VOlwvngE1XqmtIpuga0bC/pz6g5cCNeMnKQEeEXWVzw=
 github.com/Ulbora/auth_interface v1.0.0/go.mod h1:i8dptQU29zmoscU4NHtddNpBltSi9oLDQXylQgnqxFs=
 github.com/Ulbora/dbinterface v1.0.3 h1:To53y2igWp5p/SkFX4zubWQOQJ6DF4KbPRWFVHeRD2I=
@@ -35,10 +39,14 @@ github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.1 h1:/opyYiz6HZoBVAU8ypemFOTtzuKFE9kiKstP6
 github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.1/go.mod h1:JEL7eYb4ETfz9AYni+/4BV09MrMgGwju0G/k4XF8QMg=
 github.com/go-sql-driver/mysql v1.4.1 h1:g24URVg0OFbNUTx9qqY1IRZ9D9z3iPyi5zKhQZpNwpA=
 github.com/go-sql-driver/mysql v1.4.1/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
+github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/go-cmp v0.3.1 h1:Xye71clBPdm5HgqGwUkwhbynsUJZhDbS20FvLhQ2izg=
 github.com/google/go-cmp v0.3.1/go.mod h1:8QqcDgzrUqlUb/G2PQTWiueGozuR1884gddMywk6iLU=
+github.com/google/go-cmp v0.4.0 h1:xsAVV57WRhGj6kEIi8ReJzQlHHqcBYCElAvkovg3B/4=
+github.com/google/go-cmp v0.4.0/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/gorilla/mux v1.7.0 h1:tOSd0UKHQd6urX6ApfOn4XdBMY6Sh1MfxV3kmaazO+U=
 github.com/gorilla/mux v1.7.0/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/mux v1.7.3 h1:gnP5JzjVOuiZD07fKKToCAOjS0yOpj/qPETTXCCS6hw=
@@ -61,6 +69,8 @@ golang.org/x/crypto v0.0.0-20191122220453-ac88ee75c92c h1:/nJuwDLoL/zrqY6gf57vxC
 golang.org/x/crypto v0.0.0-20191122220453-ac88ee75c92c/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/crypto v0.0.0-20191219195013-becbf705a915 h1:aJ0ex187qoXrJHPo8ZasVTASQB7llQP6YeNzgDALPRk=
 golang.org/x/crypto v0.0.0-20191219195013-becbf705a915/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
+golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d h1:9FCpayM9Egr1baVnV1SX0H87m+XB0B8S0hAMi99X/3U=
+golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/lint v0.0.0-20190409202823-959b441ac422/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=
 golang.org/x/lint v0.0.0-20190909230951-414d861bb4ac/go.mod h1:6SW0HCj/g11FgYtHlgUYUwCkIfeOF89ocIRzGO/8vkc=
 golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=

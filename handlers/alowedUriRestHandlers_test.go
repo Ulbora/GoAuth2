@@ -14,11 +14,14 @@ import (
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
 	ac "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 	"github.com/gorilla/mux"
 )
 
 func TestOauthRestHandler_AddAllowedURISuperBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -38,6 +41,8 @@ func TestOauthRestHandler_AddAllowedURISuperBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURISuperBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -61,6 +66,8 @@ func TestOauthRestHandler_AddAllowedURISuperBadBody(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURISuper(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -95,6 +102,8 @@ func TestOauthRestHandler_AddAllowedURISuper(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURISuperFailAdd(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -127,6 +136,8 @@ func TestOauthRestHandler_AddAllowedURISuperFailAdd(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURISuperNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -161,6 +172,8 @@ func TestOauthRestHandler_AddAllowedURISuperNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -194,6 +207,8 @@ func TestOauthRestHandler_AddAllowedURI(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURINoAssetControl(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -227,6 +242,8 @@ func TestOauthRestHandler_AddAllowedURINoAssetControl(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURIBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -260,6 +277,8 @@ func TestOauthRestHandler_AddAllowedURIBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURIAddFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -293,6 +312,8 @@ func TestOauthRestHandler_AddAllowedURIAddFail(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -326,6 +347,8 @@ func TestOauthRestHandler_AddAllowedURINotAuth(t *testing.T) {
 
 func TestOauthRestHandler_AddAllowedURIBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -360,6 +383,8 @@ func TestOauthRestHandler_AddAllowedURIBadBody(t *testing.T) {
 // update uri super
 func TestOauthRestHandler_UpdateAllowedURISuperBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -378,6 +403,8 @@ func TestOauthRestHandler_UpdateAllowedURISuperBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURISuperBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -401,6 +428,8 @@ func TestOauthRestHandler_UpdateAllowedURISuperBadBody(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURISuper(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -432,6 +461,8 @@ func TestOauthRestHandler_UpdateAllowedURISuper(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURISuperFailAdd(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -464,6 +495,8 @@ func TestOauthRestHandler_UpdateAllowedURISuperFailAdd(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURISuperNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -500,6 +533,8 @@ func TestOauthRestHandler_UpdateAllowedURISuperNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_updateAllowedURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -532,6 +567,8 @@ func TestOauthRestHandler_updateAllowedURI(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURINoAssetControl(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -564,6 +601,8 @@ func TestOauthRestHandler_UpdateAllowedURINoAssetControl(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURIBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -596,6 +635,8 @@ func TestOauthRestHandler_UpdateAllowedURIBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURIAddFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = false
@@ -629,6 +670,8 @@ func TestOauthRestHandler_UpdateAllowedURIAddFail(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -661,6 +704,8 @@ func TestOauthRestHandler_UpdateAllowedURINotAuth(t *testing.T) {
 
 func TestOauthRestHandler_UpdateAllowedURIBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -693,6 +738,8 @@ func TestOauthRestHandler_UpdateAllowedURIBadBody(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -731,6 +778,8 @@ func TestOauthRestHandler_GetAllowedURI(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -769,6 +818,8 @@ func TestOauthRestHandler_GetAllowedURINotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURIBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -807,6 +858,8 @@ func TestOauthRestHandler_GetAllowedURIBadParam(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURINoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -847,6 +900,8 @@ func TestOauthRestHandler_GetAllowedURINoParam(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURIlist(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -888,6 +943,8 @@ func TestOauthRestHandler_GetAllowedURIlist(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURIListNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -926,6 +983,8 @@ func TestOauthRestHandler_GetAllowedURIListNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURIListBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -964,6 +1023,8 @@ func TestOauthRestHandler_GetAllowedURIListBadParam(t *testing.T) {
 
 func TestOauthRestHandler_GetAllowedURIListNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientAllowedURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -1004,6 +1065,8 @@ func TestOauthRestHandler_GetAllowedURIListNoParam(t *testing.T) {
 
 func TestOauthRestHandler_DeleteAllowedURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1038,6 +1101,8 @@ func TestOauthRestHandler_DeleteAllowedURI(t *testing.T) {
 
 func TestOauthRestHandler_DeleteAllowedURIFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = false
@@ -1072,6 +1137,8 @@ func TestOauthRestHandler_DeleteAllowedURIFail(t *testing.T) {
 
 func TestOauthRestHandler_DeleteAllowedURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1106,6 +1173,8 @@ func TestOauthRestHandler_DeleteAllowedURINotAuth(t *testing.T) {
 
 func TestOauthRestHandler_DeleteAllowedURIBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1140,6 +1209,8 @@ func TestOauthRestHandler_DeleteAllowedURIBadParam(t *testing.T) {
 
 func TestOauthRestHandler_DeleteAllowedURINoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true

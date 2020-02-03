@@ -13,6 +13,7 @@ import (
 	oa "github.com/Ulbora/GoAuth2/oauthclient"
 	rc "github.com/Ulbora/GoAuth2/rolecontrol"
 	px "github.com/Ulbora/GoProxy"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	dau "github.com/Ulbora/default_auth"
 	// mdb "github.com/Ulbora/dbinterface_mysql"
@@ -62,7 +63,7 @@ func UseWebHandler(dbi db.Database, compressJtw bool, authURL string) *OauthWebH
 }
 
 //UseRestHandler UseRestHandler
-func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string) *OauthRestHandler {
+func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string, logger *lg.Logger) *OauthRestHandler {
 	var oauthManager m.OauthManager
 	var oauthMySqldb msdb.MySQLOauthDB
 	oauthMySqldb.DB = dbi
@@ -77,6 +78,8 @@ func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL st
 	oauthManager.AuthService = da.GetNew()
 
 	var rh OauthRestHandler
+	rh.Log = logger
+
 	rh.Manager = &oauthManager
 
 	var clt oa.OauthClient

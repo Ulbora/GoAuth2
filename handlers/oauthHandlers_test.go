@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"testing"
+
+	lg "github.com/Ulbora/Level_Logger"
 	// m "github.com/Ulbora/GoAuth2/managers"
 	// oa "github.com/Ulbora/GoAuth2/oauthclient"
 	// rc "github.com/Ulbora/GoAuth2/rolecontrol"
@@ -18,6 +20,8 @@ type testObj struct {
 
 func TestOauthRestHandler_ProcessBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var robj testObj
 	robj.Valid = true
 	robj.Code = "3"
@@ -35,6 +39,8 @@ func TestOauthRestHandler_ProcessBody(t *testing.T) {
 
 func TestOauthRestHandler_ProcessBodyBadObj(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var robj testObj
 	robj.Valid = true
 	robj.Code = "3"

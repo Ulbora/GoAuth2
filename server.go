@@ -30,6 +30,7 @@ import (
 
 	//"encoding/json"
 	hd "github.com/Ulbora/GoAuth2/handlers"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 	"github.com/gorilla/mux"
@@ -42,10 +43,12 @@ func main() {
 	compressJwt := flag.Bool("compressJwt", false, "compress Jwt access token")
 	assets := flag.String("assets", "", "Assets to control")
 	flag.Parse()
-
-	fmt.Println("mock: ", *mock)
-	fmt.Println("assets: ", *assets)
-	fmt.Println("compressJwt: ", *compressJwt)
+	var logger lg.Logger
+	logger.LogLevel = lg.InfoLevel
+	logger.Info("mock: ", *mock)
+	logger.Info("assets: ", *assets)
+	logger.Info("compressJwt: ", *compressJwt)
+	logger.LogLevel = lg.OffLevel
 	var dbi db.Database
 	var mydb mdb.MyDB
 	var goauth2Host string
@@ -103,7 +106,7 @@ func main() {
 	} else {
 		owh = hd.UseWebHandler(dbi, *compressJwt, authURL)
 		wh = owh.GetNewWebHandler()
-		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL)
+		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL, &logger)
 		rh = orh.GetNewRestHandler()
 	}
 

@@ -40,26 +40,26 @@ func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Req
 	auscl.Role = "superAdmin"
 	auscl.URL = addsAuURL
 	auscl.Scope = "write"
-	fmt.Println("client: ", h.Client)
+	h.Log.Debug("client: ", h.Client)
 	auth := h.Client.Authorize(r, &auscl)
 	if auth {
 		h.SetContentType(w)
 		aasURIContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", aasURIContOk)
+		h.Log.Debug("conOk: ", aasURIContOk)
 		if !aasURIContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var cus m.ClientAllowedURI
 			bsuc, berr := h.ProcessBody(r, &cus)
-			fmt.Println("bsuc: ", bsuc)
-			fmt.Println("cu: ", cus)
-			fmt.Println("berr: ", berr)
+			h.Log.Debug("bsuc: ", bsuc)
+			h.Log.Debug("cu: ", cus)
+			h.Log.Debug("berr: ", berr)
 			if !bsuc && berr != nil {
 				http.Error(w, berr.Error(), http.StatusBadRequest)
 			} else {
 				ausSuc, ausID := h.Manager.AddClientAllowedURI(&cus)
-				fmt.Println("auSuc: ", ausSuc)
-				fmt.Println("auID: ", ausID)
+				h.Log.Debug("auSuc: ", ausSuc)
+				h.Log.Debug("auID: ", ausID)
 				var rtn ResponseID
 				if ausSuc && ausID != 0 {
 					rtn.Success = ausSuc
@@ -84,9 +84,9 @@ func (h *OauthRestHandler) AddAllowedURISuper(w http.ResponseWriter, r *http.Req
 func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request) {
 	var cu m.ClientAllowedURI
 	bsuc, berr := h.ProcessBody(r, &cu)
-	fmt.Println("bsuc: ", bsuc)
-	fmt.Println("cu: ", cu)
-	fmt.Println("berr: ", berr)
+	h.Log.Debug("bsuc: ", bsuc)
+	h.Log.Debug("cu: ", cu)
+	h.Log.Debug("berr: ", berr)
 	if bsuc && berr == nil {
 
 		//url of this endpoint
@@ -104,7 +104,7 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 		}
 		aucl.URL = addAuURL
 		aucl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &aucl)
@@ -113,13 +113,13 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			aaURIContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", aaURIContOk)
+			h.Log.Debug("conOk: ", aaURIContOk)
 			if !aaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				auSuc, auID := h.Manager.AddClientAllowedURI(&cu)
-				fmt.Println("auSuc: ", auSuc)
-				fmt.Println("auID: ", auID)
+				h.Log.Debug("auSuc: ", auSuc)
+				h.Log.Debug("auID: ", auID)
 				var rtn ResponseID
 				if auSuc && auID != 0 {
 					rtn.Success = auSuc
@@ -145,7 +145,7 @@ func (h *OauthRestHandler) AddAllowedURI(w http.ResponseWriter, r *http.Request)
 //UpdateAllowedURISuper UpdateAllowedURISuper
 func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.Request) {
 	//url of this endpoint
-	fmt.Println("inside UpdateAllowedURISuper------------------------------------")
+	h.Log.Debug("inside UpdateAllowedURISuper------------------------------------")
 
 	var upsAuURL = "/ulbora/rs/clientAllowedUriSuper/update"
 
@@ -153,27 +153,27 @@ func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.
 	upuscl.Role = "superAdmin"
 	upuscl.URL = upsAuURL
 	upuscl.Scope = "write"
-	fmt.Println("client: ", h.Client)
+	h.Log.Debug("client: ", h.Client)
 	auth := h.Client.Authorize(r, &upuscl)
-	fmt.Println("auth: ", auth)
+	h.Log.Debug("auth: ", auth)
 	if auth {
 		// w.Header().Set("Content-Type", "application/json")
 		h.SetContentType(w)
 		uPasURIContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", uPasURIContOk)
+		h.Log.Debug("conOk: ", uPasURIContOk)
 		if !uPasURIContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var upcus m.ClientAllowedURI
 			ubsuc, uberr := h.ProcessBody(r, &upcus)
-			fmt.Println("ubsuc: ", ubsuc)
-			fmt.Println("upcu: ", upcus)
-			fmt.Println("uberr: ", uberr)
+			h.Log.Debug("ubsuc: ", ubsuc)
+			h.Log.Debug("upcu: ", upcus)
+			h.Log.Debug("uberr: ", uberr)
 			if !ubsuc && uberr != nil {
 				http.Error(w, uberr.Error(), http.StatusBadRequest)
 			} else {
 				uPusSuc := h.Manager.UpdateClientAllowedURI(&upcus)
-				fmt.Println("auSuc: ", uPusSuc)
+				h.Log.Debug("auSuc: ", uPusSuc)
 				var rtn Response
 				if uPusSuc {
 					rtn.Success = uPusSuc
@@ -197,9 +197,9 @@ func (h *OauthRestHandler) UpdateAllowedURISuper(w http.ResponseWriter, r *http.
 func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Request) {
 	var ucu m.ClientAllowedURI
 	upbsuc, uberr := h.ProcessBody(r, &ucu)
-	fmt.Println("upbsuc: ", upbsuc)
-	fmt.Println("ucu: ", ucu)
-	fmt.Println("uberr: ", uberr)
+	h.Log.Debug("upbsuc: ", upbsuc)
+	h.Log.Debug("ucu: ", ucu)
+	h.Log.Debug("uberr: ", uberr)
 	if upbsuc && uberr == nil {
 
 		//url of this endpoint
@@ -217,7 +217,7 @@ func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Reque
 		}
 		aucl.URL = upAuURL
 		aucl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &aucl)
@@ -226,12 +226,12 @@ func (h *OauthRestHandler) UpdateAllowedURI(w http.ResponseWriter, r *http.Reque
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			upaURIContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", upaURIContOk)
+			h.Log.Debug("conOk: ", upaURIContOk)
 			if !upaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				uuSuc := h.Manager.UpdateClientAllowedURI(&ucu)
-				fmt.Println("uuSuc: ", uuSuc)
+				h.Log.Debug("uuSuc: ", uuSuc)
 				var rtn Response
 				if uuSuc {
 					rtn.Success = uuSuc
@@ -267,15 +267,15 @@ func (h *OauthRestHandler) GetAllowedURI(w http.ResponseWriter, r *http.Request)
 		//var id string
 		h.SetContentType(w)
 		vars := mux.Vars(r)
-		fmt.Println("vars: ", len(vars))
+		h.Log.Debug("vars: ", len(vars))
 		if vars != nil && len(vars) != 0 {
 			var idStr = vars["id"]
-			fmt.Println("vars: ", vars)
+			h.Log.Debug("vars: ", vars)
 			id, idErr := strconv.ParseInt(idStr, 10, 64)
 			if id != 0 && idErr == nil {
-				fmt.Println("id: ", id)
+				h.Log.Debug("id: ", id)
 				getAu := h.Manager.GetClientAllowedURI(id)
-				fmt.Println("getAu: ", getAu)
+				h.Log.Debug("getAu: ", getAu)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getAu)
 				fmt.Fprint(w, string(resJSON))
@@ -304,15 +304,15 @@ func (h *OauthRestHandler) GetAllowedURIList(w http.ResponseWriter, r *http.Requ
 		//var id string
 		h.SetContentType(w)
 		vars := mux.Vars(r)
-		fmt.Println("vars: ", len(vars))
+		h.Log.Debug("vars: ", len(vars))
 		if vars != nil && len(vars) != 0 {
 			var clientIDStr = vars["clientId"]
-			fmt.Println("vars: ", vars)
+			h.Log.Debug("vars: ", vars)
 			clientID, idErr := strconv.ParseInt(clientIDStr, 10, 64)
 			if clientID != 0 && idErr == nil {
-				fmt.Println("clientID: ", clientID)
+				h.Log.Debug("clientID: ", clientID)
 				getAul := h.Manager.GetClientAllowedURIList(clientID)
-				fmt.Println("getAul: ", getAul)
+				h.Log.Debug("getAul: ", getAul)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getAul)
 				fmt.Fprint(w, string(resJSON))
@@ -341,14 +341,14 @@ func (h *OauthRestHandler) DeleteAllowedURI(w http.ResponseWriter, r *http.Reque
 		//var id string
 		h.SetContentType(w)
 		vars := mux.Vars(r)
-		fmt.Println("vars: ", len(vars))
+		h.Log.Debug("vars: ", len(vars))
 		if vars != nil && len(vars) != 0 {
 			var idStr = vars["id"]
-			fmt.Println("vars delete: ", vars)
+			h.Log.Debug("vars delete: ", vars)
 			id, idErr := strconv.ParseInt(idStr, 10, 64)
-			fmt.Println("id delete: ", id)
+			h.Log.Debug("id delete: ", id)
 			if id != 0 && idErr == nil {
-				fmt.Println("id: ", id)
+				h.Log.Debug("id: ", id)
 				getAud := h.Manager.DeleteClientAllowedURI(id)
 				var rtn Response
 				if getAud {

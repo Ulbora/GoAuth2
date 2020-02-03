@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"errors"
 
-	"log"
 	"net/http"
 
 	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
 	oa "github.com/Ulbora/GoAuth2/oauthclient"
 	rc "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 /*
@@ -41,6 +41,7 @@ type OauthRestHandler struct {
 	AssetControl    rc.AssetControl
 	TokenCompressed bool
 	JwtCompress     cp.JwtCompress
+	Log             *lg.Logger
 }
 
 //GetNewRestHandler GetNewRestHandler
@@ -77,7 +78,8 @@ func (h *OauthRestHandler) ProcessBody(r *http.Request, obj interface{}) (bool, 
 		err = decoder.Decode(obj)
 		//fmt.Println("decoder: ", decoder)
 		if err != nil {
-			log.Println("Decode Error: ", err.Error())
+			//log.Println("Decode Error: ", err.Error())
+			h.Log.Error("Decode Error: ", err.Error())
 		} else {
 			suc = true
 		}
