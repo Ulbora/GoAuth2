@@ -7,6 +7,7 @@ import (
 
 	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 func TestOauthClient_Authorize(t *testing.T) {
@@ -15,6 +16,8 @@ func TestOauthClient_Authorize(t *testing.T) {
 
 	var oc OauthClient
 	oc.Manager = &man
+	var l lg.Logger
+	oc.Log = &l
 	//oc.TokenCompressed = true
 	c := oc.GetNewClient()
 	var cl Claim
@@ -41,6 +44,8 @@ func TestOauthClient_AuthorizeCompressed(t *testing.T) {
 	var oc OauthClient
 	oc.Manager = &man
 	oc.TokenCompressed = true
+	var l lg.Logger
+	oc.Log = &l
 	c := oc.GetNewClient()
 	var cl Claim
 	cl.Role = "testRole"

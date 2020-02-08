@@ -91,6 +91,8 @@ type RestHandler interface {
 	DeleteClient(w http.ResponseWriter, r *http.Request)
 
 	ValidateAccessToken(w http.ResponseWriter, r *http.Request)
+
+	SetLogLevel(w http.ResponseWriter, r *http.Request)
 }
 
 //WebHandler WebHandler

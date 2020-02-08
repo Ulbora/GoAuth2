@@ -178,6 +178,8 @@ func main() {
 	//validate token
 	router.HandleFunc("/rs/token/validate", rh.ValidateAccessToken).Methods("POST")
 
+	router.HandleFunc("/rs/loglevel", rh.SetLogLevel).Methods("POST")
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static/")))
 
 	fmt.Println("Starting server Oauth2 Server on " + port)

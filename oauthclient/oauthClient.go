@@ -9,6 +9,7 @@ import (
 
 	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 /*
@@ -36,6 +37,7 @@ type OauthClient struct {
 	Manager         m.Manager
 	TokenCompressed bool
 	JwtCompress     cp.JwtCompress
+	Log             *lg.Logger
 }
 
 //Authorize Authorize
@@ -51,10 +53,10 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 		hashed = true
 	}
 	//fmt.Println("tokenHeader", tokenHeader)
-	fmt.Println("clientIDStr", clientIDStr)
-	fmt.Println("clientID", clientID)
-	fmt.Println("userID", userID)
-	fmt.Println("hashed", hashed)
+	o.Log.Debug("clientIDStr", clientIDStr)
+	o.Log.Debug("clientID", clientID)
+	o.Log.Debug("userID", userID)
+	o.Log.Debug("hashed", hashed)
 	if tokenHeader != "" {
 		tokenArray := strings.Split(tokenHeader, " ")
 		//fmt.Println("tokenArray", tokenArray)
@@ -65,7 +67,8 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 			} else {
 				token = tokenArray[1]
 			}
-			fmt.Println("token:", token)
+			fmt.Println("loglevel: ", o.Log.LogLevel)
+			o.Log.Info("token:", token)
 			var vr m.ValidateAccessTokenReq
 			vr.AccessToken = token
 			vr.Hashed = hashed
@@ -75,7 +78,7 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 			vr.URI = c.URL
 			vr.Scope = c.Scope
 			rtn = o.Manager.ValidateAccessToken(&vr)
-			fmt.Println("valid: ", rtn)
+			o.Log.Debug("valid: ", rtn)
 		}
 	}
 	return rtn

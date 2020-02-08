@@ -85,6 +85,7 @@ func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL st
 	var clt oa.OauthClient
 	clt.Manager = &oauthManager
 	clt.TokenCompressed = compressJtw
+	clt.Log = logger
 	rh.Client = &clt
 
 	var curs []rc.ControlledURL

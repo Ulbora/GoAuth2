@@ -23,6 +23,7 @@ package managers
 import (
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
 	px "github.com/Ulbora/GoProxy"
+	lg "github.com/Ulbora/Level_Logger"
 	au "github.com/Ulbora/auth_interface"
 )
 
@@ -117,4 +118,5 @@ type OauthManager struct {
 	Db          odb.Oauth2DB
 	Proxy       px.Proxy
 	AuthService au.AuthInterface
+	Log         *lg.Logger
 }
