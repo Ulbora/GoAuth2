@@ -35,9 +35,9 @@ import (
 func (h *OauthRestHandler) AddRedirectURI(w http.ResponseWriter, r *http.Request) {
 	var cr m.ClientRedirectURI
 	rusuc, ruerr := h.ProcessBody(r, &cr)
-	fmt.Println("rusuc: ", rusuc)
-	fmt.Println("cr: ", cr)
-	fmt.Println("ruerr: ", ruerr)
+	h.Log.Debug("rusuc: ", rusuc)
+	h.Log.Debug("cr: ", cr)
+	h.Log.Debug("ruerr: ", ruerr)
 	if rusuc && ruerr == nil {
 
 		//url of this endpoint
@@ -47,7 +47,7 @@ func (h *OauthRestHandler) AddRedirectURI(w http.ResponseWriter, r *http.Request
 		rucl.Role = "admin"
 		rucl.URL = addRURL
 		rucl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &rucl)
@@ -56,13 +56,13 @@ func (h *OauthRestHandler) AddRedirectURI(w http.ResponseWriter, r *http.Request
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			rdURIContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", rdURIContOk)
+			h.Log.Debug("conOk: ", rdURIContOk)
 			if !rdURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				ruSuc, ruID := h.Manager.AddClientRedirectURI(&cr)
-				fmt.Println("ruSuc: ", ruSuc)
-				fmt.Println("ruID: ", ruID)
+				h.Log.Debug("ruSuc: ", ruSuc)
+				h.Log.Debug("ruID: ", ruID)
 				var rtn ResponseID
 				if ruSuc && ruID != 0 {
 					rtn.Success = ruSuc
@@ -99,15 +99,15 @@ func (h *OauthRestHandler) GetRedirectURIList(w http.ResponseWriter, r *http.Req
 		//var id string
 		h.SetContentType(w)
 		rugvars := mux.Vars(r)
-		fmt.Println("vars: ", len(rugvars))
+		h.Log.Debug("vars: ", len(rugvars))
 		if rugvars != nil && len(rugvars) != 0 {
 			var rugclientIDStr = rugvars["clientId"]
-			fmt.Println("vars: ", rugvars)
+			h.Log.Debug("vars: ", rugvars)
 			clientID, rugidErr := strconv.ParseInt(rugclientIDStr, 10, 64)
 			if clientID != 0 && rugidErr == nil {
-				fmt.Println("clientID: ", clientID)
+				h.Log.Debug("clientID: ", clientID)
 				getrul := h.Manager.GetClientRedirectURIList(clientID)
-				fmt.Println("getrul: ", getrul)
+				h.Log.Debug("getrul: ", getrul)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getrul)
 				fmt.Fprint(w, string(resJSON))
@@ -136,14 +136,14 @@ func (h *OauthRestHandler) DeleteRedirectURI(w http.ResponseWriter, r *http.Requ
 		//var id string
 		h.SetContentType(w)
 		druvars := mux.Vars(r)
-		fmt.Println("vars: ", len(druvars))
+		h.Log.Debug("vars: ", len(druvars))
 		if druvars != nil && len(druvars) != 0 {
 			var druidStr = druvars["id"]
-			fmt.Println("vars delete: ", druidStr)
+			h.Log.Debug("vars delete: ", druidStr)
 			id, idErr := strconv.ParseInt(druidStr, 10, 64)
-			fmt.Println("id delete: ", id)
+			h.Log.Debug("id delete: ", id)
 			if id != 0 && idErr == nil {
-				fmt.Println("id: ", id)
+				h.Log.Debug("id: ", id)
 				rudsuc := h.Manager.DeleteClientRedirectURI(id)
 				var rtn Response
 				if rudsuc {

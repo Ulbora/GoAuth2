@@ -40,26 +40,26 @@ func (h *OauthRestHandler) AddRoleSuper(w http.ResponseWriter, r *http.Request) 
 	rlscl.Role = "superAdmin"
 	rlscl.URL = addRlsURL
 	rlscl.Scope = "write"
-	fmt.Println("client: ", h.Client)
+	h.Log.Debug("client: ", h.Client)
 	auth := h.Client.Authorize(r, &rlscl)
 	if auth {
 		h.SetContentType(w)
 		rlsContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", rlsContOk)
+		h.Log.Debug("conOk: ", rlsContOk)
 		if !rlsContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var cus m.ClientRole
 			rlssuc, rlserr := h.ProcessBody(r, &cus)
-			fmt.Println("rlssuc: ", rlssuc)
-			fmt.Println("cu: ", cus)
-			fmt.Println("rlserr: ", rlserr)
+			h.Log.Debug("rlssuc: ", rlssuc)
+			h.Log.Debug("cu: ", cus)
+			h.Log.Debug("rlserr: ", rlserr)
 			if !rlssuc && rlserr != nil {
 				http.Error(w, rlserr.Error(), http.StatusBadRequest)
 			} else {
 				arlsSuc, arlsID := h.Manager.AddClientRole(&cus)
-				fmt.Println("arlsSuc: ", arlsSuc)
-				fmt.Println("arlsID: ", arlsID)
+				h.Log.Debug("arlsSuc: ", arlsSuc)
+				h.Log.Debug("arlsID: ", arlsID)
 				var rtn ResponseID
 				if arlsSuc && arlsID != 0 {
 					rtn.Success = arlsSuc
@@ -84,9 +84,9 @@ func (h *OauthRestHandler) AddRoleSuper(w http.ResponseWriter, r *http.Request) 
 func (h *OauthRestHandler) AddRole(w http.ResponseWriter, r *http.Request) {
 	var cu m.ClientRole
 	rlbsuc, rlberr := h.ProcessBody(r, &cu)
-	fmt.Println("rlbsuc: ", rlbsuc)
-	fmt.Println("cu: ", cu)
-	fmt.Println("rlberr: ", rlberr)
+	h.Log.Debug("rlbsuc: ", rlbsuc)
+	h.Log.Debug("cu: ", cu)
+	h.Log.Debug("rlberr: ", rlberr)
 	if rlbsuc && rlberr == nil {
 
 		//url of this endpoint
@@ -104,7 +104,7 @@ func (h *OauthRestHandler) AddRole(w http.ResponseWriter, r *http.Request) {
 		}
 		rlcl.URL = addrl
 		rlcl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &rlcl)
@@ -113,13 +113,13 @@ func (h *OauthRestHandler) AddRole(w http.ResponseWriter, r *http.Request) {
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			arlContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", arlContOk)
+			h.Log.Debug("conOk: ", arlContOk)
 			if !arlContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				arlSuc, arlID := h.Manager.AddClientRole(&cu)
-				fmt.Println("arlSuc: ", arlSuc)
-				fmt.Println("arlID: ", arlID)
+				h.Log.Debug("arlSuc: ", arlSuc)
+				h.Log.Debug("arlID: ", arlID)
 				var rtn ResponseID
 				if arlSuc && arlID != 0 {
 					rtn.Success = arlSuc
@@ -156,15 +156,15 @@ func (h *OauthRestHandler) GetRoleList(w http.ResponseWriter, r *http.Request) {
 		//var id string
 		h.SetContentType(w)
 		rllvars := mux.Vars(r)
-		fmt.Println("vars: ", len(rllvars))
+		h.Log.Debug("vars: ", len(rllvars))
 		if rllvars != nil && len(rllvars) != 0 {
 			var rllClientIDStr = rllvars["clientId"]
-			fmt.Println("vars: ", rllvars)
+			h.Log.Debug("vars: ", rllvars)
 			rllclientID, idErr := strconv.ParseInt(rllClientIDStr, 10, 64)
 			if rllclientID != 0 && idErr == nil {
-				fmt.Println("clientID: ", rllclientID)
+				h.Log.Debug("clientID: ", rllclientID)
 				getRll := h.Manager.GetClientRoleList(rllclientID)
-				fmt.Println("getAul: ", getRll)
+				h.Log.Debug("getAul: ", getRll)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getRll)
 				fmt.Fprint(w, string(resJSON))
@@ -193,14 +193,14 @@ func (h *OauthRestHandler) DeleteRole(w http.ResponseWriter, r *http.Request) {
 		//var id string
 		h.SetContentType(w)
 		rldvars := mux.Vars(r)
-		fmt.Println("vars: ", len(rldvars))
+		h.Log.Debug("vars: ", len(rldvars))
 		if rldvars != nil && len(rldvars) != 0 {
 			var rldidStr = rldvars["id"]
-			fmt.Println("vars delete: ", rldvars)
+			h.Log.Debug("vars delete: ", rldvars)
 			rldid, idErr := strconv.ParseInt(rldidStr, 10, 64)
-			fmt.Println("id delete: ", rldid)
+			h.Log.Debug("id delete: ", rldid)
 			if rldid != 0 && idErr == nil {
-				fmt.Println("id: ", rldid)
+				h.Log.Debug("id: ", rldid)
 				rlsucd := h.Manager.DeleteClientRole(rldid)
 				var rlrtn Response
 				if rlsucd {

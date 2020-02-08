@@ -13,12 +13,15 @@ import (
 
 	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 // validate token
 
 func TestOauthRestHandler_ValidateToken(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockValidateAccessTokenSuccess = true
@@ -46,6 +49,8 @@ func TestOauthRestHandler_ValidateToken(t *testing.T) {
 
 func TestOauthRestHandler_ValidateTokenCompressed(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockValidateAccessTokenSuccess = true
@@ -79,6 +84,8 @@ func TestOauthRestHandler_ValidateTokenCompressed(t *testing.T) {
 
 func TestOauthRestHandler_ValidateTokenNotValid(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockValidateAccessTokenSuccess = false
@@ -106,6 +113,8 @@ func TestOauthRestHandler_ValidateTokenNotValid(t *testing.T) {
 
 func TestOauthRestHandler_ValidateTokenBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockValidateAccessTokenSuccess = true
@@ -133,6 +142,8 @@ func TestOauthRestHandler_ValidateTokenBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_ValidateTokenBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockValidateAccessTokenSuccess = true

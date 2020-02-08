@@ -14,6 +14,7 @@ import (
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
 	ac "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 	"github.com/gorilla/mux"
 )
 
@@ -21,6 +22,8 @@ import (
 
 func TestOauthRestHandlerGrtType_AddGrantType(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -59,6 +62,8 @@ func TestOauthRestHandlerGrtType_AddGrantType(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_AddGrantTypeBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -92,6 +97,8 @@ func TestOauthRestHandlerGrtType_AddGrantTypeBadMedia(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_AddGrantTypeAddFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -125,6 +132,8 @@ func TestOauthRestHandlerGrtType_AddGrantTypeAddFail(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_AddGrantTypeNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -158,6 +167,8 @@ func TestOauthRestHandlerGrtType_AddGrantTypeNotAuth(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_AddGrantTypeBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -193,6 +204,8 @@ func TestOauthRestHandlerGrtType_AddGrantTypeBadBody(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_GetGrantTypelist(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientGrantType
 	cuo.ID = 4
 	cuo.GrantType = "code"
@@ -234,6 +247,8 @@ func TestOauthRestHandlerGrtType_GetGrantTypelist(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_GetGrantTypeListNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientGrantType
 	cuo.ID = 4
 	cuo.GrantType = "/test/url"
@@ -272,6 +287,8 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListNotAuth(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_GetGrantTypeListBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientGrantType
 	cuo.ID = 4
 	cuo.GrantType = "code"
@@ -310,6 +327,8 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListBadParam(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_GetGrantTypeListNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientGrantType
 	cuo.ID = 4
 	cuo.GrantType = "code"
@@ -350,6 +369,8 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListNoParam(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_DeleteGrantType(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -384,6 +405,8 @@ func TestOauthRestHandlerGrtType_DeleteGrantType(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_DeleteGrantTypeFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = false
@@ -418,6 +441,8 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeFail(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_DeleteGrantTypeNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -452,6 +477,8 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeNotAuth(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_DeleteGrantTypeBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -486,6 +513,8 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeBadParam(t *testing.T) {
 
 func TestOauthRestHandlerGrtType_DeleteGrantTypeNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true

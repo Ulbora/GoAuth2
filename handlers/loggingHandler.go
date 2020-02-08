@@ -57,7 +57,7 @@ func (h *OauthRestHandler) SetLogLevel(w http.ResponseWriter, r *http.Request) {
 	h.SetContentType(w)
 	logContOk := h.CheckContent(r)
 
-	fmt.Println("conOk: ", logContOk)
+	//fmt.Println("conOk: ", logContOk)
 
 	if !logContOk {
 		http.Error(w, "json required", http.StatusUnsupportedMediaType)
@@ -72,9 +72,9 @@ func (h *OauthRestHandler) SetLogLevel(w http.ResponseWriter, r *http.Request) {
 		if loggingKey == loggingKeyHdr {
 			var lv LogLevel
 			lgsuc, lgerr := h.ProcessBody(r, &lv)
-			fmt.Println("lgsuc: ", lgsuc)
-			fmt.Println("LogLevel: ", lv)
-			fmt.Println("lgerr: ", lgerr)
+			//fmt.Println("lgsuc: ", lgsuc)
+			//fmt.Println("LogLevel: ", lv)
+			//fmt.Println("lgerr: ", lgerr)
 			if !lgsuc && lgerr != nil {
 				http.Error(w, lgerr.Error(), http.StatusBadRequest)
 			} else {

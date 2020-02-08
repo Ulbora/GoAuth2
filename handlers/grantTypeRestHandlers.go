@@ -35,9 +35,9 @@ import (
 func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) {
 	var cg m.ClientGrantType
 	gsuc, gerr := h.ProcessBody(r, &cg)
-	fmt.Println("gsuc: ", gsuc)
-	fmt.Println("cg: ", cg)
-	fmt.Println("gerr: ", gerr)
+	h.Log.Debug("gsuc: ", gsuc)
+	h.Log.Debug("cg: ", cg)
+	h.Log.Debug("gerr: ", gerr)
 	if gsuc && gerr == nil {
 
 		//url of this endpoint
@@ -48,7 +48,7 @@ func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) 
 
 		gtcl.URL = addAuURL
 		gtcl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &gtcl)
@@ -57,13 +57,13 @@ func (h *OauthRestHandler) AddGrantType(w http.ResponseWriter, r *http.Request) 
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			aaURIContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", aaURIContOk)
+			h.Log.Debug("conOk: ", aaURIContOk)
 			if !aaURIContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				gtaSuc, gtID := h.Manager.AddClientGrantType(&cg)
-				fmt.Println("gtaSuc: ", gtaSuc)
-				fmt.Println("gtID: ", gtID)
+				h.Log.Debug("gtaSuc: ", gtaSuc)
+				h.Log.Debug("gtID: ", gtID)
 				var rtn ResponseID
 				if gtaSuc && gtID != 0 {
 					rtn.Success = gtaSuc
@@ -100,15 +100,15 @@ func (h *OauthRestHandler) GetGrantTypeList(w http.ResponseWriter, r *http.Reque
 		//var id string
 		h.SetContentType(w)
 		gtlvars := mux.Vars(r)
-		fmt.Println("vars: ", len(gtlvars))
+		h.Log.Debug("vars: ", len(gtlvars))
 		if gtlvars != nil && len(gtlvars) != 0 {
 			var gtclientIDStr = gtlvars["clientId"]
-			fmt.Println("vars: ", gtlvars)
+			h.Log.Debug("vars: ", gtlvars)
 			clientID, gtlidErr := strconv.ParseInt(gtclientIDStr, 10, 64)
 			if clientID != 0 && gtlidErr == nil {
-				fmt.Println("clientID: ", clientID)
+				h.Log.Debug("clientID: ", clientID)
 				getgtl := h.Manager.GetClientGrantTypeList(clientID)
-				fmt.Println("getgtl: ", getgtl)
+				h.Log.Debug("getgtl: ", getgtl)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getgtl)
 				fmt.Fprint(w, string(resJSON))
@@ -137,14 +137,14 @@ func (h *OauthRestHandler) DeleteGrantType(w http.ResponseWriter, r *http.Reques
 		//var id string
 		h.SetContentType(w)
 		gtdvars := mux.Vars(r)
-		fmt.Println("vars: ", len(gtdvars))
+		h.Log.Debug("vars: ", len(gtdvars))
 		if gtdvars != nil && len(gtdvars) != 0 {
 			var gtlidStr = gtdvars["id"]
-			fmt.Println("vars delete: ", gtdvars)
+			h.Log.Debug("vars delete: ", gtdvars)
 			id, idErr := strconv.ParseInt(gtlidStr, 10, 64)
-			fmt.Println("id delete: ", id)
+			h.Log.Debug("id delete: ", id)
 			if id != 0 && idErr == nil {
-				fmt.Println("id: ", id)
+				h.Log.Debug("id: ", id)
 				gtdsuc := h.Manager.DeleteClientGrantType(id)
 				var rtn Response
 				if gtdsuc {

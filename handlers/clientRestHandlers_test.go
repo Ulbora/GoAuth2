@@ -13,11 +13,14 @@ import (
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
 	ac "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 	"github.com/gorilla/mux"
 )
 
 func TestOauthRestHandler_AddClientBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -37,6 +40,8 @@ func TestOauthRestHandler_AddClientBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_AddClientBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -60,6 +65,8 @@ func TestOauthRestHandler_AddClientBadBody(t *testing.T) {
 
 func TestOauthRestHandler_AddClient(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -94,6 +101,8 @@ func TestOauthRestHandler_AddClient(t *testing.T) {
 
 func TestOauthRestHandler_AddClientFailAdd(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -126,6 +135,8 @@ func TestOauthRestHandler_AddClientFailAdd(t *testing.T) {
 
 func TestOauthRestHandler_AddClientNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -159,6 +170,8 @@ func TestOauthRestHandler_AddClientNotAuth(t *testing.T) {
 // update uri super
 func TestOauthRestHandler_UpdateClientBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -177,6 +190,8 @@ func TestOauthRestHandler_UpdateClientBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_UpdateClientBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var oct oc.MockOauthClient
 	oct.MockValid = true
@@ -200,6 +215,8 @@ func TestOauthRestHandler_UpdateClientBadBody(t *testing.T) {
 
 func TestOauthRestHandler_UpdateClient(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockUpdateSuccess1 = true
@@ -231,6 +248,8 @@ func TestOauthRestHandler_UpdateClient(t *testing.T) {
 
 func TestOauthRestHandler_UpdateClientFailAdd(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -263,6 +282,8 @@ func TestOauthRestHandler_UpdateClientFailAdd(t *testing.T) {
 
 func TestOauthRestHandler_UpdateClientNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -295,6 +316,8 @@ func TestOauthRestHandler_UpdateClientNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetClient(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -345,6 +368,8 @@ func TestOauthRestHandler_GetClient(t *testing.T) {
 
 func TestOauthRestHandler_GetClientNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -387,6 +412,8 @@ func TestOauthRestHandler_GetClientNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetClientBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -429,6 +456,8 @@ func TestOauthRestHandler_GetClientBadParam(t *testing.T) {
 
 func TestOauthRestHandler_GetClientNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -473,6 +502,8 @@ func TestOauthRestHandler_GetClientNoParam(t *testing.T) {
 
 func TestOauthRestHandler_GetClientAdmin(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -524,6 +555,8 @@ func TestOauthRestHandler_GetClientAdmin(t *testing.T) {
 
 func TestOauthRestHandler_GetClientAdminNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -567,6 +600,8 @@ func TestOauthRestHandler_GetClientAdminNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetClientAdminBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -610,6 +645,8 @@ func TestOauthRestHandler_GetClientAdminBadParam(t *testing.T) {
 
 func TestOauthRestHandler_GetClientAdminNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -654,6 +691,8 @@ func TestOauthRestHandler_GetClientAdminNoParam(t *testing.T) {
 
 func TestOauthRestHandler_GetClientlist(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -699,6 +738,8 @@ func TestOauthRestHandler_GetClientlist(t *testing.T) {
 
 func TestOauthRestHandler_GetClientListNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -742,6 +783,8 @@ func TestOauthRestHandler_GetClientListNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_GetSearchClientlist(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -789,6 +832,8 @@ func TestOauthRestHandler_GetSearchClientlist(t *testing.T) {
 
 func TestOauthRestHandler_GetSearchClientlistBadName(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -836,6 +881,8 @@ func TestOauthRestHandler_GetSearchClientlistBadName(t *testing.T) {
 
 func TestOauthRestHandler_GetSearchClientlistBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -883,6 +930,8 @@ func TestOauthRestHandler_GetSearchClientlistBadBody(t *testing.T) {
 }
 func TestOauthRestHandler_GetSearchClientlistBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -930,6 +979,8 @@ func TestOauthRestHandler_GetSearchClientlistBadMedia(t *testing.T) {
 
 func TestOauthRestHandler_GetSearchClientlistNoAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.Client
 	cuo.ClientID = 10
 	cuo.Secret = "secrettest"
@@ -979,6 +1030,8 @@ func TestOauthRestHandler_GetSearchClientlistNoAuth(t *testing.T) {
 
 func TestOauthRestHandler_DeleteClient(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1013,6 +1066,8 @@ func TestOauthRestHandler_DeleteClient(t *testing.T) {
 
 func TestOauthRestHandler_DeleteClientFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = false
@@ -1047,6 +1102,8 @@ func TestOauthRestHandler_DeleteClientFail(t *testing.T) {
 
 func TestOauthRestHandler_DeleteClientNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1081,6 +1138,8 @@ func TestOauthRestHandler_DeleteClientNotAuth(t *testing.T) {
 
 func TestOauthRestHandler_DeleteClientBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -1115,6 +1174,8 @@ func TestOauthRestHandler_DeleteClientBadParam(t *testing.T) {
 
 func TestOauthRestHandler_DeleteClientNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true

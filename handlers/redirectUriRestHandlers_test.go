@@ -14,6 +14,7 @@ import (
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
 	ac "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 	"github.com/gorilla/mux"
 )
 
@@ -21,6 +22,8 @@ import (
 
 func TestOauthRestHandlerRedectURI_AddRedirectURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -59,6 +62,8 @@ func TestOauthRestHandlerRedectURI_AddRedirectURI(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_AddRedirectURIBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -92,6 +97,8 @@ func TestOauthRestHandlerRedectURI_AddRedirectURIBadMedia(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_AddRedirectURIAddFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -125,6 +132,8 @@ func TestOauthRestHandlerRedectURI_AddRedirectURIAddFail(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_AddRedirectURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -158,6 +167,8 @@ func TestOauthRestHandlerRedectURI_AddRedirectURINotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_AddRedirectURIBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -193,6 +204,8 @@ func TestOauthRestHandlerRedectURI_AddRedirectURIBadBody(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_GetRedirectURIlist(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRedirectURI
 	cuo.ID = 4
 	cuo.URI = "/test"
@@ -234,6 +247,8 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlist(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_GetRedirectURIlistNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRedirectURI
 	cuo.ID = 4
 	cuo.URI = "/test/url"
@@ -272,6 +287,8 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistNotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_GetRedirectURIlistBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRedirectURI
 	cuo.ID = 4
 	cuo.URI = "/test"
@@ -310,6 +327,8 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistBadParam(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_GetRedirectURIlistNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRedirectURI
 	cuo.ID = 4
 	cuo.URI = "/test"
@@ -350,6 +369,8 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistNoParam(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_DeleteRedirectURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -384,6 +405,8 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURI(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_DeleteRedirectURIFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = false
@@ -418,6 +441,8 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURIFail(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_DeleteRedirectURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -452,6 +477,8 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURINotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_DeleteRedirectURIBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -486,6 +513,8 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURIBadParam(t *testing.T) {
 
 func TestOauthRestHandlerRedectURI_DeleteRedirectURINoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true

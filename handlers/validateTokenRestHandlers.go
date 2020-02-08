@@ -42,18 +42,18 @@ func (h *OauthRestHandler) ValidateAccessToken(w http.ResponseWriter, r *http.Re
 		vdtr.AccessToken = h.JwtCompress.UnCompressJwt(vdtr.AccessToken)
 		fmt.Println("uncompressed token in validate: ", vdtr.AccessToken)
 	}
-	fmt.Println("vdtsuc: ", vdtsuc)
-	fmt.Println("vdtr: ", vdtr)
-	fmt.Println("gerr: ", gerr)
+	h.Log.Debug("vdtsuc: ", vdtsuc)
+	h.Log.Debug("vdtr: ", vdtr)
+	h.Log.Debug("gerr: ", gerr)
 	if vdtsuc && gerr == nil {
 		h.SetContentType(w)
 		vdtContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", vdtContOk)
+		h.Log.Debug("conOk: ", vdtContOk)
 		if !vdtContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			vdtSuc := h.Manager.ValidateAccessToken(&vdtr)
-			fmt.Println("vdtSuc: ", vdtSuc)
+			h.Log.Debug("vdtSuc: ", vdtSuc)
 			var rtn ValidationResponse
 			if vdtSuc {
 				rtn.Valid = vdtSuc

@@ -35,9 +35,9 @@ import (
 func (h *OauthRestHandler) AddRoleURI(w http.ResponseWriter, r *http.Request) {
 	var crui m.ClientRoleURI
 	ruibsuc, gerr := h.ProcessBody(r, &crui)
-	fmt.Println("ruisuc: ", ruibsuc)
-	fmt.Println("crui: ", crui)
-	fmt.Println("gerr: ", gerr)
+	h.Log.Debug("ruisuc: ", ruibsuc)
+	h.Log.Debug("crui: ", crui)
+	h.Log.Debug("gerr: ", gerr)
 	if ruibsuc && gerr == nil {
 
 		//url of this endpoint
@@ -48,7 +48,7 @@ func (h *OauthRestHandler) AddRoleURI(w http.ResponseWriter, r *http.Request) {
 
 		rlucl.URL = addRoleU
 		rlucl.Scope = "write"
-		fmt.Println("client: ", h.Client)
+		h.Log.Debug("client: ", h.Client)
 
 		//check that jwt token user role has permission to use the url of this endpoint
 		auth := h.Client.Authorize(r, &rlucl)
@@ -57,12 +57,12 @@ func (h *OauthRestHandler) AddRoleURI(w http.ResponseWriter, r *http.Request) {
 			// w.Header().Set("Content-Type", "application/json")
 			h.SetContentType(w)
 			rluContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", rluContOk)
+			h.Log.Debug("conOk: ", rluContOk)
 			if !rluContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				rluiaSuc := h.Manager.AddClientRoleURI(&crui)
-				fmt.Println("gtaSuc: ", rluiaSuc)
+				h.Log.Debug("gtaSuc: ", rluiaSuc)
 				//fmt.Println("gtID: ", gtID)
 				var rtn Response
 				if rluiaSuc {
@@ -100,15 +100,15 @@ func (h *OauthRestHandler) GetRoleURIList(w http.ResponseWriter, r *http.Request
 		//var id string
 		h.SetContentType(w)
 		ruilvars := mux.Vars(r)
-		fmt.Println("vars: ", len(ruilvars))
+		h.Log.Debug("vars: ", len(ruilvars))
 		if ruilvars != nil && len(ruilvars) != 0 {
 			var ruiRoleIDStr = ruilvars["clientRoleId"]
-			fmt.Println("vars: ", ruilvars)
+			h.Log.Debug("vars: ", ruilvars)
 			ruiRoleID, ruiidErr := strconv.ParseInt(ruiRoleIDStr, 10, 64)
 			if ruiRoleID != 0 && ruiidErr == nil {
-				fmt.Println("roleId: ", ruiRoleID)
+				h.Log.Debug("roleId: ", ruiRoleID)
 				getRuil := h.Manager.GetClientRoleAllowedURIList(ruiRoleID)
-				fmt.Println("getgtl: ", getRuil)
+				h.Log.Debug("getgtl: ", getRuil)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getRuil)
 				fmt.Fprint(w, string(resJSON))
@@ -136,34 +136,34 @@ func (h *OauthRestHandler) DeleteRoleURI(w http.ResponseWriter, r *http.Request)
 	if auth {
 		h.SetContentType(w)
 		ruidvars := mux.Vars(r)
-		fmt.Println("vars del ru: ", len(ruidvars))
+		h.Log.Debug("vars del ru: ", len(ruidvars))
 		var clientRoleID int64
 		var clientAllowedURIID int64
 
 		if ruidvars != nil && len(ruidvars) == 2 {
 			var cridStr = ruidvars["clientRoleId"]
-			fmt.Println("vars delete crid: ", cridStr)
+			h.Log.Debug("vars delete crid: ", cridStr)
 			crid, cridErr := strconv.ParseInt(cridStr, 10, 64)
 			if crid != 0 && cridErr == nil {
 				clientRoleID = crid
 			}
 			var cauidStr = ruidvars["clientAllowedUriId"]
-			fmt.Println("vars delete cauidStr: ", cauidStr)
+			h.Log.Debug("vars delete cauidStr: ", cauidStr)
 			cauid, cauidErr := strconv.ParseInt(cauidStr, 10, 64)
 			if cauid != 0 && cauidErr == nil {
 				clientAllowedURIID = cauid
 			}
 		} else {
 			rlsContOk := h.CheckContent(r)
-			fmt.Println("conOk: ", rlsContOk)
+			h.Log.Debug("conOk: ", rlsContOk)
 			if !rlsContOk {
 				http.Error(w, "json required", http.StatusUnsupportedMediaType)
 			} else {
 				var crui m.ClientRoleURI
 				rlssuc, rlserr := h.ProcessBody(r, &crui)
-				fmt.Println("rlssuc: ", rlssuc)
-				fmt.Println("crui: ", crui)
-				fmt.Println("rlserr: ", rlserr)
+				h.Log.Debug("rlssuc: ", rlssuc)
+				h.Log.Debug("crui: ", crui)
+				h.Log.Debug("rlserr: ", rlserr)
 				if !rlssuc && rlserr != nil {
 					http.Error(w, rlserr.Error(), http.StatusBadRequest)
 				} else {
@@ -173,7 +173,7 @@ func (h *OauthRestHandler) DeleteRoleURI(w http.ResponseWriter, r *http.Request)
 			}
 		}
 		if clientRoleID != 0 && clientAllowedURIID != 0 {
-			fmt.Println("clientRoleID: ", clientRoleID)
+			h.Log.Debug("clientRoleID: ", clientRoleID)
 			var crui m.ClientRoleURI
 			crui.ClientRoleID = clientRoleID
 			crui.ClientAllowedURIID = clientAllowedURIID

@@ -41,20 +41,20 @@ func (h *OauthRestHandler) AddClient(w http.ResponseWriter, r *http.Request) {
 	acltcl.Role = "superAdmin"
 	acltcl.URL = addCltURL
 	acltcl.Scope = "write"
-	fmt.Println("client: ", h.Client)
+	h.Log.Debug("client: ", h.Client)
 	auth := h.Client.Authorize(r, &acltcl)
 	if auth {
 		h.SetContentType(w)
 		acltContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", acltContOk)
+		h.Log.Debug("conOk: ", acltContOk)
 		if !acltContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var cus m.Client
 			bcsuc, bcerr := h.ProcessBody(r, &cus)
-			fmt.Println("bcsuc: ", bcsuc)
-			fmt.Println("client in add: ", cus)
-			fmt.Println("bcerr: ", bcerr)
+			h.Log.Debug("bcsuc: ", bcsuc)
+			h.Log.Debug("client in add: ", cus)
+			h.Log.Debug("bcerr: ", bcerr)
 			if !bcsuc && bcerr != nil {
 				http.Error(w, bcerr.Error(), http.StatusBadRequest)
 			} else {
@@ -68,8 +68,8 @@ func (h *OauthRestHandler) AddClient(w http.ResponseWriter, r *http.Request) {
 				// }
 
 				acltSuc, acltID := h.Manager.AddClient(&cus)
-				fmt.Println("acltSuc: ", acltSuc)
-				fmt.Println("acltID: ", acltID)
+				h.Log.Debug("acltSuc: ", acltSuc)
+				h.Log.Debug("acltID: ", acltID)
 				var rtn ResponseID
 				if acltSuc && acltID != 0 {
 					rtn.Success = acltSuc
@@ -99,26 +99,26 @@ func (h *OauthRestHandler) UpdateClient(w http.ResponseWriter, r *http.Request) 
 	upcltscl.Role = "superAdmin"
 	upcltscl.URL = upcltURL
 	upcltscl.Scope = "write"
-	fmt.Println("client: ", h.Client)
+	h.Log.Debug("client: ", h.Client)
 	auth := h.Client.Authorize(r, &upcltscl)
 	if auth {
 		// w.Header().Set("Content-Type", "application/json")
 		h.SetContentType(w)
 		uPcltContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", uPcltContOk)
+		h.Log.Debug("conOk: ", uPcltContOk)
 		if !uPcltContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var upclt m.Client
 			ubcltsuc, uberr := h.ProcessBody(r, &upclt)
-			fmt.Println("ubcltsuc: ", ubcltsuc)
-			fmt.Println("client in update: ", upclt)
-			fmt.Println("uberr: ", uberr)
+			h.Log.Debug("ubcltsuc: ", ubcltsuc)
+			h.Log.Debug("client in update: ", upclt)
+			h.Log.Debug("uberr: ", uberr)
 			if !ubcltsuc && uberr != nil {
 				http.Error(w, uberr.Error(), http.StatusBadRequest)
 			} else {
 				uPcltSuc := h.Manager.UpdateClient(&upclt)
-				fmt.Println("uPcltSuc: ", uPcltSuc)
+				h.Log.Debug("uPcltSuc: ", uPcltSuc)
 				var rtn Response
 				if uPcltSuc {
 					rtn.Success = uPcltSuc
@@ -152,15 +152,15 @@ func (h *OauthRestHandler) GetClient(w http.ResponseWriter, r *http.Request) {
 		//var id string
 		h.SetContentType(w)
 		gcltvars := mux.Vars(r)
-		fmt.Println("vars: ", len(gcltvars))
+		h.Log.Debug("vars: ", len(gcltvars))
 		if gcltvars != nil && len(gcltvars) != 0 {
 			var cltidStr = gcltvars["id"]
-			fmt.Println("vars: ", gcltvars)
+			h.Log.Debug("vars: ", gcltvars)
 			cltid, idErr := strconv.ParseInt(cltidStr, 10, 64)
 			if cltid != 0 && idErr == nil {
-				fmt.Println("id: ", cltid)
+				h.Log.Debug("id: ", cltid)
 				getClt := h.Manager.GetClient(cltid)
-				fmt.Println("getClt: ", getClt)
+				h.Log.Debug("getClt: ", getClt)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getClt)
 				fmt.Fprint(w, string(resJSON))
@@ -196,9 +196,9 @@ func (h *OauthRestHandler) GetClientAdmin(w http.ResponseWriter, r *http.Request
 			//fmt.Println("vars: ", gcltavars)
 			cltaid, idErr := strconv.ParseInt(cltaidStr, 10, 64)
 			if cltaid != 0 && idErr == nil {
-				fmt.Println("clientId in admin get: ", cltaid)
+				h.Log.Debug("clientId in admin get: ", cltaid)
 				getClta := h.Manager.GetClient(cltaid)
-				fmt.Println("getClt: ", getClta)
+				h.Log.Debug("getClt: ", getClta)
 				w.WriteHeader(http.StatusOK)
 				resJSON, _ := json.Marshal(getClta)
 				fmt.Fprint(w, string(resJSON))
@@ -226,7 +226,7 @@ func (h *OauthRestHandler) GetClientList(w http.ResponseWriter, r *http.Request)
 	if auth {
 		h.SetContentType(w)
 		getcltl := h.Manager.GetClientList()
-		fmt.Println("getcltl: ", getcltl)
+		h.Log.Debug("getcltl: ", getcltl)
 		w.WriteHeader(http.StatusOK)
 		resJSON, _ := json.Marshal(getcltl)
 		fmt.Fprint(w, string(resJSON))
@@ -248,21 +248,21 @@ func (h *OauthRestHandler) GetClientSearchList(w http.ResponseWriter, r *http.Re
 	if auth {
 		h.SetContentType(w)
 		acltsContOk := h.CheckContent(r)
-		fmt.Println("conOk: ", acltsContOk)
+		h.Log.Debug("conOk: ", acltsContOk)
 		if !acltsContOk {
 			http.Error(w, "json required", http.StatusUnsupportedMediaType)
 		} else {
 			var cus m.Client
 			bcltssuc, bcltserr := h.ProcessBody(r, &cus)
-			fmt.Println("bcltssuc: ", bcltssuc)
-			fmt.Println("client in search: ", cus)
-			fmt.Println("bcltserr: ", bcltserr)
+			h.Log.Debug("bcltssuc: ", bcltssuc)
+			h.Log.Debug("client in search: ", cus)
+			h.Log.Debug("bcltserr: ", bcltserr)
 			if !bcltssuc && bcltserr != nil {
 				http.Error(w, bcltserr.Error(), http.StatusBadRequest)
 			} else {
 				if cus.Name != "" {
 					getCltsl := h.Manager.GetClientSearchList(cus.Name)
-					fmt.Println("getCltsl: ", getCltsl)
+					h.Log.Debug("getCltsl: ", getCltsl)
 					w.WriteHeader(http.StatusOK)
 					resJSON, _ := json.Marshal(getCltsl)
 					fmt.Fprint(w, string(resJSON))
@@ -289,14 +289,14 @@ func (h *OauthRestHandler) DeleteClient(w http.ResponseWriter, r *http.Request) 
 	if auth {
 		h.SetContentType(w)
 		cltdvars := mux.Vars(r)
-		fmt.Println("vars: ", len(cltdvars))
+		h.Log.Debug("vars: ", len(cltdvars))
 		if cltdvars != nil && len(cltdvars) != 0 {
 			var cltdidStr = cltdvars["id"]
-			fmt.Println("vars delete: ", cltdvars)
+			h.Log.Debug("vars delete: ", cltdvars)
 			cltdid, idErr := strconv.ParseInt(cltdidStr, 10, 64)
-			fmt.Println("id delete clientId: ", cltdid)
+			h.Log.Debug("id delete clientId: ", cltdid)
 			if cltdid != 0 && idErr == nil {
-				fmt.Println("id: ", cltdid)
+				h.Log.Debug("id: ", cltdid)
 				cltdSuc := h.Manager.DeleteClient(cltdid)
 				var cltdrtn Response
 				if cltdSuc {

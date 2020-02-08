@@ -14,6 +14,7 @@ import (
 	m "github.com/Ulbora/GoAuth2/managers"
 	oc "github.com/Ulbora/GoAuth2/oauthclient"
 	ac "github.com/Ulbora/GoAuth2/rolecontrol"
+	lg "github.com/Ulbora/Level_Logger"
 	"github.com/gorilla/mux"
 )
 
@@ -21,6 +22,8 @@ import (
 
 func TestOauthRestHandlerRoleURI_AddRoleURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -59,6 +62,8 @@ func TestOauthRestHandlerRoleURI_AddRoleURI(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_AddRoleURIBadMedia(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -92,6 +97,8 @@ func TestOauthRestHandlerRoleURI_AddRoleURIBadMedia(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_AddRoleURIFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = false
@@ -125,6 +132,8 @@ func TestOauthRestHandlerRoleURI_AddRoleURIFail(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_AddRoleURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -158,6 +167,8 @@ func TestOauthRestHandlerRoleURI_AddRoleURINotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_AddRoleURIBadBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockInsertSuccess1 = true
@@ -193,6 +204,8 @@ func TestOauthRestHandlerRoleURI_AddRoleURIBadBody(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_GetRoleURIList(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRoleURI
 	cuo.ClientRoleID = 4
 	cuo.ClientAllowedURIID = 10
@@ -233,6 +246,8 @@ func TestOauthRestHandlerRoleURI_GetRoleURIList(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_GetRoleURIListNotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRoleURI
 	cuo.ClientRoleID = 4
 	cuo.ClientAllowedURIID = 10
@@ -270,6 +285,8 @@ func TestOauthRestHandlerRoleURI_GetRoleURIListNotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_GetRoleURIListBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRoleURI
 	cuo.ClientRoleID = 4
 	cuo.ClientAllowedURIID = 10
@@ -307,6 +324,8 @@ func TestOauthRestHandlerRoleURI_GetRoleURIListBadParam(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_GetRoleURIListNoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 	var cuo m.ClientRoleURI
 	cuo.ClientRoleID = 4
 	cuo.ClientAllowedURIID = 10
@@ -346,6 +365,8 @@ func TestOauthRestHandlerRoleURI_GetRoleURIListNoParam(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURI(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -381,6 +402,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURI(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURIFail(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = false
@@ -416,6 +439,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURIFail(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURINotAuth(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -451,6 +476,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURINotAuth(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURIBadParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -486,6 +513,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURIBadParam(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURINoParam(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -521,6 +550,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURINoParam(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURIJson(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
@@ -558,6 +589,8 @@ func TestOauthRestHandlerRoleURI_DeleteRoleURIJson(t *testing.T) {
 
 func TestOauthRestHandlerRoleURI_DeleteRoleURIJsonNoBody(t *testing.T) {
 	var oh OauthRestHandler
+	var l lg.Logger
+	oh.Log = &l
 
 	var man m.MockManager
 	man.MockDeleteSuccess1 = true
