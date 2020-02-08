@@ -1,7 +1,5 @@
 package managers
 
-import "fmt"
-
 /*
  Copyright (C) 2019 Ulbora Labs LLC. (www.ulboralabs.com)
  All rights reserved.
@@ -37,32 +35,33 @@ type ValidateAccessTokenReq struct {
 func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 	var rtn bool
 	//fix issue with no user needed with client grant
-	fmt.Println("at role", at.Role)
+	//fmt.Println("log level in validate token: ", m.Log.LogLevel)
+	m.Log.Debug("at role", at.Role)
 	if at.AccessToken != "" && at.ClientID != 0 {
 		var userID string
 		if at.Hashed && at.UserID != "" {
 			userID = unHashUser(at.UserID)
-			fmt.Println("unhashed user: ", userID)
+			m.Log.Debug("unhashed user: ", userID)
 		} else {
 			userID = at.UserID
 		}
 		tkkey := m.Db.GetAccessTokenKey()
-		fmt.Println("tkkey", tkkey)
+		m.Log.Debug("tkkey", tkkey)
 		atsuc, pwatpl := m.ValidateJwt(at.AccessToken, tkkey)
-		fmt.Println("atsuc", atsuc)
-		fmt.Println("userPass", userID == unHashUser(pwatpl.UserID))
-		fmt.Println("user", userID)
-		fmt.Println("userUnhash", unHashUser(pwatpl.UserID))
-		fmt.Println("pwatpl.UserID", pwatpl.UserID)
-		fmt.Println("pwatpl", pwatpl)
+		m.Log.Debug("atsuc", atsuc)
+		m.Log.Debug("userPass", userID == unHashUser(pwatpl.UserID))
+		m.Log.Debug("user", userID)
+		m.Log.Debug("userUnhash", unHashUser(pwatpl.UserID))
+		m.Log.Debug("pwatpl.UserID", pwatpl.UserID)
+		m.Log.Info("pwatpl", *pwatpl)
 		var noUser bool
 		if pwatpl.UserID == "" || at.UserID == "" {
 			noUser = true
 		}
-		fmt.Println("noUser", noUser)
+		m.Log.Debug("noUser", noUser)
 		if atsuc && (noUser || userID == unHashUser(pwatpl.UserID)) && pwatpl.TokenType == accessTokenType &&
 			pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
-			fmt.Println("inside if")
+			m.Log.Debug("inside if")
 			var roleFound bool
 			var scopeFound bool
 			if at.Role != "" && at.URI != "" {
@@ -75,7 +74,7 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 			} else {
 				roleFound = true
 			}
-			fmt.Println("at.Scope", at.Scope)
+			m.Log.Debug("at.Scope", at.Scope)
 			if at.Scope != "" {
 				var foundWrite bool
 				for _, s := range pwatpl.ScopeList {
@@ -98,8 +97,8 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 					}
 				}
 			}
-			fmt.Println("roleFound", roleFound)
-			fmt.Println("scopeFound", scopeFound)
+			m.Log.Debug("roleFound", roleFound)
+			m.Log.Debug("scopeFound", scopeFound)
 			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound {
 				rtn = true
 			} else if (pwatpl.Grant == clientGrantType || pwatpl.Grant == passwordGrantType) && roleFound {

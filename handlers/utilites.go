@@ -65,6 +65,7 @@ func UseWebHandler(dbi db.Database, compressJtw bool, authURL string) *OauthWebH
 //UseRestHandler UseRestHandler
 func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string, logger *lg.Logger) *OauthRestHandler {
 	var oauthManager m.OauthManager
+	oauthManager.Log = logger
 	var oauthMySqldb msdb.MySQLOauthDB
 	oauthMySqldb.DB = dbi
 	var oauthDb odb.Oauth2DB

@@ -2,7 +2,6 @@
 package oauthclient
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -67,7 +66,6 @@ func (o *OauthClient) Authorize(r *http.Request, c *Claim) bool {
 			} else {
 				token = tokenArray[1]
 			}
-			fmt.Println("loglevel: ", o.Log.LogLevel)
 			o.Log.Info("token:", token)
 			var vr m.ValidateAccessTokenReq
 			vr.AccessToken = token

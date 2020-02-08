@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -41,6 +42,8 @@ func TestOauthManagerTakenVal_ValidateAccessToken(t *testing.T) {
 
 	var man OauthManager
 	man.Db = odbAu
+	var l lg.Logger
+	man.Log = &l
 	var m Manager
 	m = &man
 
@@ -108,6 +111,8 @@ func TestOauthManagerTakenVal_ValidateAccessToken2(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -182,6 +187,8 @@ func TestOauthManagerTakenVal_ValidateAccessToken3(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -256,6 +263,8 @@ func TestOauthManagerTakenVal_ValidateAccessToken3a(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -330,6 +339,8 @@ func TestOauthManagerTakenVal_ValidateAccessToken4(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
