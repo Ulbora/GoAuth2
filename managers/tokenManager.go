@@ -1,7 +1,6 @@
 package managers
 
 import (
-	"fmt"
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -76,38 +75,38 @@ func (m *OauthManager) GetAuthCodeToken(act *AuthCodeTokenReq) (bool, *Token, st
 	var suc bool
 	var tokenErr string
 	client := m.Db.GetClient(act.ClientID)
-	fmt.Println("client: ", client)
+	m.Log.Debug("client: ", client)
 	if client != nil && client.Secret == act.Secret && client.Enabled {
 		rtu := m.Db.GetClientRedirectURI(act.ClientID, act.RedirectURI)
-		fmt.Println("rtu: ", rtu)
+		m.Log.Debug("rtu: ", rtu)
 		if rtu.ID > 0 {
 			acode := m.Db.GetAuthorizationCodeByCode(act.Code)
 			if acode.ClientID == act.ClientID {
 				acRev := m.Db.GetAuthCodeRevolk(acode.AuthorizationCode)
-				fmt.Println("acRev: ", acRev)
+				m.Log.Debug("acRev: ", acRev)
 				if acRev == nil || acRev.ID == 0 {
 					if acode.AlreadyUsed {
-						fmt.Println("AlreadyUsed: ", acode.AlreadyUsed)
+						m.Log.Debug("AlreadyUsed: ", acode.AlreadyUsed)
 						var rvk odb.AuthCodeRevolk
 						rvk.AuthorizationCode = acode.AuthorizationCode
 						rvsuc, rvid := m.Db.AddAuthCodeRevolk(nil, &rvk)
 						tokenErr = invalidClientError
-						fmt.Println("rvsuc: ", rvsuc)
-						fmt.Println("rvid: ", rvid)
+						m.Log.Debug("rvsuc: ", rvsuc)
+						m.Log.Debug("rvid: ", rvid)
 					} else {
 						acode.AlreadyUsed = true
 						usuc := m.Db.UpdateAuthorizationCode(acode)
-						fmt.Println("usuc: ", usuc)
+						m.Log.Debug("usuc: ", usuc)
 						if usuc {
 							tkn := m.Db.GetAccessToken(acode.AccessTokenID)
 							if tkn.ID > 0 {
-								fmt.Println("tkn: ", tkn)
+								m.Log.Info("tkn: ", tkn)
 								rtn.AccessToken = tkn.Token
 								rtn.TokenType = tokenTypeBearer
 								rtn.ExpiresIn = codeAccessTokenLifeInMinutes * 60
 								if tkn.RefreshTokenID != 0 {
 									rtkn := m.Db.GetRefreshToken(tkn.RefreshTokenID)
-									fmt.Println("rtkn: ", rtkn)
+									m.Log.Info("rtkn: ", rtkn)
 									if rtkn.ID > 0 {
 										rtn.RefreshToken = rtkn.Token
 										suc = true
@@ -143,17 +142,17 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 	var suc bool
 	var tokenErr string
 	client := m.Db.GetClient(ct.ClientID)
-	fmt.Println("client: ", client)
+	m.Log.Debug("client: ", client)
 	if client != nil && client.Secret == ct.Secret && client.Enabled {
 
 		gton := m.grantTypeTurnedOn(ct.ClientID, clientGrantType)
-		fmt.Println("gton: ", gton)
+		m.Log.Debug("gton: ", gton)
 		if gton {
 			delSuc := m.Db.DeleteCredentialsGrant(ct.ClientID)
-			fmt.Println("delSuc: ", delSuc)
+			m.Log.Debug("delSuc: ", delSuc)
 			if delSuc {
 				roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ct.ClientID)
-				fmt.Println("roleURIList", roleURIList)
+				m.Log.Debug("roleURIList", roleURIList)
 				var pl Payload
 				pl.TokenType = accessTokenType
 				//pl.UserID = hashUser(ac.UserID)
@@ -164,7 +163,7 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 				pl.RoleURIs = *m.populateRoleURLList(roleURIList)
 				//pl.ScopeList = *scopeStrList
 				accessToken := m.GenerateAccessToken(&pl)
-				fmt.Println("accessToken: ", accessToken)
+				m.Log.Info("accessToken: ", accessToken)
 				if accessToken != "" {
 					now := time.Now()
 					var aToken odb.AccessToken
@@ -175,7 +174,7 @@ func (m *OauthManager) GetCredentialsToken(ct *CredentialsTokenReq) (bool, *Toke
 					cgrant.ClientID = ct.ClientID
 
 					cgSuc, _ := m.Db.AddCredentialsGrant(&cgrant, &aToken)
-					fmt.Println("cgSuc: ", cgSuc)
+					m.Log.Debug("cgSuc: ", cgSuc)
 					if cgSuc {
 						rtn.AccessToken = accessToken
 						rtn.TokenType = tokenTypeBearer
@@ -200,17 +199,17 @@ func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, str
 	var suc bool
 	var tokenErr string
 	client := m.Db.GetClient(pt.ClientID)
-	fmt.Println("pw client: ", client)
+	m.Log.Debug("pw client: ", client)
 	if client != nil && client.Enabled {
 
 		gton := m.grantTypeTurnedOn(pt.ClientID, passwordGrantType)
-		fmt.Println("pw gton: ", gton)
+		m.Log.Debug("pw gton: ", gton)
 		if gton {
 			delSuc := m.Db.DeletePasswordGrant(pt.ClientID, pt.Username)
-			fmt.Println("delSuc: ", delSuc)
+			m.Log.Debug("delSuc: ", delSuc)
 			if delSuc {
 				roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(pt.ClientID)
-				fmt.Println("roleURIList", roleURIList)
+				m.Log.Debug("roleURIList", roleURIList)
 				var pl Payload
 				pl.TokenType = accessTokenType
 				pl.UserID = hashUser(pt.Username)
@@ -221,10 +220,10 @@ func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, str
 				pl.RoleURIs = *m.populateRoleURLList(roleURIList)
 				//pl.ScopeList = *scopeStrList
 				accessToken := m.GenerateAccessToken(&pl)
-				fmt.Println("accessToken: ", accessToken)
+				m.Log.Info("accessToken: ", accessToken)
 				if accessToken != "" {
 					refToken := m.GenerateRefreshToken(pt.ClientID, hashUser(pt.Username), passwordGrantType)
-					fmt.Println("refToken: ", refToken)
+					m.Log.Info("refToken: ", refToken)
 
 					now := time.Now()
 					var aToken odb.AccessToken
@@ -239,7 +238,7 @@ func (m *OauthManager) GetPasswordToken(pt *PasswordTokenReq) (bool, *Token, str
 					pgrant.UserID = pt.Username
 
 					cgSuc, _ := m.Db.AddPasswordGrant(&pgrant, &aToken, &rToken)
-					fmt.Println("cgSuc: ", cgSuc)
+					m.Log.Debug("cgSuc: ", cgSuc)
 					if cgSuc {
 						rtn.AccessToken = accessToken
 						rtn.TokenType = tokenTypeBearer
@@ -266,35 +265,35 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 	var tokenErr string
 	if rt.ClientID != 0 && rt.Secret != "" {
 		client := m.Db.GetClient(rt.ClientID)
-		fmt.Println("client in get with ref: ", client)
+		m.Log.Debug("client in get with ref: ", client)
 		if client.Enabled && client.Secret == rt.Secret {
-			fmt.Println("client enabled and secrets match")
+			m.Log.Debug("client enabled and secrets match")
 			rtk := m.Db.GetRefreshTokenKey()
 			if rtk != "" {
-				fmt.Println("refresh Token Key", rtk)
+				m.Log.Info("refresh Token Key", rtk)
 				rtsuc, rtpl := m.ValidateJwt(rt.RefreshToken, rtk)
-				fmt.Println("rtsuc", rtsuc)
-				fmt.Println("rtpl", rtpl)
+				m.Log.Debug("rtsuc", rtsuc)
+				m.Log.Debug("rtpl", rtpl)
 				if rtsuc && rtpl.ClientID == rt.ClientID && rtpl.Subject == codeGrantType {
-					fmt.Println("rtpl in success", rtpl)
-					fmt.Println("unhashed user", unHashUser(rtpl.UserID))
+					m.Log.Debug("rtpl in success", rtpl)
+					m.Log.Debug("unhashed user", unHashUser(rtpl.UserID))
 					acode := m.Db.GetAuthorizationCode(rt.ClientID, unHashUser(rtpl.UserID))
-					fmt.Println("acode", acode)
-					fmt.Println("acode user", (*acode)[0].UserID)
-					fmt.Println("acode AccessTokenID", (*acode)[0].AccessTokenID)
+					m.Log.Info("acode", acode)
+					m.Log.Debug("acode user", (*acode)[0].UserID)
+					m.Log.Info("acode AccessTokenID", (*acode)[0].AccessTokenID)
 					if len(*acode) > 0 && (*acode)[0].UserID == unHashUser(rtpl.UserID) {
-						fmt.Println("acode user suc")
+						m.Log.Debug("acode user suc")
 						atkn := m.Db.GetAccessToken((*acode)[0].AccessTokenID)
 						//fmt.Println("atkn", atkn)
 						if atkn.ID > 0 {
-							fmt.Println("atkn", atkn)
+							m.Log.Debug("atkn", atkn)
 							tkkey := m.Db.GetAccessTokenKey()
-							fmt.Println("tkkey", tkkey)
+							m.Log.Info("tkkey", tkkey)
 							atsuc, atpl := m.ValidateJwt(atkn.Token, tkkey)
-							fmt.Println("atsuc", atsuc)
-							fmt.Println("atpl", atpl)
+							m.Log.Debug("atsuc", atsuc)
+							m.Log.Debug("atpl", atpl)
 							if atpl.UserID == rtpl.UserID && atpl.ClientID == rt.ClientID {
-								fmt.Println("atpl in success", atpl)
+								m.Log.Debug("atpl in success", atpl)
 								var pl Payload
 								pl.TokenType = accessTokenType
 								pl.UserID = atpl.UserID
@@ -305,7 +304,7 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 								pl.RoleURIs = atpl.RoleURIs
 								pl.ScopeList = atpl.ScopeList
 								newAccessToken := m.GenerateAccessToken(&pl)
-								fmt.Println("newAccessToken", newAccessToken)
+								m.Log.Info("newAccessToken", newAccessToken)
 								now := time.Now()
 								(*acode)[0].Expires = now.Add(time.Minute * authCodeLifeInMinutes)
 								atkn.Token = newAccessToken
@@ -337,33 +336,33 @@ func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenR
 	var tokenErr string
 	if rt.ClientID != 0 {
 		client := m.Db.GetClient(rt.ClientID)
-		fmt.Println("client in get with ref: ", client)
+		m.Log.Debug("client in get with ref: ", client)
 		rtk := m.Db.GetRefreshTokenKey()
 		if rtk != "" {
-			fmt.Println("refresh Token Key", rtk)
+			m.Log.Info("refresh Token Key", rtk)
 			rtsuc, rtpl := m.ValidateJwt(rt.RefreshToken, rtk)
-			fmt.Println("rtsuc", rtsuc)
-			fmt.Println("rtpl", rtpl)
+			m.Log.Debug("rtsuc", rtsuc)
+			m.Log.Debug("rtpl", rtpl)
 			if rtsuc && rtpl.ClientID == rt.ClientID && rtpl.Subject == passwordGrantType {
-				fmt.Println("rtpl in success", rtpl)
-				fmt.Println("unhashed user", unHashUser(rtpl.UserID))
+				m.Log.Debug("rtpl in success", rtpl)
+				m.Log.Debug("unhashed user", unHashUser(rtpl.UserID))
 				pgnt := m.Db.GetPasswordGrant(rt.ClientID, unHashUser(rtpl.UserID))
-				fmt.Println("pgnt", pgnt)
-				fmt.Println("pgnt user", (*pgnt)[0].UserID)
-				fmt.Println("pgnt AccessTokenID", (*pgnt)[0].AccessTokenID)
+				m.Log.Debug("pgnt", pgnt)
+				m.Log.Debug("pgnt user", (*pgnt)[0].UserID)
+				m.Log.Debug("pgnt AccessTokenID", (*pgnt)[0].AccessTokenID)
 				if len(*pgnt) > 0 && (*pgnt)[0].UserID == unHashUser(rtpl.UserID) {
-					fmt.Println("pgnt user suc")
+					m.Log.Debug("pgnt user suc")
 					pgatkn := m.Db.GetAccessToken((*pgnt)[0].AccessTokenID)
-					fmt.Println("pgatkn", pgatkn)
+					m.Log.Debug("pgatkn", pgatkn)
 					if pgatkn.ID > 0 {
-						fmt.Println("pgatkn", pgatkn)
+						m.Log.Debug("pgatkn", pgatkn)
 						tkkey := m.Db.GetAccessTokenKey()
-						fmt.Println("tkkey", tkkey)
+						m.Log.Info("tkkey", tkkey)
 						atsuc, pwatpl := m.ValidateJwt(pgatkn.Token, tkkey)
-						fmt.Println("atsuc", atsuc)
-						fmt.Println("pwatpl", pwatpl)
+						m.Log.Debug("atsuc", atsuc)
+						m.Log.Debug("pwatpl", pwatpl)
 						if pwatpl.UserID == rtpl.UserID && pwatpl.ClientID == rt.ClientID {
-							fmt.Println("pwatpl in success", pwatpl)
+							m.Log.Debug("pwatpl in success", pwatpl)
 							var pl Payload
 							pl.TokenType = accessTokenType
 							pl.UserID = pwatpl.UserID
@@ -374,7 +373,7 @@ func (m *OauthManager) GetPasswordAccesssTokenWithRefreshToken(rt *RefreshTokenR
 							pl.RoleURIs = pwatpl.RoleURIs
 							pl.ScopeList = pwatpl.ScopeList
 							newAccessToken := m.GenerateAccessToken(&pl)
-							fmt.Println("newAccessToken", newAccessToken)
+							m.Log.Info("newAccessToken", newAccessToken)
 							now := time.Now()
 							//(*pgnt)[0].Expires = now.Add(time.Minute * authCodeLifeInMinutes)
 							pgatkn.Token = newAccessToken

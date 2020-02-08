@@ -1,7 +1,6 @@
 package managers
 
 import (
-	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -49,8 +48,8 @@ func generateAuthCodeString(authCode int64, randCode string) string {
 		spart := string(randCode[8:])
 		cpart := strconv.FormatInt(authCode, 10)
 		rtn = fpart + cpart + spart
-		fmt.Println("old authcode string: ", randCode)
-		fmt.Println("new authcode string: ", rtn)
+		//fmt.Println("old authcode string: ", randCode)
+		//fmt.Println("new authcode string: ", rtn)
 	}
 
 	return rtn

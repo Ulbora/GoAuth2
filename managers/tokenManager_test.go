@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -64,6 +65,8 @@ func TestOauthManagerToken_GetAuthCodeToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -133,6 +136,8 @@ func TestOauthManagerToken_GetAuthCodeTokenNoAccessToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -202,6 +207,8 @@ func TestOauthManagerToken_GetAuthCodeTokenUpdateFailed(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -271,6 +278,8 @@ func TestOauthManagerToken_GetAuthCodeTokenRevolked(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -340,6 +349,8 @@ func TestOauthManagerToken_GetAuthCodeTokenBadClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -409,6 +420,8 @@ func TestOauthManagerToken_GetAuthCodeTokenBadRedirect(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -479,6 +492,8 @@ func TestOauthManagerToken_GetAuthCodeTokenBadSecret(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -549,6 +564,8 @@ func TestOauthManagerToken_GetAuthCodeTokenAlreadUsed(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -614,6 +631,8 @@ func TestOauthManagerToken_GetAuthCodeTokenNoRefresh(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -693,6 +712,8 @@ func TestOauthManagerToken_GetCredToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -769,6 +790,8 @@ func TestOauthManagerToken_GetCredTokenDeleteFailed(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -845,6 +868,8 @@ func TestOauthManagerToken_GetCredTokenGrantOff(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -921,6 +946,8 @@ func TestOauthManagerToken_GetCredTokenBadSecret(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -983,6 +1010,8 @@ func TestOauthManagerToken_GetAuthCodeWithRefToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1077,6 +1106,8 @@ func TestOauthManagerToken_GetAuthCodeWithRefTokenTokenNotValid(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1171,6 +1202,8 @@ func TestOauthManagerToken_GetAuthCodeWithRefTokenNoTokenKey(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1265,6 +1298,8 @@ func TestOauthManagerToken_GetAuthCodeWithRefTokenBadSecret(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1359,6 +1394,8 @@ func TestOauthManagerToken_GetAuthCodeWithRefTokenBadClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1484,6 +1521,8 @@ func TestOauthManagerToken_GetPasseordToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1577,6 +1616,8 @@ func TestOauthManagerToken_GetPasseordTokenAddFailed(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1669,6 +1710,8 @@ func TestOauthManagerToken_GetPasseordTokenDeleteFailed(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1762,6 +1805,8 @@ func TestOauthManagerToken_GetPasseordTokenGrantOff(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1855,6 +1900,8 @@ func TestOauthManagerToken_GetPasseordTokenDisabledClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -1917,6 +1964,8 @@ func TestOauthManagerToken_GetPasswordWithRefToken(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -2011,6 +2060,8 @@ func TestOauthManagerToken_GetPasswordWithRefTokenBadKey(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -2105,6 +2156,8 @@ func TestOauthManagerToken_GetPasswordWithRefTokenBadClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

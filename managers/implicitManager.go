@@ -1,7 +1,6 @@
 package managers
 
 import (
-	"fmt"
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -60,14 +59,14 @@ func (m *OauthManager) AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn) 
 			//here
 			//check that grant type is on
 			gton := m.grantTypeTurnedOn(imp.ClientID, implicitGrantType)
-			fmt.Println("grant turned on: ", gton)
+			m.Log.Debug("grant turned on: ", gton)
 			if gton {
 				impgt := m.Db.GetImplicitGrant(imp.ClientID, imp.UserID)
-				fmt.Println("impgt: ", impgt)
+				m.Log.Debug("impgt: ", impgt)
 				var scopeStrList []string
 				if len(*impgt) > 0 && (*impgt)[0].ID != 0 {
 					scopeList := m.Db.GetImplicitGrantScopeList((*impgt)[0].ID)
-					fmt.Println("scopeList: ", scopeList)
+					m.Log.Debug("scopeList: ", scopeList)
 					var scopeFound bool
 					for _, s := range *scopeList {
 						if s.Scope == imp.Scope {
@@ -75,7 +74,7 @@ func (m *OauthManager) AuthorizeImplicit(imp *Implicit) (bool, *ImplicitReturn) 
 							break
 						}
 					}
-					fmt.Println("scopeFound: ", scopeFound)
+					m.Log.Debug("scopeFound: ", scopeFound)
 					for _, s := range *scopeList {
 						scopeStrList = append(scopeStrList, s.Scope)
 					}
@@ -111,7 +110,7 @@ func (m *OauthManager) ValidateImplicitClientAndCallback(imp *Implicit) *Implici
 	var rtn ImplicitClient
 	if imp.ClientID != 0 && imp.RedirectURI != "" {
 		cru := m.Db.GetClientRedirectURI(imp.ClientID, imp.RedirectURI)
-		fmt.Println("cru: ", cru)
+		m.Log.Debug("cru: ", cru)
 		if cru.ID > 0 && cru.URI == imp.RedirectURI && cru.ClientID == imp.ClientID {
 			c := m.Db.GetClient(imp.ClientID)
 			if c.Enabled {
@@ -128,13 +127,13 @@ func (m *OauthManager) processImplicitInsert(imp *Implicit, scopeStrList *[]stri
 	var igdel bool
 	if existingAuthCode {
 		igdel = m.Db.DeleteImplicitGrant(imp.ClientID, imp.UserID)
-		fmt.Println("igdel: ", igdel)
+		m.Log.Debug("igdel: ", igdel)
 	} else {
 		igdel = true
 	}
 	if igdel {
 		roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(imp.ClientID)
-		fmt.Println("roleURIList", roleURIList)
+		m.Log.Debug("roleURIList", roleURIList)
 		var pl Payload
 		pl.TokenType = accessTokenType
 		pl.UserID = hashUser(imp.UserID)
@@ -145,7 +144,7 @@ func (m *OauthManager) processImplicitInsert(imp *Implicit, scopeStrList *[]stri
 		pl.RoleURIs = *m.populateRoleURLList(roleURIList)
 		pl.ScopeList = *scopeStrList
 		accessToken := m.GenerateAccessToken(&pl)
-		fmt.Println("accessToken: ", accessToken)
+		m.Log.Info("accessToken: ", accessToken)
 		if accessToken != "" {
 			now := time.Now()
 			var igt odb.ImplicitGrant
@@ -157,8 +156,8 @@ func (m *OauthManager) processImplicitInsert(imp *Implicit, scopeStrList *[]stri
 			aToken.Expires = now.Add(time.Minute * implicitAccessTokenLifeInMinutes)
 
 			igSuc, igID := m.Db.AddImplicitGrant(&igt, &aToken, scopeStrList)
-			fmt.Println("igSuc: ", igSuc)
-			fmt.Println("igID: ", igID)
+			m.Log.Debug("igSuc: ", igSuc)
+			m.Log.Debug("igID: ", igID)
 			if igSuc {
 				success = igSuc
 				rtn = new(ImplicitReturn)

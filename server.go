@@ -104,7 +104,7 @@ func main() {
 		orh := hd.UseMockRest()
 		rh = orh.GetNewRestHandler()
 	} else {
-		owh = hd.UseWebHandler(dbi, *compressJwt, authURL)
+		owh = hd.UseWebHandler(dbi, *compressJwt, authURL, &logger)
 		wh = owh.GetNewWebHandler()
 		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL, &logger)
 		rh = orh.GetNewRestHandler()

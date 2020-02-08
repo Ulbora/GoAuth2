@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -116,6 +117,8 @@ func TestOauthManagerAuthCode_AuthorizeAuthCode(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -239,6 +242,8 @@ func TestOauthManagerAuthCode_AuthorizeAuthCodeNoScope(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -362,6 +367,8 @@ func TestOauthManagerAuthCode_AuthorizeAuthCodeNoAuthCode(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -407,6 +414,8 @@ func TestOauthManagerAuthCode_CheckAuthCodeApplicationAuthorization(t *testing.T
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -452,6 +461,8 @@ func TestOauthManagerAuthCode_ValidateAuthCodeClientAndCallback(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

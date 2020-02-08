@@ -40,8 +40,9 @@ import (
 */
 
 //UseWebHandler UseWebHandler
-func UseWebHandler(dbi db.Database, compressJtw bool, authURL string) *OauthWebHandler {
+func UseWebHandler(dbi db.Database, compressJtw bool, authURL string, logger *lg.Logger) *OauthWebHandler {
 	var oauthManagerw m.OauthManager
+	oauthManagerw.Log = logger
 	var oauthMySqldbw msdb.MySQLOauthDB
 	oauthMySqldbw.DB = dbi
 	var oauthDbw odb.Oauth2DB
@@ -57,6 +58,7 @@ func UseWebHandler(dbi db.Database, compressJtw bool, authURL string) *OauthWebH
 	oauthManagerw.AuthService = da.GetNew()
 
 	var wh OauthWebHandler
+	wh.Log = logger
 	wh.Manager = &oauthManagerw
 	wh.TokenCompressed = compressJtw
 	return &wh

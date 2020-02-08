@@ -2,7 +2,6 @@
 package managers
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/Ulbora/GoAuth2/oauth2database"
@@ -52,14 +51,14 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 		rtu := m.Db.GetClientRedirectURI(ac.ClientID, ac.RedirectURI)
 		if rtu.ID > 0 {
 			gton := m.grantTypeTurnedOn(ac.ClientID, codeGrantType)
-			fmt.Println("grant turned on: ", gton)
+			m.Log.Debug("grant turned on: ", gton)
 			if gton {
 				acode := m.Db.GetAuthorizationCode(ac.ClientID, ac.UserID)
-				fmt.Println("acode: ", acode)
+				m.Log.Debug("acode: ", acode)
 				var scopeStrList []string
 				if len(*acode) > 0 && (*acode)[0].AuthorizationCode != 0 {
 					scopeList := m.Db.GetAuthorizationCodeScopeList((*acode)[0].AuthorizationCode)
-					fmt.Println("scopeList: ", scopeList)
+					m.Log.Debug("scopeList: ", scopeList)
 					var scopeFound bool
 					for _, s := range *scopeList {
 						if s.Scope == ac.Scope {
@@ -67,7 +66,7 @@ func (m *OauthManager) AuthorizeAuthCode(ac *AuthCode) (success bool, authCode i
 							break
 						}
 					}
-					fmt.Println("scopeFound: ", scopeFound)
+					m.Log.Debug("scopeFound: ", scopeFound)
 					for _, s := range *scopeList {
 						scopeStrList = append(scopeStrList, s.Scope)
 					}
@@ -104,7 +103,7 @@ func (m *OauthManager) ValidateAuthCodeClientAndCallback(ac *AuthCode) *AuthCode
 	var rtn AuthCodeClient
 	if ac.ClientID != 0 && ac.RedirectURI != "" {
 		cru := m.Db.GetClientRedirectURI(ac.ClientID, ac.RedirectURI)
-		fmt.Println("cru: ", cru)
+		m.Log.Debug("cru: ", cru)
 		if cru.ID > 0 && cru.URI == ac.RedirectURI && cru.ClientID == ac.ClientID {
 			c := m.Db.GetClient(ac.ClientID)
 			if c.Enabled {
@@ -121,16 +120,16 @@ func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]strin
 	var acdel bool
 	if existingAuthCode {
 		acdel = m.Db.DeleteAuthorizationCode(ac.ClientID, ac.UserID)
-		fmt.Println("acdel: ", acdel)
+		m.Log.Debug("acdel: ", acdel)
 	} else {
 		acdel = true
 	}
 	if acdel {
 		refToken := m.GenerateRefreshToken(ac.ClientID, hashUser(ac.UserID), codeGrantType)
-		fmt.Println("refToken:", refToken)
+		m.Log.Info("refToken:", refToken)
 		if refToken != "" {
 			roleURIList := m.Db.GetClientRoleAllowedURIListByClientID(ac.ClientID)
-			fmt.Println("roleURIList", roleURIList)
+			m.Log.Debug("roleURIList", roleURIList)
 			var pl Payload
 			pl.TokenType = accessTokenType
 			pl.UserID = hashUser(ac.UserID)
@@ -141,7 +140,7 @@ func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]strin
 			pl.RoleURIs = *m.populateRoleURLList(roleURIList)
 			pl.ScopeList = *scopeStrList
 			accessToken := m.GenerateAccessToken(&pl)
-			fmt.Println("accessToken: ", accessToken)
+			m.Log.Info("accessToken: ", accessToken)
 			if accessToken != "" {
 				var code odb.AuthorizationCode
 				code.ClientID = ac.ClientID
@@ -157,15 +156,15 @@ func (m *OauthManager) processAuthCodeInsert(ac *AuthCode, scopeStrList *[]strin
 				var rToken odb.RefreshToken
 				rToken.Token = refToken
 				acSuc, acID := m.Db.AddAuthorizationCode(&code, &aToken, &rToken, scopeStrList)
-				fmt.Println("acSuc: ", acSuc)
-				fmt.Println("acID: ", acID)
+				m.Log.Debug("acSuc: ", acSuc)
+				m.Log.Debug("acID: ", acID)
 				if acSuc {
 					newRanCode := generateAuthCodeString(acID, code.RandonAuthCode)
 					var uac odb.AuthorizationCode
 					uac.AuthorizationCode = acID
 					uac.RandonAuthCode = newRanCode
 					usuc := m.Db.UpdateAuthorizationCode(&uac)
-					fmt.Println("update success: ", usuc)
+					m.Log.Debug("update success: ", usuc)
 					if usuc {
 						success = usuc
 						authCode = acID

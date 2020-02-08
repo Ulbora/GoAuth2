@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -101,6 +102,8 @@ func TestOauthManagerImplicit_AuthorizeImplicit(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -212,6 +215,8 @@ func TestOauthManagerImplicit_AuthorizeImplicitNewScope(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -330,6 +335,8 @@ func TestOauthManagerImplicit_AuthorizeImplicitNew(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -448,6 +455,8 @@ func TestOauthManagerImplicit_AuthorizeImplicitClientDisabled(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -566,6 +575,8 @@ func TestOauthManagerImplicit_CheckImplicitApplicationAuthorization(t *testing.T
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -612,6 +623,8 @@ func TestOauthManagerImplicit_ValidateAuthCodeClientAndCallback(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

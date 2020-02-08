@@ -9,6 +9,7 @@ import (
 
 	cp "github.com/Ulbora/GoAuth2/compresstoken"
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 	gs "github.com/Ulbora/go-sessions"
 	"github.com/gorilla/sessions"
 )
@@ -54,6 +55,7 @@ type OauthWebHandler struct {
 	Store           *sessions.CookieStore
 	TokenCompressed bool
 	JwtCompress     cp.JwtCompress
+	Log             *lg.Logger
 	//SessInit  bool
 }
 

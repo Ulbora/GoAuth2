@@ -9,7 +9,7 @@ import (
 
 func TestUseHanders_UseWebHandler(t *testing.T) {
 	var dbi db.Database
-	h := UseWebHandler(dbi, false, "url")
+	h := UseWebHandler(dbi, false, "url", nil)
 	if h == nil {
 		t.Fail()
 	}
