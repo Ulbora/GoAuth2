@@ -21,32 +21,33 @@ package mysqldb
 */
 import (
 	"fmt"
-	"log"
 	"strconv"
 
+	lg "github.com/Ulbora/Level_Logger"
 	dbi "github.com/Ulbora/dbinterface"
 )
 
 //MySQLOauthDB MySQLOauthDB
 type MySQLOauthDB struct {
-	DB dbi.Database
+	DB  dbi.Database
+	Log *lg.Logger
 }
 
 func (d *MySQLOauthDB) testConnection() bool {
-	log.Println("in testConnection")
+	d.Log.Debug("in testConnection")
 	var rtn = false
 	var a []interface{}
-	log.Println("d.DB: ", d.DB)
+	d.Log.Debug("d.DB: ", fmt.Sprintln(d.DB))
 	rowPtr := d.DB.Test(oauthTest, a...)
-	fmt.Println("rowPtr", rowPtr)
-	log.Println("after testConnection test", rowPtr)
+	d.Log.Debug("rowPtr", *rowPtr)
+	d.Log.Debug("after testConnection test", *rowPtr)
 	if len(rowPtr.Row) != 0 {
 		foundRow := rowPtr.Row
 		int64Val, err := strconv.ParseInt(foundRow[0], 10, 0)
 		//log.Print("Records found during test ")
 		//log.Println("Records found during test :", int64Val)
 		if err != nil {
-			log.Print(err)
+			d.Log.Error(err)
 		}
 		if int64Val >= 0 {
 			rtn = true

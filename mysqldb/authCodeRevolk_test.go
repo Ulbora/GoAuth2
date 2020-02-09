@@ -7,6 +7,7 @@ import (
 	//"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -41,6 +42,8 @@ func TestMySQLOauthDBAcRv_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAcRv
 
 	odbAcRv = &moadb
@@ -115,6 +118,8 @@ func TestMySQLOauthDBAcRv_AddAuthCodeRevolkTx(t *testing.T) {
 
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.DB = &mtx
 	var odbbUri2TX = &moadbtx
 

@@ -21,7 +21,6 @@ package mysqldb
 */
 
 import (
-	"fmt"
 	"strconv"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -53,7 +52,7 @@ func (d *MySQLOauthDB) GetAuthCodeRevolk(ac int64) *odb.AuthCodeRevolk {
 	var a []interface{}
 	a = append(a, ac)
 	row := d.DB.Get(getAuthCodeRevolk, a...)
-	fmt.Println("row: ", row)
+	d.Log.Debug("row: ", row)
 	rtn := parseAuthCodeRevolkRow(&row.Row)
 	return rtn
 }

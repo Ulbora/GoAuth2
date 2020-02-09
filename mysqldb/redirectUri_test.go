@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -45,6 +46,8 @@ func TestMySQLOauthDB2_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess2 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbbUri2
 
 	odbbUri2 = &moadb
@@ -74,6 +77,8 @@ func TestMySQLOauthDB2_AddClientRedirectURITx(t *testing.T) {
 	mdbx.MockInsertID1 = 1
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -123,6 +128,8 @@ func TestMySQLOauthDB2_DeleteClientRedirectURITx(t *testing.T) {
 	mdbx.MockDeleteSuccess1 = true
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 

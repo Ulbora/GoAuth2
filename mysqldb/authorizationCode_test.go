@@ -6,6 +6,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -50,6 +51,8 @@ func TestMySQLOauthDBAC_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -132,6 +135,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeNoRefresh(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -189,6 +194,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeAuthCodeFail(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -246,6 +253,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeRefTokenFail(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -303,6 +312,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeAcTokenFail(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -367,6 +378,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeScope(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -424,6 +437,8 @@ func TestMySQLOauthDBAC_AddAuthorizationCodeScopeFailscope(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -488,6 +503,8 @@ func TestMySQLOauthDBAC_AddAuthCodeRevolk(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -562,6 +579,8 @@ func TestMySQLOauthDBAC_UpdateAuthCodeToken(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -646,6 +665,8 @@ func TestMySQLOauthDBAC_UpdateAuthCodeTokenFail(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -730,6 +751,8 @@ func TestMySQLOauthDBAC_UpdateAuthCodeTokenFail2(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -807,6 +830,8 @@ func TestMySQLOauthDBAC_GetAuthCodeByCode(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -887,6 +912,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCode(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -951,6 +978,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCode2(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -1015,6 +1044,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail1(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -1079,6 +1110,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail2(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -1143,6 +1176,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail3(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -1207,6 +1242,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail4(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb
@@ -1271,6 +1308,8 @@ func TestMySQLOauthDBAC_DeleteAuthorizationCodeFail5(t *testing.T) {
 	mydb.MockRows2 = &dbrows2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAc
 
 	odbAc = &moadb

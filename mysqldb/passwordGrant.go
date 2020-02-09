@@ -21,7 +21,6 @@ package mysqldb
 */
 
 import (
-	"fmt"
 	"strconv"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -38,8 +37,8 @@ func (d *MySQLOauthDB) AddPasswordGrant(pwg *odb.PasswordGrant, at *odb.AccessTo
 	var cont bool
 	if rt != nil && rt.Token != "" {
 		rtsuc, rtID := d.AddRefreshToken(tx, rt)
-		fmt.Println("refTk res: ", rtsuc)
-		fmt.Println("refTk id: ", rtID)
+		d.Log.Debug("refTk res: ", rtsuc)
+		d.Log.Debug("refTk id: ", rtID)
 		if rtsuc {
 			at.RefreshTokenID = rtID
 			cont = true
@@ -49,20 +48,20 @@ func (d *MySQLOauthDB) AddPasswordGrant(pwg *odb.PasswordGrant, at *odb.AccessTo
 	}
 	if cont {
 		atsuc, atID := d.AddAccessToken(tx, at)
-		fmt.Println("atTk res: ", atsuc)
-		fmt.Println("atTk id: ", atID)
+		d.Log.Debug("atTk res: ", atsuc)
+		d.Log.Debug("atTk id: ", atID)
 		if atsuc {
 			pwg.AccessTokenID = atID
 			var a []interface{}
 			a = append(a, pwg.ClientID, pwg.UserID, pwg.AccessTokenID)
 			suc, id = tx.Insert(insertPasswordGrant, a...)
-			fmt.Println("pwg res: ", suc)
-			fmt.Println("pwg id: ", id)
+			d.Log.Debug("pwg res: ", suc)
+			d.Log.Debug("pwg id: ", id)
 			if suc {
 				tx.Commit()
 			} else {
 				id = 0
-				fmt.Println("pw grant rolling back: ", suc)
+				d.Log.Debug("pw grant rolling back: ", suc)
 				tx.Rollback()
 			}
 		} else {
@@ -83,17 +82,17 @@ func (d *MySQLOauthDB) GetPasswordGrant(clientID int64, userID string) *[]odb.Pa
 	var a []interface{}
 	a = append(a, clientID, userID)
 	rows := d.DB.GetList(getPasswordGrant, a...)
-	fmt.Println("rows in getbyscope: ", rows)
-	fmt.Println("rows", rows)
-	fmt.Println("rows", len(rows.Rows))
+	d.Log.Debug("rows in getbyscope: ", rows)
+	d.Log.Debug("rows", rows)
+	d.Log.Debug("rows", len(rows.Rows))
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
-		fmt.Println("foundRows in getbyscope: ", foundRows)
+		d.Log.Debug("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			fmt.Println("foundRows in get pg len: ", len(foundRow))
+			d.Log.Debug("foundRows in get pg len: ", len(foundRow))
 			if len(foundRow) > 0 {
-				fmt.Println("foundRow in getbyscope: ", foundRow)
+				d.Log.Debug("foundRow in getbyscope: ", foundRow)
 				pgID, err := strconv.ParseInt((foundRow)[0], 10, 64)
 				if err == nil {
 					cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
@@ -105,7 +104,7 @@ func (d *MySQLOauthDB) GetPasswordGrant(clientID int64, userID string) *[]odb.Pa
 							rtnc.ClientID = cid
 							rtnc.UserID = (foundRow)[2]
 							rtnc.AccessTokenID = tid
-							fmt.Println("rtnc in getbyscope: ", rtnc)
+							d.Log.Debug("rtnc in getbyscope: ", rtnc)
 							rtn = append(rtn, rtnc)
 						}
 					}
@@ -113,7 +112,7 @@ func (d *MySQLOauthDB) GetPasswordGrant(clientID int64, userID string) *[]odb.Pa
 			}
 		}
 	}
-	fmt.Println("pw grant: ", rtn)
+	d.Log.Debug("pw grant: ", rtn)
 	return &rtn
 }
 
@@ -124,15 +123,15 @@ func (d *MySQLOauthDB) DeletePasswordGrant(clientID int64, userID string) bool {
 		d.DB.Connect()
 	}
 	pwgList := d.GetPasswordGrant(clientID, userID)
-	fmt.Println("pwgList: ", pwgList)
-	fmt.Println("pwgList len: ", len(*pwgList))
+	d.Log.Debug("pwgList: ", pwgList)
+	d.Log.Debug("pwgList len: ", len(*pwgList))
 	if len(*pwgList) == 0 {
 		suc = true
 	} else {
 		for _, pw := range *pwgList {
 			if pw.ID > 0 {
 				at := d.GetAccessToken(pw.AccessTokenID)
-				fmt.Println("at: ", at)
+				d.Log.Debug("at: ", at)
 				var rtid int64
 				if at.RefreshTokenID > 0 {
 					rt := d.GetRefreshToken(at.RefreshTokenID)
@@ -142,15 +141,15 @@ func (d *MySQLOauthDB) DeletePasswordGrant(clientID int64, userID string) bool {
 				var a []interface{}
 				a = append(a, pw.ID)
 				pwgdel := tx.Delete(deletePasswordGrantByID, a...)
-				fmt.Println("delete pwg: ", pwgdel)
+				d.Log.Debug("delete pwg: ", pwgdel)
 				if pwgdel {
 					atdel := d.DeleteAccessToken(tx, pw.AccessTokenID)
-					fmt.Println("delete AccessToken: ", atdel)
+					d.Log.Debug("delete AccessToken: ", atdel)
 					if atdel {
 						var cont = true
 						if rtid > 0 {
 							cont = d.DeleteRefreshToken(tx, rtid)
-							fmt.Println("delete RefreshToken: ", cont)
+							d.Log.Debug("delete RefreshToken: ", cont)
 						}
 						if cont {
 							suc = true

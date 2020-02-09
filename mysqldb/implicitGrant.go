@@ -23,7 +23,6 @@ package mysqldb
 import (
 	//"fmt"
 
-	"fmt"
 	"strconv"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -38,15 +37,15 @@ func (d *MySQLOauthDB) AddImplicitGrant(ig *odb.ImplicitGrant, at *odb.AccessTok
 	}
 	tx := d.DB.BeginTransaction()
 	atsuc, acID := d.AddAccessToken(tx, at)
-	fmt.Println("atTk res: ", atsuc)
-	fmt.Println("atTk id: ", acID)
+	d.Log.Debug("atTk res: ", atsuc)
+	d.Log.Debug("atTk id: ", acID)
 	if atsuc {
 		ig.AccessTokenID = acID
 		var a []interface{}
 		a = append(a, ig.ClientID, ig.UserID, ig.AccessTokenID)
 		suc, id = tx.Insert(insertImplicitGrant, a...)
-		fmt.Println("ig res: ", suc)
-		fmt.Println("ig id: ", id)
+		d.Log.Debug("ig res: ", suc)
+		d.Log.Debug("ig id: ", id)
 		if suc {
 			var scSuc = true
 			if scopeList != nil {
@@ -55,10 +54,10 @@ func (d *MySQLOauthDB) AddImplicitGrant(ig *odb.ImplicitGrant, at *odb.AccessTok
 					igs.ImplicitGrantID = id
 					igs.Scope = s
 					ssuc, sid := d.AddImplicitGrantScope(tx, &igs)
-					fmt.Println("scope res: ", ssuc)
-					fmt.Println("scope id: ", sid)
+					d.Log.Debug("scope res: ", ssuc)
+					d.Log.Debug("scope id: ", sid)
 					if !ssuc {
-						fmt.Println("scope failed rolling back res: ", ssuc)
+						d.Log.Debug("scope failed rolling back res: ", ssuc)
 						scSuc = false
 					}
 				}
@@ -69,7 +68,7 @@ func (d *MySQLOauthDB) AddImplicitGrant(ig *odb.ImplicitGrant, at *odb.AccessTok
 			} else {
 				suc = false
 				id = 0
-				fmt.Println("rolling back suc: ", suc)
+				d.Log.Debug("rolling back suc: ", suc)
 				tx.Rollback()
 			}
 		} else {
@@ -90,14 +89,14 @@ func (d *MySQLOauthDB) GetImplicitGrant(clientID int64, userID string) *[]odb.Im
 	var a []interface{}
 	a = append(a, clientID, userID)
 	rows := d.DB.GetList(getImplicitGrant, a...)
-	fmt.Println("rows", rows)
-	fmt.Println("rows", len(rows.Rows))
+	d.Log.Debug("rows", rows)
+	d.Log.Debug("rows", len(rows.Rows))
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
-		fmt.Println("foundRows in get len: ", len(foundRows))
+		d.Log.Debug("foundRows in get len: ", len(foundRows))
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			fmt.Println("foundRows in get ig len: ", len(foundRow))
+			d.Log.Debug("foundRows in get ig len: ", len(foundRow))
 			if len(foundRow) > 0 {
 				rowContent := parseImplicitGrantRow(&foundRow)
 				rtn = append(rtn, *rowContent)
@@ -105,7 +104,7 @@ func (d *MySQLOauthDB) GetImplicitGrant(clientID int64, userID string) *[]odb.Im
 		}
 	}
 	// rtn := parseAuthCodeRow(&row.Row)
-	fmt.Println("ImplicitGrant list: ", rtn)
+	d.Log.Debug("ImplicitGrant list: ", rtn)
 	return &rtn
 }
 
@@ -118,13 +117,13 @@ func (d *MySQLOauthDB) GetImplicitGrantByScope(clientID int64, userID string, sc
 	var a []interface{}
 	a = append(a, clientID, userID, scope)
 	rows := d.DB.GetList(getImplicitGrantByScope, a...)
-	fmt.Println("rows in getbyscope: ", rows)
+	d.Log.Debug("rows in getbyscope: ", rows)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
-		fmt.Println("foundRows in getbyscope: ", foundRows)
+		d.Log.Debug("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			fmt.Println("foundRow in getbyscope: ", foundRow)
+			d.Log.Debug("foundRow in getbyscope: ", foundRow)
 			id, err := strconv.ParseInt((foundRow)[0], 10, 64)
 			if err == nil {
 				cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
@@ -137,7 +136,7 @@ func (d *MySQLOauthDB) GetImplicitGrantByScope(clientID int64, userID string, sc
 						rtnc.UserID = userID
 						rtnc.Scope = (foundRow)[2]
 						rtnc.AccessTokenID = aid
-						fmt.Println("rtnc in getbyscope: ", rtnc)
+						d.Log.Debug("rtnc in getbyscope: ", rtnc)
 						rtn = append(rtn, rtnc)
 					}
 
@@ -145,7 +144,7 @@ func (d *MySQLOauthDB) GetImplicitGrantByScope(clientID int64, userID string, sc
 			}
 		}
 	}
-	fmt.Println("ImplicitGrant in scope: ", rtn)
+	d.Log.Debug("ImplicitGrant in scope: ", rtn)
 	return &rtn
 }
 
@@ -156,8 +155,8 @@ func (d *MySQLOauthDB) DeleteImplicitGrant(clientID int64, userID string) bool {
 		d.DB.Connect()
 	}
 	igList := d.GetImplicitGrant(clientID, userID)
-	fmt.Println("ImplicitGrant list in delete: ", igList)
-	fmt.Println("ImplicitGrant len list in delete: ", len(*igList))
+	d.Log.Debug("ImplicitGrant list in delete: ", igList)
+	d.Log.Debug("ImplicitGrant len list in delete: ", len(*igList))
 	if len(*igList) == 0 {
 		suc = true
 	} else {
@@ -166,15 +165,15 @@ func (d *MySQLOauthDB) DeleteImplicitGrant(clientID int64, userID string) bool {
 				//at := d.GetAccessToken(ig.AccessTokenID)
 				tx := d.DB.BeginTransaction()
 				sdel := d.DeleteImplicitGrantScopeList(tx, ig.ID)
-				fmt.Println("delete scope: ", sdel)
+				d.Log.Debug("delete scope: ", sdel)
 				if sdel {
 					var a []interface{}
 					a = append(a, ig.ID)
 					igdel := tx.Delete(deleteImplicitGrantByID, a...)
-					fmt.Println("delete ImplicitGrant: ", igdel)
+					d.Log.Debug("delete ImplicitGrant: ", igdel)
 					if igdel {
 						atdel := d.DeleteAccessToken(tx, ig.AccessTokenID)
-						fmt.Println("delete AccessToken: ", atdel)
+						d.Log.Debug("delete AccessToken: ", atdel)
 						//if atdel {
 						if atdel {
 							suc = true
@@ -196,7 +195,7 @@ func (d *MySQLOauthDB) DeleteImplicitGrant(clientID int64, userID string) bool {
 }
 
 func parseImplicitGrantRow(foundRow *[]string) *odb.ImplicitGrant {
-	fmt.Println("foundRow in parseImplicitGrantRow: ", foundRow)
+	//fmt.Println("foundRow in parseImplicitGrantRow: ", foundRow)
 	var rtn odb.ImplicitGrant
 	if len(*foundRow) > 0 {
 		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)

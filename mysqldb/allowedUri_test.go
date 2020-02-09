@@ -2,10 +2,12 @@ package mysqldb
 
 import (
 	"fmt"
+	"testing"
+
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
-	"testing"
 )
 
 var dbAu db.Database
@@ -45,6 +47,8 @@ func TestMySQLOauthDB_ConnectAllowURI(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAu
 
 	odbAu = &moadb

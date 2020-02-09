@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -23,6 +24,8 @@ func TestMySQLOauthDBKey_ConnectAllowURI(t *testing.T) {
 	dbKey = &mydb
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbKey
 
 	odbKey = &moadb
@@ -47,6 +50,8 @@ func TestMySQLOauthDBKey_GetAccessTokenKey(t *testing.T) {
 	mydb.MockRow1 = &getRow
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbKey
 
 	odbKey = &moadb
@@ -77,6 +82,8 @@ func TestMySQLOauthDBKey_GetRefreshTokenKey(t *testing.T) {
 	mydb.MockRow1 = &getRow
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbKey
 
 	odbKey = &moadb
@@ -107,6 +114,8 @@ func TestMySQLOauthDBKey_GetSessionKey(t *testing.T) {
 	mydb.MockRow1 = &getRow
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbKey
 
 	odbKey = &moadb

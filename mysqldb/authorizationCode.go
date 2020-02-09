@@ -39,8 +39,8 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 	var cont bool
 	if rt != nil && rt.Token != "" {
 		rtsuc, rtID := d.AddRefreshToken(tx, rt)
-		fmt.Println("refTk res: ", rtsuc)
-		fmt.Println("refTk id: ", rtID)
+		d.Log.Debug("refTk res: ", rtsuc)
+		d.Log.Debug("refTk id: ", rtID)
 		if rtsuc {
 			at.RefreshTokenID = rtID
 			cont = true
@@ -51,15 +51,15 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 	if cont {
 		//at.RefreshTokenID = rtID
 		atsuc, acID := d.AddAccessToken(tx, at)
-		fmt.Println("atTk res: ", atsuc)
-		fmt.Println("atTk id: ", acID)
+		d.Log.Debug("atTk res: ", atsuc)
+		d.Log.Debug("atTk id: ", acID)
 		if atsuc {
 			code.AccessTokenID = acID
 			var a []interface{}
 			a = append(a, code.ClientID, code.UserID, code.Expires, code.AccessTokenID, code.RandonAuthCode, code.AlreadyUsed)
 			suc, id = tx.Insert(insertAuthCode, a...)
-			fmt.Println("ac res: ", suc)
-			fmt.Println("ac id: ", id)
+			d.Log.Debug("ac res: ", suc)
+			d.Log.Debug("ac id: ", id)
 			if suc {
 				//add code for adding scopes
 				var scSuc = true
@@ -69,10 +69,10 @@ func (d *MySQLOauthDB) AddAuthorizationCode(code *odb.AuthorizationCode, at *odb
 						acs.AuthorizationCode = id
 						acs.Scope = s
 						ssuc, sid := d.AddAuthCodeScope(tx, &acs)
-						fmt.Println("scope res: ", ssuc)
-						fmt.Println("scope id: ", sid)
+						d.Log.Debug("scope res: ", ssuc)
+						d.Log.Debug("scope id: ", sid)
 						if !ssuc {
-							fmt.Println("scope failed authcode: ", ssuc)
+							d.Log.Debug("scope failed authcode: ", ssuc)
 							scSuc = false
 						}
 					}
@@ -153,7 +153,7 @@ func (d *MySQLOauthDB) GetAuthorizationCode(clientID int64, userID string) *[]od
 		}
 	}
 	// rtn := parseAuthCodeRow(&row.Row)
-	fmt.Println("authCode: ", rtn)
+	d.Log.Debug("authCode: ", rtn)
 	return &rtn
 }
 
@@ -166,13 +166,13 @@ func (d *MySQLOauthDB) GetAuthorizationCodeByScope(clientID int64, userID string
 	var a []interface{}
 	a = append(a, clientID, userID, scope)
 	rows := d.DB.GetList(getAuthorizationCodeByClientUserScope, a...)
-	fmt.Println("rows in getbyscope: ", rows)
+	d.Log.Debug("rows in getbyscope: ", rows)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
-		fmt.Println("foundRows in getbyscope: ", foundRows)
+		d.Log.Debug("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
-			fmt.Println("foundRow in getbyscope: ", foundRow)
+			d.Log.Debug("foundRow in getbyscope: ", foundRow)
 			ac, err := strconv.ParseInt((foundRow)[0], 10, 64)
 			if err == nil {
 				cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
@@ -186,7 +186,7 @@ func (d *MySQLOauthDB) GetAuthorizationCodeByScope(clientID int64, userID string
 					//rtnc.AccessTokenID = atid
 					rtnc.RandonAuthCode = (foundRow)[3]
 					rtnc.AlreadyUsed, _ = strconv.ParseBool((foundRow)[4])
-					fmt.Println("rtnc in getbyscope: ", rtnc)
+					d.Log.Debug("rtnc in getbyscope: ", rtnc)
 					rtn = append(rtn, rtnc)
 				}
 			}
@@ -208,7 +208,7 @@ func (d *MySQLOauthDB) GetAuthorizationCodeByCode(code string) *odb.Authorizatio
 	a = append(a, code)
 	row := d.DB.Get(getAuthorizationCodeByCode, a...)
 	rtn := parseAuthCodeRow(&row.Row)
-	fmt.Println("authCode: ", rtn)
+	d.Log.Debug("authCode: ", rtn)
 	return rtn
 }
 
@@ -220,8 +220,8 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 	}
 	//make this a list call
 	acodeList := d.GetAuthorizationCode(clientID, userID)
-	fmt.Println("auth code list: ", acodeList)
-	fmt.Println("auth code list: ", len(*acodeList))
+	d.Log.Debug("auth code list: ", acodeList)
+	d.Log.Debug("auth code list: ", len(*acodeList))
 	if len(*acodeList) == 0 {
 		suc = true
 	} else {
@@ -236,10 +236,10 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 				tx := d.DB.BeginTransaction()
 				// authCodeRevokeProcessor.deleteAuthCodeRevoke do this
 				rvkDel := d.DeleteAuthCodeRevolk(tx, acode.AuthorizationCode)
-				fmt.Println("delete refresh token: ", rvkDel)
+				d.Log.Debug("delete refresh token: ", rvkDel)
 				if rvkDel {
 					sdel := d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
-					fmt.Println("delete scope: ", sdel)
+					d.Log.Debug("delete scope: ", sdel)
 					// d.DeleteAuthCodeScopeList(tx, acode.AuthorizationCode)
 					if sdel {
 						var a []interface{}
@@ -247,15 +247,15 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 						//acdel := tx.Delete(deleteAuthCode, a...)
 						a = append(a, acode.AuthorizationCode)
 						acdel := tx.Delete(deleteAuthCodeByCode, a...)
-						fmt.Println("delete authCode: ", acdel)
+						d.Log.Debug("delete authCode: ", acdel)
 						if acdel {
 							atdel := d.DeleteAccessToken(tx, acode.AccessTokenID)
-							fmt.Println("delete AccessToken: ", atdel)
+							d.Log.Debug("delete AccessToken: ", atdel)
 							if atdel {
 								var cont = true
 								if rtid > 0 {
 									cont = d.DeleteRefreshToken(tx, rtid)
-									fmt.Println("delete RefreshToken: ", cont)
+									d.Log.Debug("delete RefreshToken: ", cont)
 								}
 								if cont {
 									suc = true
@@ -282,7 +282,7 @@ func (d *MySQLOauthDB) DeleteAuthorizationCode(clientID int64, userID string) bo
 }
 
 func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
-	fmt.Println("foundRow in parseAuthCodeRow: ", foundRow)
+	//fmt.Println("foundRow in parseAuthCodeRow: ", foundRow)
 	var rtn odb.AuthorizationCode
 	if len(*foundRow) > 0 {
 		id, err := strconv.ParseInt((*foundRow)[0], 10, 64)
@@ -295,7 +295,7 @@ func parseAuthCodeRow(foundRow *[]string) *odb.AuthorizationCode {
 				//if err == nil {
 				// rtn.UserID = uid
 				cTime, err := time.Parse(odb.TimeFormat, (*foundRow)[3])
-				fmt.Println("time error:", err)
+				//fmt.Println("time error:", err)
 				if err == nil {
 					atid, err := strconv.ParseInt((*foundRow)[4], 10, 64)
 					if err == nil {

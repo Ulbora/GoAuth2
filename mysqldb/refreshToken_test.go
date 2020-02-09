@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -40,6 +41,8 @@ func TestMySQLOauthDBReToken_Connect(t *testing.T) {
 	mydb.MockDeleteSuccess1 = true
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbRt
 
 	odbRt = &moadb
@@ -68,6 +71,8 @@ func TestMySQLOauthDBReToken_AddRefreshTokenTx(t *testing.T) {
 	mdbx.MockInsertID1 = 1
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -111,6 +116,8 @@ func TestMySQLOauthDBReToken_DeleteRefreshTokenTx(t *testing.T) {
 	mdbx.MockDeleteSuccess1 = true
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 	res := odbbUri2TX.DeleteRefreshToken(&mtx, idRt)

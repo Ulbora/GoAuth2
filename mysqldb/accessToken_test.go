@@ -8,6 +8,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -58,6 +59,8 @@ func TestMySQLOauthDBAcToken_Connect(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAt
 
 	odbAt = &moadb
@@ -88,6 +91,8 @@ func TestMySQLOauthDBAcToken_AddAccessTokenTx(t *testing.T) {
 	mdbx.MockInsertID1 = 1
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -122,6 +127,8 @@ func TestMySQLOauthDBAcToken_UpdateAccessTokenTx(t *testing.T) {
 
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -156,6 +163,8 @@ func TestMySQLOauthDBAcToken_DeleteAccessTokenTx(t *testing.T) {
 
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -202,6 +211,8 @@ func TestMySQLOauthDBAcToken_AddAccessToken2Tx(t *testing.T) {
 	mdbx.MockInsertID1 = 1
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 
@@ -237,6 +248,8 @@ func TestMySQLOauthDBAcToken_UpdateAccessToken2Tx(t *testing.T) {
 	mdbx.MockUpdateSuccess1 = true
 	mtx.MyDBMock = &mdbx
 	var moadbtx MySQLOauthDB
+	var l lg.Logger
+	moadbtx.Log = &l
 	//moadbtx.Tx = &mtx
 	var odbbUri2TX = &moadbtx
 

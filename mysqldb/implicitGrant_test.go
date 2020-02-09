@@ -6,6 +6,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -86,6 +87,8 @@ func TestMySQLOauthDBIg_Connect(t *testing.T) {
 	mydb.MockRows4 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -191,6 +194,8 @@ func TestMySQLOauthDBIg_AddImplicitGrantFailTk(t *testing.T) {
 	mydb.MockInsertID3 = 7
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -234,6 +239,8 @@ func TestMySQLOauthDBIg_AddImplicitGrantFailIg(t *testing.T) {
 	mydb.MockInsertID3 = 7
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -295,6 +302,8 @@ func TestMySQLOauthDBIg_AddImplicitGrantFailScope(t *testing.T) {
 	mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -357,6 +366,8 @@ func TestMySQLOauthDBIg_DeleteImplicitGrant(t *testing.T) {
 	mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -411,6 +422,8 @@ func TestMySQLOauthDBIg_DeleteImplicitGrant2(t *testing.T) {
 	//mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -463,6 +476,8 @@ func TestMySQLOauthDBIg_DeleteImplicitGrantFail1(t *testing.T) {
 	mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -515,6 +530,8 @@ func TestMySQLOauthDBIg_DeleteImplicitGrantFail2(t *testing.T) {
 	mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb
@@ -574,6 +591,8 @@ func TestMySQLOauthDBIg_DeleteImplicitGrantFail3(t *testing.T) {
 	//mydb.MockRows3 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbIg
 
 	odbIg = &moadb

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -26,6 +27,8 @@ func TestMySQLOauthDBPg_Connect(t *testing.T) {
 	dbPg = &mydb
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -55,6 +58,8 @@ func TestMySQLOauthDBPg_AddPasswordGrant(t *testing.T) {
 	mydb.MockInsertID3 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -99,6 +104,8 @@ func TestMySQLOauthDBPg_AddPasswordGrantFail1(t *testing.T) {
 	mydb.MockInsertID3 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -143,6 +150,8 @@ func TestMySQLOauthDBPg_AddPasswordGrantFail2(t *testing.T) {
 	mydb.MockInsertID3 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -187,6 +196,8 @@ func TestMySQLOauthDBPg_AddPasswordGrantFail3(t *testing.T) {
 	mydb.MockInsertID3 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -231,6 +242,8 @@ func TestMySQLOauthDBPg_AddPasswordGrantFail4(t *testing.T) {
 	mydb.MockInsertID3 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -289,6 +302,8 @@ func TestMySQLOauthDBPg_DeletePasswordGrant(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -339,6 +354,8 @@ func TestMySQLOauthDBPg_DeletePasswordGrant2(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -387,6 +404,8 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail1(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -435,6 +454,8 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail2(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb
@@ -483,6 +504,8 @@ func TestMySQLOauthDBPg_DeletePasswordGrantFail3(t *testing.T) {
 	mydb.MockRow2 = &getRow2
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbPg = &moadb

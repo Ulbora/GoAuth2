@@ -8,6 +8,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -29,6 +30,8 @@ func TestMySQLOauthDBAcTokeni_Connect(t *testing.T) {
 	dbAti = &mydb
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbAti
 
 	odbAti = &moadb

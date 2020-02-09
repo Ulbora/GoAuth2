@@ -5,6 +5,7 @@ import (
 	"time"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 )
@@ -25,6 +26,8 @@ func TestMySQLOauthDBCg_Connect(t *testing.T) {
 	dbCg = &mydb
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbCg
 
 	odbCg = &moadb
@@ -52,6 +55,8 @@ func TestMySQLOauthDBCg_AddCredentialsGrant(t *testing.T) {
 	mydb.MockInsertID2 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -90,6 +95,8 @@ func TestMySQLOauthDBCg_AddCredentialsGrantFail1(t *testing.T) {
 	mydb.MockInsertID2 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -128,6 +135,8 @@ func TestMySQLOauthDBCg_AddCredentialsGrantFail2(t *testing.T) {
 	mydb.MockInsertID2 = 1
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -170,6 +179,8 @@ func TestMySQLOauthDBCg_DeleteCredentialsGrant(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -206,6 +217,8 @@ func TestMySQLOauthDBCg_DeleteCredentialsGrant2(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -241,6 +254,8 @@ func TestMySQLOauthDBCg_DeleteCredentialsGrantFail1(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb
@@ -277,6 +292,8 @@ func TestMySQLOauthDBCg_DeleteCredentialsGrantFail2(t *testing.T) {
 	mydb.MockRows1 = &dbrows
 
 	var moadb MySQLOauthDB
+	var l lg.Logger
+	moadb.Log = &l
 	moadb.DB = dbPg
 
 	odbCg = &moadb

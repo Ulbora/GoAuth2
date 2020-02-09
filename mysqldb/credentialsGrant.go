@@ -23,7 +23,6 @@ package mysqldb
 import (
 	//"fmt"
 
-	"fmt"
 	"strconv"
 
 	odb "github.com/Ulbora/GoAuth2/oauth2database"
@@ -38,21 +37,21 @@ func (d *MySQLOauthDB) AddCredentialsGrant(cg *odb.CredentialsGrant, at *odb.Acc
 	}
 	tx := d.DB.BeginTransaction()
 	atsuc, acID := d.AddAccessToken(tx, at)
-	fmt.Println("atTk res: ", atsuc)
-	fmt.Println("atTk id: ", acID)
+	d.Log.Debug("atTk res: ", atsuc)
+	d.Log.Debug("atTk id: ", acID)
 	if atsuc {
 		cg.AccessTokenID = acID
 		var a []interface{}
 		a = append(a, cg.ClientID, cg.AccessTokenID)
 		suc, id = tx.Insert(insertCredentialsGrant, a...)
-		fmt.Println("ig res: ", suc)
-		fmt.Println("ig id: ", id)
+		d.Log.Debug("ig res: ", suc)
+		d.Log.Debug("ig id: ", id)
 		if suc {
 			tx.Commit()
 		} else {
 			suc = false
 			id = 0
-			fmt.Println("rolling back suc: ", suc)
+			d.Log.Debug("rolling back suc: ", suc)
 			tx.Rollback()
 		}
 	} else {
@@ -72,11 +71,11 @@ func (d *MySQLOauthDB) GetCredentialsGrant(clientID int64) *[]odb.CredentialsGra
 	rows := d.DB.GetList(getCredentialsGrant, a...)
 	if rows != nil && len(rows.Rows) != 0 {
 		foundRows := rows.Rows
-		fmt.Println("foundRows in getbyscope: ", foundRows)
+		d.Log.Debug("foundRows in getbyscope: ", foundRows)
 		for r := range foundRows {
 			foundRow := foundRows[r]
 			if len(foundRow) > 0 {
-				fmt.Println("foundRow in getbyscope: ", foundRow)
+				d.Log.Debug("foundRow in getbyscope: ", foundRow)
 				cgID, err := strconv.ParseInt((foundRow)[0], 10, 64)
 				if err == nil {
 					cid, err := strconv.ParseInt((foundRow)[1], 10, 64)
@@ -87,7 +86,7 @@ func (d *MySQLOauthDB) GetCredentialsGrant(clientID int64) *[]odb.CredentialsGra
 							rtnc.ID = cgID
 							rtnc.ClientID = cid
 							rtnc.AccessTokenID = tid
-							fmt.Println("rtnc in getbyscope: ", rtnc)
+							d.Log.Debug("rtnc in getbyscope: ", rtnc)
 							rtn = append(rtn, rtnc)
 						}
 					}
@@ -95,7 +94,7 @@ func (d *MySQLOauthDB) GetCredentialsGrant(clientID int64) *[]odb.CredentialsGra
 			}
 		}
 	}
-	fmt.Println("CredentialsGrant list: ", rtn)
+	d.Log.Debug("CredentialsGrant list: ", rtn)
 	return &rtn
 }
 
@@ -106,7 +105,7 @@ func (d *MySQLOauthDB) DeleteCredentialsGrant(clientID int64) bool {
 		d.DB.Connect()
 	}
 	cgList := d.GetCredentialsGrant(clientID)
-	fmt.Println("cgList: ", cgList)
+	d.Log.Debug("cgList: ", cgList)
 	if len(*cgList) == 0 {
 		suc = true
 	} else {
@@ -116,10 +115,10 @@ func (d *MySQLOauthDB) DeleteCredentialsGrant(clientID int64) bool {
 				var a []interface{}
 				a = append(a, cg.ID)
 				cgdel := tx.Delete(deleteCredentialsGrant, a...)
-				fmt.Println("delete cg: ", cgdel)
+				d.Log.Debug("delete cg: ", cgdel)
 				if cgdel {
 					atdel := d.DeleteAccessToken(tx, cg.AccessTokenID)
-					fmt.Println("delete AccessToken: ", atdel)
+					d.Log.Debug("delete AccessToken: ", atdel)
 					if atdel {
 						suc = true
 						tx.Commit()
