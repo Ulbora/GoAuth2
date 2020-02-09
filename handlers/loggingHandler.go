@@ -63,8 +63,8 @@ func (h *OauthRestHandler) SetLogLevel(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "json required", http.StatusUnsupportedMediaType)
 	} else {
 		var loggingKey string
-		if os.Getenv("Logging_KEY") != "" {
-			loggingKey = os.Getenv("Logging_KEY")
+		if os.Getenv("LOGGING_KEY") != "" {
+			loggingKey = os.Getenv("LOGGING_KEY")
 		} else {
 			loggingKey = defaultLoggingKey
 		}

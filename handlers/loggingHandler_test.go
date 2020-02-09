@@ -145,7 +145,7 @@ func TestOauthRestHandlerLogger_SetOffLogLevel(t *testing.T) {
 }
 
 func TestOauthRestHandlerLogger_SetOffLogLevelLogKey(t *testing.T) {
-	os.Setenv("Logging_KEY", "45sdbb2345")
+	os.Setenv("LOGGING_KEY", "45sdbb2345")
 	var oh OauthRestHandler
 	var logger lg.Logger
 	oh.Log = &logger
@@ -169,11 +169,11 @@ func TestOauthRestHandlerLogger_SetOffLogLevelLogKey(t *testing.T) {
 	if w.Code != 200 || w.Header().Get("Content-Type") != "application/json" || !lres.Success || lres.LogLevel != "OFF" {
 		t.Fail()
 	}
-	os.Unsetenv("Logging_KEY")
+	os.Unsetenv("LOGGING_KEY")
 }
 
 func TestOauthRestHandlerLogger_SetOffLogLevelLogKeyWrongKey(t *testing.T) {
-	os.Setenv("Logging_KEY", "45sdbb23455")
+	os.Setenv("LOGGING_KEY", "45sdbb23455")
 	var oh OauthRestHandler
 	var logger lg.Logger
 	oh.Log = &logger
@@ -197,7 +197,7 @@ func TestOauthRestHandlerLogger_SetOffLogLevelLogKeyWrongKey(t *testing.T) {
 	if w.Code != 401 {
 		t.Fail()
 	}
-	os.Unsetenv("Logging_KEY")
+	os.Unsetenv("LOGGING_KEY")
 }
 
 func TestOauthRestHandlerLogger_SetBadMediaLogLevel(t *testing.T) {
