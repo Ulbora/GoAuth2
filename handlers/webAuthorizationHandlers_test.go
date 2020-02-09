@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 func TestOauthWebHandler_Authorize(t *testing.T) {
@@ -19,6 +20,8 @@ func TestOauthWebHandler_Authorize(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=code&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -46,6 +49,8 @@ func TestOauthWebHandler_AuthorizeNotAuth(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=code&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -73,6 +78,8 @@ func TestOauthWebHandler_AuthorizeAuthCodeFail(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=code&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -104,6 +111,8 @@ func TestOauthWebHandler_AuthorizeImplicit(t *testing.T) {
 	//om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=token&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -135,6 +144,8 @@ func TestOauthWebHandler_AuthorizeImplicitCompressed(t *testing.T) {
 	//om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	wh.TokenCompressed = true
 	h := wh.GetNewWebHandler()
@@ -167,6 +178,8 @@ func TestOauthWebHandler_AuthorizeImplicitNotAuth(t *testing.T) {
 	//om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=token&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -198,6 +211,8 @@ func TestOauthWebHandler_AuthorizeImplicitFailed(t *testing.T) {
 	//om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=token&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -229,6 +244,8 @@ func TestOauthWebHandler_AuthorizeInvalidGrant(t *testing.T) {
 	//om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=someGrant&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -256,6 +273,8 @@ func TestOauthWebHandler_AuthorizeBadSession(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=code&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -283,6 +302,8 @@ func TestOauthWebHandler_AuthorizeNotLoggedIn(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
 	r, _ := http.NewRequest("GET", "/test?response_type=code&client_id=125&redirect_uri=http://tester.com/test&scope=web&state=123", nil)
@@ -322,6 +343,8 @@ func TestOauthWebHandler_AuthorizeApp(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -362,6 +385,8 @@ func TestOauthWebHandler_AuthorizeAppNotValid(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -402,6 +427,8 @@ func TestOauthWebHandler_AuthorizeAppNoAuthInfo(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -442,6 +469,8 @@ func TestOauthWebHandler_AuthorizeAppBadSession(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -482,6 +511,8 @@ func TestOauthWebHandler_AuthorizeAppToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -522,6 +553,8 @@ func TestOauthWebHandler_AuthorizeAppTokenNotAuth(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -562,6 +595,8 @@ func TestOauthWebHandler_AuthorizeAppTokenNotResponsType(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -602,6 +637,8 @@ func TestOauthWebHandler_AuthorizeByUserCode(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -644,6 +681,8 @@ func TestOauthWebHandler_AuthorizeByUserCodeFailedAuth(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -687,6 +726,8 @@ func TestOauthWebHandler_AuthorizeByUserToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -730,6 +771,8 @@ func TestOauthWebHandler_AuthorizeByUserTokenCompressed(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	wh.TokenCompressed = true
@@ -774,6 +817,8 @@ func TestOauthWebHandler_AuthorizeByUserTokenFailedAuth(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -817,6 +862,8 @@ func TestOauthWebHandler_AuthorizeByUserBadResponseType(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -860,6 +907,8 @@ func TestOauthWebHandler_AuthorizeByUserTokenBadSession(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -903,6 +952,8 @@ func TestOauthWebHandler_AuthorizeByUserTokenNoInfo(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -946,6 +997,8 @@ func TestOauthWebHandler_Error(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()

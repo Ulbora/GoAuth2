@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/gob"
-	"fmt"
 	"html/template"
 	"net/http"
 
@@ -101,13 +100,13 @@ func (h *OauthWebHandler) getSession(r *http.Request) (*sessions.Session, bool) 
 
 		loggedInAuth := s.Values["loggedIn"]
 		userAuth := s.Values["user"]
-		fmt.Println("loggedIn: ", loggedInAuth)
-		fmt.Println("user: ", userAuth)
+		h.Log.Debug("loggedIn: ", loggedInAuth)
+		h.Log.Debug("user: ", userAuth)
 
 		larii := s.Values["authReqInfo"]
-		fmt.Println("arii-----login", larii)
+		h.Log.Debug("arii-----login", larii)
 
-		fmt.Println("session error in getSession: ", err)
+		h.Log.Debug("session error in getSession: ", err)
 		if err == nil {
 			suc = true
 			srtn = s

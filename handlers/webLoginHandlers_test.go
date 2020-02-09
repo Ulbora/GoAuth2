@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 func TestOauthWebHandlerLogin_Login(t *testing.T) {
@@ -21,6 +22,8 @@ func TestOauthWebHandlerLogin_Login(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -47,6 +50,8 @@ func TestOauthWebHandlerLogin_LoginUser(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -83,6 +88,8 @@ func TestOauthWebHandlerLogin_LoginUserBadGrant(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -119,6 +126,8 @@ func TestOauthWebHandlerLogin_LoginUserFailLogin(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -155,6 +164,8 @@ func TestOauthWebHandlerLogin_LoginUserNoSessionInfo(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -191,6 +202,8 @@ func TestOauthWebHandlerLogin_LoginUserNoSession(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()

@@ -31,6 +31,6 @@ func (h *OauthWebHandler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("index test")
 	//var lpg PageParams
 	//lpg.Title = loginPageTitle
-	fmt.Println("template: ", h.Templates)
+	h.Log.Debug("template: ", h.Templates)
 	h.Templates.ExecuteTemplate(w, indexHTML, nil)
 }

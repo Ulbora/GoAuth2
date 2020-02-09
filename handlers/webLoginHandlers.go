@@ -2,10 +2,10 @@
 package handlers
 
 import (
-	"fmt"
-	au "github.com/Ulbora/auth_interface"
 	"net/http"
 	"strconv"
+
+	au "github.com/Ulbora/auth_interface"
 )
 
 /*
@@ -64,7 +64,7 @@ func (h *OauthWebHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var lpg PageParams
 	lpg.Error = loginErr
 	lpg.Title = loginPageTitle
-	fmt.Println("login params: ", lpg)
+	h.Log.Debug("login params: ", lpg)
 	h.Templates.ExecuteTemplate(w, loginHTML, &lpg)
 }
 
@@ -81,26 +81,26 @@ func (h *OauthWebHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		// fmt.Println("SessionKey in getSession", h.Session.SessionKey)
 
 		larii := s.Values["authReqInfo"]
-		fmt.Println("arii", larii)
+		h.Log.Debug("arii", larii)
 		if larii != nil {
 			lari := larii.(*AuthorizeRequestInfo)
-			fmt.Println("ari", lari)
+			h.Log.Debug("ari", lari)
 			username := r.FormValue("username")
 			password := r.FormValue("password")
-			fmt.Println("username", username)
-			fmt.Println("password", password)
+			h.Log.Debug("username", username)
+			h.Log.Debug("password", password)
 			var lg au.Login
 			lg.ClientID = lari.ClientID
 			lg.Username = username
 			lg.Password = password
 			suc := h.Manager.UserLogin(&lg)
-			fmt.Println("login suc", suc)
+			h.Log.Debug("login suc", suc)
 			if suc {
 				if lari.ResponseType == codeRespType || lari.ResponseType == tokenRespType {
 					s.Values["loggedIn"] = true
 					s.Values["user"] = username
 					serr := s.Save(r, w)
-					fmt.Println("serr", serr)
+					h.Log.Debug("serr", serr)
 					//session, sserr := store.Get(r, "temp-name")
 					//fmt.Println("sserr", sserr)
 					//session.Store()

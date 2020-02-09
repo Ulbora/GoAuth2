@@ -2,10 +2,10 @@
 package handlers
 
 import (
-	"fmt"
-	m "github.com/Ulbora/GoAuth2/managers"
 	"net/http"
 	"strconv"
+
+	m "github.com/Ulbora/GoAuth2/managers"
 )
 
 /*
@@ -52,8 +52,8 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 	if suc {
 		loggedInAuth := s.Values["loggedIn"]
 		userAuth := s.Values["user"]
-		fmt.Println("loggedIn: ", loggedInAuth)
-		fmt.Println("user: ", userAuth)
+		h.Log.Debug("loggedIn: ", loggedInAuth)
+		h.Log.Debug("user: ", userAuth)
 
 		//session, _ := store.Get(r, "temp-name")
 
@@ -67,26 +67,26 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 
 		larii := s.Values["authReqInfo"]
 
-		fmt.Println("arii-----auth", larii)
+		h.Log.Debug("arii-----auth", larii)
 
 		respTypeAuth := r.URL.Query().Get("response_type")
-		fmt.Println("respType: ", respTypeAuth)
+		h.Log.Debug("respType: ", respTypeAuth)
 
 		clientIDStrAuth := r.URL.Query().Get("client_id")
-		fmt.Println("clientIDStr: ", clientIDStrAuth)
+		h.Log.Debug("clientIDStr: ", clientIDStrAuth)
 
 		clientIDAuth, idErr := strconv.ParseInt(clientIDStrAuth, 10, 64)
-		fmt.Println("clientIDAuth: ", clientIDAuth)
-		fmt.Println("idErr: ", idErr)
+		h.Log.Debug("clientIDAuth: ", clientIDAuth)
+		h.Log.Debug("idErr: ", idErr)
 
 		redirectURLAuth := r.URL.Query().Get("redirect_uri")
-		fmt.Println("redirURLAuth: ", redirectURLAuth)
+		h.Log.Debug("redirURLAuth: ", redirectURLAuth)
 
 		scopeAuth := r.URL.Query().Get("scope")
-		fmt.Println("scopeAuth: ", scopeAuth)
+		h.Log.Debug("scopeAuth: ", scopeAuth)
 
 		stateAuth := r.URL.Query().Get("state")
-		fmt.Println("stateAuth: ", stateAuth)
+		h.Log.Debug("stateAuth: ", stateAuth)
 
 		var ari AuthorizeRequestInfo
 		ari.ResponseType = respTypeAuth
@@ -96,8 +96,8 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 		ari.State = stateAuth
 
 		if loggedInAuth == true && userAuth != nil {
-			fmt.Println("loggedIn: ", loggedInAuth)
-			fmt.Println("user: ", userAuth)
+			h.Log.Debug("loggedIn: ", loggedInAuth)
+			h.Log.Debug("user: ", userAuth)
 			if respTypeAuth == codeRespType {
 				var au m.AuthCode
 				au.ClientID = clientIDAuth
@@ -105,12 +105,12 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 				au.Scope = scopeAuth
 				au.RedirectURI = redirectURLAuth
 				authed := h.Manager.CheckAuthCodeApplicationAuthorization(&au)
-				fmt.Println("authed: ", authed)
+				h.Log.Debug("authed: ", authed)
 				if authed {
 					ausuc, acode, acodeStr := h.Manager.AuthorizeAuthCode(&au)
-					fmt.Println("ausuc: ", ausuc)
-					fmt.Println("acode: ", acode)
-					fmt.Println("acodeStr: ", acodeStr)
+					h.Log.Debug("ausuc: ", ausuc)
+					h.Log.Debug("acode: ", acode)
+					h.Log.Debug("acodeStr: ", acodeStr)
 					if ausuc && acode != 0 && acodeStr != "" {
 						http.Redirect(w, r, redirectURLAuth+"?code="+acodeStr+"&state="+stateAuth, http.StatusFound)
 					} else {
@@ -120,7 +120,7 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 					s.Values["authReqInfo"] = ari
 					s.Save(r, w)
 					larii := s.Values["authReqInfo"]
-					fmt.Println("arii-----", larii)
+					h.Log.Debug("arii-----", larii)
 					http.Redirect(w, r, authorizeAppURL, http.StatusFound)
 				}
 			} else if respTypeAuth == tokenRespType {
@@ -130,7 +130,7 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 				aut.Scope = scopeAuth
 				aut.RedirectURI = redirectURLAuth
 				iauthed := h.Manager.CheckImplicitApplicationAuthorization(&aut)
-				fmt.Println("iauthed: ", iauthed)
+				h.Log.Debug("iauthed: ", iauthed)
 				if iauthed {
 					isuc, im := h.Manager.AuthorizeImplicit(&aut)
 					if isuc && im.Token != "" {
@@ -157,7 +157,7 @@ func (h *OauthWebHandler) Authorize(w http.ResponseWriter, r *http.Request) {
 			s.Values["authReqInfo"] = ari
 			//s.Values["testval"] = "someTest"
 			sesErr := s.Save(r, w)
-			fmt.Println("sesErr", sesErr)
+			h.Log.Debug("sesErr", sesErr)
 			//larii := s.Values["authReqInfo"]
 			//fmt.Println("arii-----", larii)
 			http.Redirect(w, r, loginURL, http.StatusFound)
@@ -173,23 +173,23 @@ func (h *OauthWebHandler) AuthorizeApp(w http.ResponseWriter, r *http.Request) {
 	if suc {
 		loggedInAuth := s.Values["loggedIn"]
 		userAuth := s.Values["user"]
-		fmt.Println("loggedIn: ", loggedInAuth)
-		fmt.Println("user: ", userAuth)
+		h.Log.Debug("loggedIn: ", loggedInAuth)
+		h.Log.Debug("user: ", userAuth)
 
 		arii := s.Values["authReqInfo"]
-		fmt.Println("arii", arii)
+		h.Log.Debug("arii", arii)
 		if arii != nil {
 			ari := arii.(*AuthorizeRequestInfo)
-			fmt.Println("ari", ari)
+			h.Log.Debug("ari", ari)
 			if ari.ResponseType == codeRespType {
 				var au m.AuthCode
 				au.ClientID = ari.ClientID
 				au.RedirectURI = ari.RedirectURI
-				fmt.Println("au", au)
+				h.Log.Debug("au", au)
 				authRes := h.Manager.ValidateAuthCodeClientAndCallback(&au)
-				fmt.Println("authRes", authRes)
+				h.Log.Debug("authRes", authRes)
 				if authRes.Valid {
-					fmt.Println("authRes", authRes)
+					h.Log.Debug("authRes", authRes)
 					var pg PageParams
 					pg.Title = authAppPageTitle
 					pg.ClientName = authRes.ClientName
@@ -238,15 +238,15 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 	s, suc := h.getSession(r)
 	if suc {
 		aaut := r.URL.Query().Get("authorize")
-		fmt.Println("authorize", aaut)
+		h.Log.Debug("authorize", aaut)
 
 		aaarii := s.Values["authReqInfo"]
 		user := s.Values["user"]
-		fmt.Println("aaarii", aaarii)
+		h.Log.Debug("aaarii", aaarii)
 		if aaarii != nil && user != nil {
 
 			aaari := aaarii.(*AuthorizeRequestInfo)
-			fmt.Println("ari", aaari)
+			h.Log.Debug("ari", aaari)
 			if aaut == "true" && aaari.ResponseType == codeRespType {
 				var aac m.AuthCode
 				aac.ClientID = aaari.ClientID
@@ -255,9 +255,9 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 				aac.RedirectURI = aaari.RedirectURI
 				authSuc, authCode, authCodeStr := h.Manager.AuthorizeAuthCode(&aac)
 				if authSuc && authCode != 0 && authCodeStr != "" {
-					fmt.Println("authSuc", authSuc)
-					fmt.Println("authCode", authCode)
-					fmt.Println("authCodeStr", authCodeStr)
+					h.Log.Debug("authSuc", authSuc)
+					h.Log.Debug("authCode", authCode)
+					h.Log.Debug("authCodeStr", authCodeStr)
 					http.Redirect(w, r, aaari.RedirectURI+"?code="+authCodeStr+"&state="+aaari.State, http.StatusFound)
 				} else {
 					var aaacpg PageParams
@@ -271,8 +271,8 @@ func (h *OauthWebHandler) ApplicationAuthorizationByUser(w http.ResponseWriter, 
 				aai.Scope = aaari.Scope
 				aai.RedirectURI = aaari.RedirectURI
 				aaiSuc, irtn := h.Manager.AuthorizeImplicit(&aai)
-				fmt.Println("aaiSuc", aaiSuc)
-				fmt.Println("irtn", irtn)
+				h.Log.Debug("aaiSuc", aaiSuc)
+				h.Log.Debug("irtn", irtn)
 				if aaiSuc && irtn.Token != "" {
 					if h.TokenCompressed {
 						irtn.Token = h.JwtCompress.CompressJwt(irtn.Token)

@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 func TestOauthWebHandlerToken_AuthCodeToken(t *testing.T) {
@@ -29,6 +30,8 @@ func TestOauthWebHandlerToken_AuthCodeToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -72,6 +75,8 @@ func TestOauthWebHandlerToken_AuthCodeTokenBadGrant(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -118,6 +123,8 @@ func TestOauthWebHandlerToken_AuthCodeTokenBadClient(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -159,6 +166,8 @@ func TestOauthWebHandlerToken_AuthCodeTokenFailed(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -203,6 +212,8 @@ func TestOauthWebHandlerToken_PasswordToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -247,6 +258,8 @@ func TestOauthWebHandlerToken_PasswordTokenFailedLogin(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -290,6 +303,8 @@ func TestOauthWebHandlerToken_CredentialsToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -333,6 +348,8 @@ func TestOauthWebHandlerToken_AuthCodeRefreshToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -376,6 +393,8 @@ func TestOauthWebHandlerToken_PasswordRefreshToken(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()
@@ -419,6 +438,8 @@ func TestOauthWebHandlerToken_PasswordRefreshTokenCompressed(t *testing.T) {
 	ari.State = "12eee"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	//wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	wh.TokenCompressed = true

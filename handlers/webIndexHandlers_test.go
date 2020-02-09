@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	m "github.com/Ulbora/GoAuth2/managers"
+	lg "github.com/Ulbora/Level_Logger"
 )
 
 func TestOauthWebHandlerIndex_Index(t *testing.T) {
@@ -20,6 +21,8 @@ func TestOauthWebHandlerIndex_Index(t *testing.T) {
 	om.MockAuthCodeString = "rr666"
 
 	var wh OauthWebHandler
+	var l lg.Logger
+	wh.Log = &l
 	wh.Templates = template.Must(template.ParseFiles("testHtmls/test.html"))
 	wh.Manager = &om
 	h := wh.GetNewWebHandler()

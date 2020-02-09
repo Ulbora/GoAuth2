@@ -42,26 +42,26 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 	var token *m.Token
 	var tokenErr string
 	var caseDef bool
-	fmt.Println("token")
+	h.Log.Debug("token")
 	grantType := r.FormValue("grant_type")
-	fmt.Println("grant type: ", grantType)
+	h.Log.Debug("grant type: ", grantType)
 
 	clientIDStr := r.FormValue("client_id")
-	fmt.Println("clientIDStr: ", clientIDStr)
+	h.Log.Debug("clientIDStr: ", clientIDStr)
 
 	clientID, err := strconv.ParseInt(clientIDStr, 10, 64)
-	fmt.Println("clientID: ", clientID)
-	fmt.Println("err: ", err)
+	h.Log.Debug("clientID: ", clientID)
+	h.Log.Debug("err: ", err)
 	if err == nil {
 		switch grantType {
 		case authorizationCodeGrantType:
-			fmt.Println("grant type: ", grantType)
+			h.Log.Debug("grant type: ", grantType)
 			secret := r.FormValue("client_secret")
-			fmt.Println("secret: ", secret)
+			h.Log.Debug("secret: ", secret)
 			code := r.FormValue("code")
-			fmt.Println("code: ", code)
+			h.Log.Debug("code: ", code)
 			redirectURI := r.FormValue("redirect_uri")
-			fmt.Println("redirectURI: ", redirectURI)
+			h.Log.Debug("redirectURI: ", redirectURI)
 			var actk m.AuthCodeTokenReq
 			actk.ClientID = clientID
 			actk.Secret = secret
@@ -69,51 +69,51 @@ func (h *OauthWebHandler) Token(w http.ResponseWriter, r *http.Request) {
 			actk.RedirectURI = redirectURI
 
 			atsuc, token, tokenErr = h.Manager.GetAuthCodeToken(&actk)
-			fmt.Println("atsuc: ", atsuc)
+			h.Log.Debug("atsuc: ", atsuc)
 
 		case passwordGrantType:
-			fmt.Println("grant type: ", grantType)
+			h.Log.Debug("grant type: ", grantType)
 			username := r.FormValue("username")
-			fmt.Println("username: ", username)
+			h.Log.Debug("username: ", username)
 			password := r.FormValue("password")
-			fmt.Println("password: ", password)
+			h.Log.Debug("password: ", password)
 			var lg au.Login
 			lg.ClientID = clientID
 			lg.Username = username
 			lg.Password = password
 			suc := h.Manager.UserLogin(&lg)
-			fmt.Println("login suc", suc)
+			h.Log.Debug("login suc", suc)
 			if suc {
 				var pt m.PasswordTokenReq
 				pt.Username = username
 				pt.ClientID = clientID
 				atsuc, token, tokenErr = h.Manager.GetPasswordToken(&pt)
-				fmt.Println("atsuc: ", atsuc)
+				h.Log.Debug("atsuc: ", atsuc)
 			} else {
 				tokenErr = unauthorizedClientError
 			}
 		case credentialGrantType:
-			fmt.Println("grant type: ", grantType)
+			h.Log.Debug("grant type: ", grantType)
 			secret := r.FormValue("client_secret")
-			fmt.Println("secret: ", secret)
+			h.Log.Debug("secret: ", secret)
 			var ct m.CredentialsTokenReq
 			ct.ClientID = clientID
 			ct.Secret = secret
 			atsuc, token, tokenErr = h.Manager.GetCredentialsToken(&ct)
-			fmt.Println("atsuc: ", atsuc)
+			h.Log.Debug("atsuc: ", atsuc)
 		case refreshTokenGrantType:
-			fmt.Println("grant type: ", grantType)
+			h.Log.Debug("grant type: ", grantType)
 			secret := r.FormValue("client_secret")
-			fmt.Println("secret: ", secret)
+			h.Log.Debug("secret: ", secret)
 			refToken := r.FormValue("refresh_token")
-			fmt.Println("refToken: ", refToken)
+			h.Log.Debug("refToken: ", refToken)
 			if secret != "" {
 				var acrt m.RefreshTokenReq
 				acrt.ClientID = clientID
 				acrt.Secret = secret
 				acrt.RefreshToken = refToken
 				atsuc, token, tokenErr = h.Manager.GetAuthCodeAccesssTokenWithRefreshToken(&acrt)
-				fmt.Println("atsuc: ", atsuc)
+				h.Log.Debug("atsuc: ", atsuc)
 			} else {
 				var pwrt m.RefreshTokenReq
 				pwrt.ClientID = clientID
