@@ -263,7 +263,8 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 	var rtn Token
 	var suc bool
 	var tokenErr string
-	if rt.ClientID != 0 && rt.Secret != "" {
+	// if rt.ClientID != 0 && rt.Secret != "" {
+	if m.checkClient(rt) {
 		client := m.Db.GetClient(rt.ClientID)
 		m.Log.Debug("client in get with ref: ", client)
 		if client.Enabled && client.Secret == rt.Secret {
@@ -327,6 +328,14 @@ func (m *OauthManager) GetAuthCodeAccesssTokenWithRefreshToken(rt *RefreshTokenR
 		tokenErr = invalidClientError
 	}
 	return suc, &rtn, tokenErr
+}
+
+func (m *OauthManager) checkClient(rt *RefreshTokenReq) bool {
+	var rtn bool
+	if rt.ClientID != 0 && rt.Secret != "" {
+		rtn = true
+	}
+	return rtn
 }
 
 //GetPasswordAccesssTokenWithRefreshToken GetPasswordAccesssTokenWithRefreshToken
