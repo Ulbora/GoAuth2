@@ -59,44 +59,47 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 			noUser = true
 		}
 		m.Log.Debug("noUser", noUser)
-		if atsuc && (noUser || userID == unHashUser(pwatpl.UserID)) && pwatpl.TokenType == accessTokenType &&
-			pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
+		if m.isAcceptable(atsuc, noUser, userID, pwatpl, at) {
+			// if atsuc && (noUser || userID == unHashUser(pwatpl.UserID)) && pwatpl.TokenType == accessTokenType &&
+			// 	pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
 			m.Log.Debug("inside if")
 			var roleFound bool
 			var scopeFound bool
-			if at.Role != "" && at.URI != "" {
-				for _, r := range pwatpl.RoleURIs {
-					if r.Role == at.Role && r.ClientAllowedURI == at.URI {
-						roleFound = true
-						break
-					}
-				}
-			} else {
-				roleFound = true
-			}
+			roleFound = m.findRole(pwatpl, at)
+			// if at.Role != "" && at.URI != "" {
+			// 	for _, r := range pwatpl.RoleURIs {
+			// 		if r.Role == at.Role && r.ClientAllowedURI == at.URI {
+			// 			roleFound = true
+			// 			break
+			// 		}
+			// 	}
+			// } else {
+			// 	roleFound = true
+			// }
 			m.Log.Debug("at.Scope", at.Scope)
-			if at.Scope != "" {
-				var foundWrite bool
-				for _, s := range pwatpl.ScopeList {
-					if s == "write" {
-						foundWrite = true
-					}
-					if s == at.Scope {
-						scopeFound = true
-						//break
-					}
-				}
-				if at.Scope == "read" && foundWrite {
-					scopeFound = true
-				}
-			} else {
-				for _, s := range pwatpl.ScopeList {
-					if s == "write" {
-						scopeFound = true
-						break
-					}
-				}
-			}
+			scopeFound = m.findScope(pwatpl, at)
+			// if at.Scope != "" {
+			// 	var foundWrite bool
+			// 	for _, s := range pwatpl.ScopeList {
+			// 		if s == "write" {
+			// 			foundWrite = true
+			// 		}
+			// 		if s == at.Scope {
+			// 			scopeFound = true
+			// 			//break
+			// 		}
+			// 	}
+			// 	if at.Scope == "read" && foundWrite {
+			// 		scopeFound = true
+			// 	}
+			// } else {
+			// 	for _, s := range pwatpl.ScopeList {
+			// 		if s == "write" {
+			// 			scopeFound = true
+			// 			break
+			// 		}
+			// 	}
+			// }
 			m.Log.Debug("roleFound", roleFound)
 			m.Log.Debug("scopeFound", scopeFound)
 			if (pwatpl.Grant == codeGrantType || pwatpl.Grant == implicitGrantType) && roleFound && scopeFound {
@@ -105,6 +108,57 @@ func (m *OauthManager) ValidateAccessToken(at *ValidateAccessTokenReq) bool {
 				rtn = true
 			}
 		}
+	}
+	return rtn
+}
+
+func (m *OauthManager) findRole(pwatpl *Payload, at *ValidateAccessTokenReq) bool {
+	var roleFound bool
+	if at.Role != "" && at.URI != "" {
+		for _, r := range pwatpl.RoleURIs {
+			if r.Role == at.Role && r.ClientAllowedURI == at.URI {
+				roleFound = true
+				break
+			}
+		}
+	} else {
+		roleFound = true
+	}
+	return roleFound
+}
+
+func (m *OauthManager) findScope(pwatpl *Payload, at *ValidateAccessTokenReq) bool {
+	var scopeFound bool
+	if at.Scope != "" {
+		var foundWrite bool
+		for _, s := range pwatpl.ScopeList {
+			if s == "write" {
+				foundWrite = true
+			}
+			if s == at.Scope {
+				scopeFound = true
+				//break
+			}
+		}
+		if at.Scope == "read" && foundWrite {
+			scopeFound = true
+		}
+	} else {
+		for _, s := range pwatpl.ScopeList {
+			if s == "write" {
+				scopeFound = true
+				break
+			}
+		}
+	}
+	return scopeFound
+}
+
+func (m *OauthManager) isAcceptable(atsuc bool, noUser bool, userID string, pwatpl *Payload, at *ValidateAccessTokenReq) bool {
+	var rtn bool
+	if atsuc && (noUser || userID == unHashUser(pwatpl.UserID)) && pwatpl.TokenType == accessTokenType &&
+		pwatpl.ClientID == at.ClientID && pwatpl.Issuer == tokenIssuer {
+		rtn = true
 	}
 	return rtn
 }
