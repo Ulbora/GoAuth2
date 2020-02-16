@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -38,6 +39,9 @@ func TestOauthManagerRefToken_GenerateRefreshToken(t *testing.T) {
 	odbAu = &moadb
 
 	var m OauthManager
+	var l lg.Logger
+	m.Log = &l
+	moadb.Log = &l
 	m.Db = odbAu
 	token := m.GenerateRefreshToken(125, "tester1", "code")
 	if token == "" {

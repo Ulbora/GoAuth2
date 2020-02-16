@@ -119,6 +119,7 @@ func TestOauthManagerAuthCode_AuthorizeAuthCode(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -245,6 +246,7 @@ func TestOauthManagerAuthCode_AuthorizeAuthCodeNoScope(t *testing.T) {
 	var l lg.Logger
 	man.Log = &l
 	man.Db = odbAu
+	moadb.Log = &l
 	var m Manager
 	m = &man
 	var ac AuthCode
@@ -369,6 +371,7 @@ func TestOauthManagerAuthCode_AuthorizeAuthCodeNoAuthCode(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -416,6 +419,7 @@ func TestOauthManagerAuthCode_CheckAuthCodeApplicationAuthorization(t *testing.T
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -463,6 +467,7 @@ func TestOauthManagerAuthCode_ValidateAuthCodeClientAndCallback(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

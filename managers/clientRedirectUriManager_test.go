@@ -3,6 +3,7 @@ package managers
 import (
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -41,6 +42,9 @@ func TestOauthManagerURI_AddClientRedirectURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -87,6 +91,9 @@ func TestOauthManagerURI_GetClientRedirectURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -129,6 +136,9 @@ func TestOauthManagerURI_DeleteClientRedirectURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

@@ -3,6 +3,7 @@ package managers
 import (
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -41,6 +42,9 @@ func TestOauthManagerAllowedURI_AddClientAllowedURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -84,6 +88,9 @@ func TestOauthManagerAllowedURI_UpdateClientAllowedURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -132,6 +139,9 @@ func TestOauthManagerAllowedURI_GetClientAllowedURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -179,6 +189,9 @@ func TestOauthManagerAllowedURI_GetClientAllowedURIList(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -220,6 +233,9 @@ func TestOauthManagerAllowedURI_DeleteClientAllowedURI(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

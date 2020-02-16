@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -43,6 +44,9 @@ func TestOauthManagerClient_AddClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -97,6 +101,9 @@ func TestOauthManagerClient_UpdateClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -153,6 +160,9 @@ func TestOauthManagerClient_UpdateClient2(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -206,6 +216,9 @@ func TestOauthManagerClient_GetClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -252,6 +265,9 @@ func TestOauthManagerClient_GetClients(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -298,6 +314,9 @@ func TestOauthManagerClient_GetClientSearch(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -343,6 +362,9 @@ func TestOauthManagerClient_DeleteClient(t *testing.T) {
 	odbAu = &moadb
 
 	var man OauthManager
+	var l lg.Logger
+	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

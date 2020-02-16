@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
 
@@ -36,6 +37,9 @@ func TestOauthManagerAccessToken_GenerateAccessToken(t *testing.T) {
 	odbAu = &moadb
 
 	var m OauthManager
+	var l lg.Logger
+	m.Log = &l
+	moadb.Log = &l
 	m.Db = odbAu
 	var pl Payload
 	pl.TokenType = codeGrantType

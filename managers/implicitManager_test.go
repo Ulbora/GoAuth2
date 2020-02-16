@@ -104,6 +104,7 @@ func TestOauthManagerImplicit_AuthorizeImplicit(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -217,6 +218,7 @@ func TestOauthManagerImplicit_AuthorizeImplicitNewScope(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -337,6 +339,7 @@ func TestOauthManagerImplicit_AuthorizeImplicitNew(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -457,6 +460,7 @@ func TestOauthManagerImplicit_AuthorizeImplicitClientDisabled(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -577,6 +581,7 @@ func TestOauthManagerImplicit_CheckImplicitApplicationAuthorization(t *testing.T
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -625,6 +630,7 @@ func TestOauthManagerImplicit_ValidateAuthCodeClientAndCallback(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man

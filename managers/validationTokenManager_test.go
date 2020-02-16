@@ -44,6 +44,7 @@ func TestOauthManagerTakenVal_ValidateAccessToken(t *testing.T) {
 	man.Db = odbAu
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	var m Manager
 	m = &man
 
@@ -113,6 +114,7 @@ func TestOauthManagerTakenVal_ValidateAccessToken2(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -189,6 +191,7 @@ func TestOauthManagerTakenVal_ValidateAccessToken3(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -265,6 +268,7 @@ func TestOauthManagerTakenVal_ValidateAccessToken3a(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
@@ -341,6 +345,7 @@ func TestOauthManagerTakenVal_ValidateAccessToken4(t *testing.T) {
 	var man OauthManager
 	var l lg.Logger
 	man.Log = &l
+	moadb.Log = &l
 	man.Db = odbAu
 	var m Manager
 	m = &man
