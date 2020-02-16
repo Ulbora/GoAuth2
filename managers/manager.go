@@ -113,10 +113,19 @@ type Manager interface {
 	UserLogin(login *au.Login) bool
 }
 
+//TokenParams AccessTokenParams
+type TokenParams struct {
+	AccessTokenKey  string
+	RefreshTokenKey string
+	Issuer          string
+	Audience        string
+}
+
 //OauthManager OauthManager
 type OauthManager struct {
 	Db          odb.Oauth2DB
 	Proxy       px.Proxy
 	AuthService au.AuthInterface
 	Log         *lg.Logger
+	TokenParams *TokenParams
 }

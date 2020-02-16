@@ -24,13 +24,32 @@ package managers
 //GenerateAccessToken GenerateAccessToken
 func (m *OauthManager) GenerateAccessToken(pl *Payload) string {
 	var token string
-	key := m.Db.GetAccessTokenKey()
-	if key != "" {
-		pl.SecretKey = key
-		pl.Subject = pl.Grant
-		pl.Issuer = tokenIssuer
-		pl.Audience = tokenAudience
-		token = m.GenerateJwtToken(pl)
+	m.Log.Debug("m.TokenParams: ", m.TokenParams)
+	var theKey string
+	var theIssuer string
+	var theAudience string
+	if m.TokenParams != nil && m.TokenParams.AccessTokenKey != "" {
+		theKey = m.TokenParams.AccessTokenKey
+	} else {
+		theKey = m.Db.GetAccessTokenKey()
 	}
+	if m.TokenParams != nil && m.TokenParams.Issuer != "" {
+		theIssuer = m.TokenParams.Issuer
+	} else {
+		theIssuer = tokenIssuer
+	}
+	if m.TokenParams != nil && m.TokenParams.Audience != "" {
+		theAudience = m.TokenParams.Audience
+	} else {
+		theAudience = tokenAudience
+	}
+	//key := m.Db.GetAccessTokenKey()
+	//if key != "" {
+	pl.SecretKey = theKey
+	pl.Subject = pl.Grant
+	pl.Issuer = theIssuer
+	pl.Audience = theAudience
+	token = m.GenerateJwtToken(pl)
+	//}
 	return token
 }
