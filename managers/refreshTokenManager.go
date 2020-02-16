@@ -23,20 +23,39 @@ package managers
 //GenerateRefreshToken GenerateRefreshToken
 func (m *OauthManager) GenerateRefreshToken(clientID int64, userID string, grantType string) string {
 	var token string
-	rtk := m.Db.GetRefreshTokenKey()
-	if rtk != "" {
-		// here write code to generate refresh token
-		var pl Payload
-		pl.TokenType = refreshTokenType
-		pl.UserID = userID
-		pl.ClientID = clientID
-		pl.Subject = grantType
-		pl.Issuer = tokenIssuer
-		pl.Audience = tokenAudience
-		pl.ExpiresInMinute = refreshTokenLifeInMinutes //(600 * time.Minute) => (600 * 60) => 36000 minutes => 10 hours
-		pl.Grant = grantType
-		pl.SecretKey = rtk
-		token = m.GenerateJwtToken(&pl)
+	m.Log.Debug("m.TokenParams: ", m.TokenParams)
+	var theKey string
+	var theIssuer string
+	var theAudience string
+	if m.TokenParams != nil && m.TokenParams.RefreshTokenKey != "" {
+		theKey = m.TokenParams.RefreshTokenKey
+	} else {
+		theKey = m.Db.GetRefreshTokenKey()
 	}
+	if m.TokenParams != nil && m.TokenParams.Issuer != "" {
+		theIssuer = m.TokenParams.Issuer
+	} else {
+		theIssuer = tokenIssuer
+	}
+	if m.TokenParams != nil && m.TokenParams.Audience != "" {
+		theAudience = m.TokenParams.Audience
+	} else {
+		theAudience = tokenAudience
+	}
+	//rtk := m.Db.GetRefreshTokenKey()
+	//if rtk != "" {
+	// here write code to generate refresh token
+	var pl Payload
+	pl.TokenType = refreshTokenType
+	pl.UserID = userID
+	pl.ClientID = clientID
+	pl.Subject = grantType
+	pl.Issuer = theIssuer
+	pl.Audience = theAudience
+	pl.ExpiresInMinute = refreshTokenLifeInMinutes //(600 * time.Minute) => (600 * 60) => 36000 minutes => 10 hours
+	pl.Grant = grantType
+	pl.SecretKey = theKey
+	token = m.GenerateJwtToken(&pl)
+	//}
 	return token
 }
