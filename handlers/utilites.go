@@ -40,8 +40,9 @@ import (
 */
 
 //UseWebHandler UseWebHandler
-func UseWebHandler(dbi db.Database, compressJtw bool, authURL string, logger *lg.Logger) *OauthWebHandler {
+func UseWebHandler(dbi db.Database, compressJtw bool, authURL string, logger *lg.Logger, tokenParams *m.TokenParams) *OauthWebHandler {
 	var oauthManagerw m.OauthManager
+	oauthManagerw.TokenParams = tokenParams
 	oauthManagerw.Log = logger
 	var oauthMySqldbw msdb.MySQLOauthDB
 	oauthMySqldbw.Log = logger
@@ -66,8 +67,9 @@ func UseWebHandler(dbi db.Database, compressJtw bool, authURL string, logger *lg
 }
 
 //UseRestHandler UseRestHandler
-func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string, logger *lg.Logger) *OauthRestHandler {
+func UseRestHandler(dbi db.Database, assets string, compressJtw bool, authURL string, logger *lg.Logger, tokenParams *m.TokenParams) *OauthRestHandler {
 	var oauthManager m.OauthManager
+	oauthManager.TokenParams = tokenParams
 	oauthManager.Log = logger
 	var oauthMySqldb msdb.MySQLOauthDB
 	oauthMySqldb.Log = logger

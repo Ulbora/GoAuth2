@@ -30,6 +30,7 @@ import (
 
 	//"encoding/json"
 	hd "github.com/Ulbora/GoAuth2/handlers"
+	m "github.com/Ulbora/GoAuth2/managers"
 	lg "github.com/Ulbora/Level_Logger"
 	db "github.com/Ulbora/dbinterface"
 	mdb "github.com/Ulbora/dbinterface_mysql"
@@ -48,7 +49,7 @@ func main() {
 	logger.Info("mock: ", *mock)
 	logger.Info("assets: ", *assets)
 	logger.Info("compressJwt: ", *compressJwt)
-	logger.LogLevel = lg.OffLevel
+	// logger.LogLevel = lg.OffLevel
 	var dbi db.Database
 	var mydb mdb.MyDB
 	var goauth2Host string
@@ -56,6 +57,7 @@ func main() {
 	var goauth2Password string
 	var goauth2Database string
 	var authURL string
+	var tokenParams m.TokenParams
 
 	if os.Getenv("GOAUTH2_HOST") != "" {
 		goauth2Host = os.Getenv("GOAUTH2_HOST")
@@ -87,6 +89,21 @@ func main() {
 		authURL = "http://localhost:3001/rs/user/login"
 	}
 
+	if os.Getenv("ACCESS_TOKEN_KEY") != "" {
+		tokenParams.AccessTokenKey = os.Getenv("ACCESS_TOKEN_KEY")
+	}
+	if os.Getenv("REFRESH_TOKEN_KEY") != "" {
+		tokenParams.RefreshTokenKey = os.Getenv("REFRESH_TOKEN_KEY")
+	}
+	if os.Getenv("TOKEN_ISSUER") != "" {
+		tokenParams.Issuer = os.Getenv("TOKEN_ISSUER")
+	}
+	if os.Getenv("TOKEN_AUDIENCE") != "" {
+		tokenParams.Audience = os.Getenv("TOKEN_AUDIENCE")
+	}
+	logger.Info("tokenParams: ", tokenParams)
+	logger.LogLevel = lg.OffLevel
+
 	mydb.Host = goauth2Host
 	mydb.User = goauth2User
 	mydb.Password = goauth2Password
@@ -104,9 +121,9 @@ func main() {
 		orh := hd.UseMockRest()
 		rh = orh.GetNewRestHandler()
 	} else {
-		owh = hd.UseWebHandler(dbi, *compressJwt, authURL, &logger)
+		owh = hd.UseWebHandler(dbi, *compressJwt, authURL, &logger, &tokenParams)
 		wh = owh.GetNewWebHandler()
-		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL, &logger)
+		orh := hd.UseRestHandler(dbi, *assets, *compressJwt, authURL, &logger, &tokenParams)
 		rh = orh.GetNewRestHandler()
 	}
 
