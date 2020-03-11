@@ -1,4 +1,4 @@
-# GoAuth2
+# GoAuth2 ![](./static/images/goAuth2.png =25x)
 A complete standalone Oauth2 Server RFC 6749 implementation written in Golang and licensed under the GPL V3 license.
 
 
