@@ -1,5 +1,5 @@
 # GoAuth2 
-![](static/images/goAuth2.png | width=100")
+![](static/images/goAuth2.png | width=100)
 
 A complete standalone Oauth2 Server RFC 6749 implementation written in Golang and licensed under the GPL V3 license.
 
