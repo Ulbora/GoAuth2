@@ -84,7 +84,7 @@ func (h *OauthWebHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 		h.Log.Debug("arii", larii)
 		if larii != nil {
 			lari := larii.(*AuthorizeRequestInfo)
-			h.Log.Debug("ari", lari)
+			h.Log.Debug("ari", *lari)
 			username := r.FormValue("username")
 			password := r.FormValue("password")
 			h.Log.Debug("username", username)
