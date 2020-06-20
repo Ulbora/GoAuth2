@@ -1,6 +1,6 @@
 module github.com/Ulbora/GoAuth2
 
-go 1.12
+go 1.14
 
 require (
 	github.com/Ulbora/GoProxy v1.0.1
