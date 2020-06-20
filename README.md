@@ -24,7 +24,7 @@ GoAuth2 issues a compressed enhanced JWT token that can be used to secure indivi
 ---
 
 ### GoAuth2 will provide the security infrastructure for <a href="https://github.com/Ulbora/Six910" target="_blank">Six910 the new open source eCommerce Platform solution from Ulbora Labs LLC</a>, Six910.
-#### (Six910 is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. 66GoCart frontend soltutions can be written in golang or any other language.)
+#### (Six910 is an eCommerce Platform server solution written in golang that provides REST endpoints for backend operations. Six910 frontend soltutions can be written in golang or any other language.)
 
 ---
 
