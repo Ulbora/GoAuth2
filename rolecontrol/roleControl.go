@@ -54,7 +54,8 @@ func (c *OauthAssets) AddControledURLs(urls *[]ControlledURL) bool {
 	//for example
 	//url https://addTest/admin/user
 	//could require role superUser
-	for _, u := range *urls {
+	for i := range *urls {
+		var u = (*urls)[i]
 		c.m[u.URL] = &u.Asset
 	}
 	if len(c.m) > 0 {

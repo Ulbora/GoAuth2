@@ -46,10 +46,11 @@ func (d *MySQLOauthDB) AddClient(client *odb.Client, uris *[]odb.ClientRedirectU
 		//fmt.Println("cid in add client: ", cid)
 		//fail = addURIs(tx, id, uris)
 		if uris != nil && len(*uris) > 0 {
-			for _, u := range *uris {
+			for i := range *uris {
+				var u = &(*uris)[i]
 				//d.Tx = tx
 				u.ClientID = cid
-				rsus, rid := d.AddClientRedirectURI(tx, &u)
+				rsus, rid := d.AddClientRedirectURI(tx, u)
 				// fmt.Println("cid in add client: ", cid)
 				// fmt.Println("rid in add client: ", rid)
 				// fmt.Println("rsus in add client: ", rsus)
