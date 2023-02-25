@@ -16,6 +16,4 @@ require (
 	github.com/gorilla/mux v1.7.3
 	github.com/gorilla/sessions v1.2.0
 	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d // indirect
-	golang.org/x/sys v0.0.0-20190606165138-5da285871e9c // indirect
-	google.golang.org/appengine v1.6.5 // indirect
 )
