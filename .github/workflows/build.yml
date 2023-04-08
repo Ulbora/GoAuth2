@@ -23,6 +23,7 @@ jobs:
 
     - name: Get
       run: go get -u ./...
+      
     - name: Build
       run: go build -v ./...
 
