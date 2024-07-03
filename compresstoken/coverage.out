@@ -1,8 +1,8 @@
 mode: set
 github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:37.54,42.16 4 1
-github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:47.2,47.12 1 1
 github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:42.16,46.3 3 1
+github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:47.2,47.12 1 1
 github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:51.57,56.17 4 1
-github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:66.2,66.12 1 1
 github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:56.17,59.17 3 1
 github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:59.17,64.4 4 1
+github.com/Ulbora/GoAuth2/compresstoken/compressToken.go:66.2,66.12 1 1

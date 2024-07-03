@@ -3,13 +3,13 @@ github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:31.72,33.2 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:36.84,38.2 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/mockRoleControl.go:41.61,45.2 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:50.68,57.23 3 1
-github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:61.2,61.18 1 1
-github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:64.2,67.12 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:57.23,60.3 2 1
+github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:61.2,61.18 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:61.18,63.3 1 1
+github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:64.2,67.12 3 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:71.80,75.16 4 1
-github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:89.2,89.17 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:75.16,77.26 2 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:77.26,82.31 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:82.31,85.10 3 1
+github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:89.2,89.17 1 1
 github.com/Ulbora/GoAuth2/rolecontrol/roleControl.go:93.57,97.2 3 1
