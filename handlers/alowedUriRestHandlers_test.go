@@ -1,11 +1,11 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"net/http"
 	"net/http/httptest"
@@ -85,7 +85,7 @@ func TestOauthRestHandler_AddAllowedURISuper(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -121,7 +121,7 @@ func TestOauthRestHandler_AddAllowedURISuperFailAdd(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -155,7 +155,7 @@ func TestOauthRestHandler_AddAllowedURISuperNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -192,7 +192,7 @@ func TestOauthRestHandler_AddAllowedURI(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -227,7 +227,7 @@ func TestOauthRestHandler_AddAllowedURINoAssetControl(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -262,7 +262,7 @@ func TestOauthRestHandler_AddAllowedURIBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -297,7 +297,7 @@ func TestOauthRestHandler_AddAllowedURIAddFail(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -332,7 +332,7 @@ func TestOauthRestHandler_AddAllowedURINotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -446,7 +446,7 @@ func TestOauthRestHandler_UpdateAllowedURISuper(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -480,7 +480,7 @@ func TestOauthRestHandler_UpdateAllowedURISuperFailAdd(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -514,7 +514,7 @@ func TestOauthRestHandler_UpdateAllowedURISuperNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -552,7 +552,7 @@ func TestOauthRestHandler_updateAllowedURI(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -586,7 +586,7 @@ func TestOauthRestHandler_UpdateAllowedURINoAssetControl(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -620,7 +620,7 @@ func TestOauthRestHandler_UpdateAllowedURIBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -655,7 +655,7 @@ func TestOauthRestHandler_UpdateAllowedURIAddFail(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -689,7 +689,7 @@ func TestOauthRestHandler_UpdateAllowedURINotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "url":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -767,7 +767,7 @@ func TestOauthRestHandler_GetAllowedURI(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -807,7 +807,7 @@ func TestOauthRestHandler_GetAllowedURINotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -847,7 +847,7 @@ func TestOauthRestHandler_GetAllowedURIBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -887,7 +887,7 @@ func TestOauthRestHandler_GetAllowedURINoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -931,7 +931,7 @@ func TestOauthRestHandler_GetAllowedURIlist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -972,7 +972,7 @@ func TestOauthRestHandler_GetAllowedURIListNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1012,7 +1012,7 @@ func TestOauthRestHandler_GetAllowedURIListBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1052,7 +1052,7 @@ func TestOauthRestHandler_GetAllowedURIListNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetAllowedURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1090,7 +1090,7 @@ func TestOauthRestHandler_DeleteAllowedURI(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1126,7 +1126,7 @@ func TestOauthRestHandler_DeleteAllowedURIFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1162,7 +1162,7 @@ func TestOauthRestHandler_DeleteAllowedURINotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1198,7 +1198,7 @@ func TestOauthRestHandler_DeleteAllowedURIBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1234,7 +1234,7 @@ func TestOauthRestHandler_DeleteAllowedURINoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteAllowedURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

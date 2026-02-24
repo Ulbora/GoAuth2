@@ -1,11 +1,11 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"net/http"
 	"net/http/httptest"
@@ -42,7 +42,7 @@ func TestOauthRestHandlerGrtType_AddGrantType(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -51,7 +51,7 @@ func TestOauthRestHandlerGrtType_AddGrantType(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.AddGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ResponseID
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -82,7 +82,7 @@ func TestOauthRestHandlerGrtType_AddGrantTypeBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -117,7 +117,7 @@ func TestOauthRestHandlerGrtType_AddGrantTypeAddFail(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -152,7 +152,7 @@ func TestOauthRestHandlerGrtType_AddGrantTypeNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "grantType":"code", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -235,7 +235,7 @@ func TestOauthRestHandlerGrtType_GetGrantTypelist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetGrantTypeList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -276,7 +276,7 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetGrantTypeList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -316,7 +316,7 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetGrantTypeList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -356,7 +356,7 @@ func TestOauthRestHandlerGrtType_GetGrantTypeListNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetGrantTypeList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientGrantType
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -394,7 +394,7 @@ func TestOauthRestHandlerGrtType_DeleteGrantType(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -430,7 +430,7 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -466,7 +466,7 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -502,7 +502,7 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -538,7 +538,7 @@ func TestOauthRestHandlerGrtType_DeleteGrantTypeNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteGrantType(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

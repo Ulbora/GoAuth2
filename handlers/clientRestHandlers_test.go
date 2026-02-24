@@ -1,11 +1,12 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
+
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -84,7 +85,7 @@ func TestOauthRestHandler_AddClient(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false, "redirectUrls": [{"id":3, "uri":"/test", "clientId": 2}]}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false, "redirectUrls": [{"id":3, "uri":"/test", "clientId": 2}]}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -120,7 +121,7 @@ func TestOauthRestHandler_AddClientFailAdd(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -154,7 +155,7 @@ func TestOauthRestHandler_AddClientNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -233,7 +234,7 @@ func TestOauthRestHandler_UpdateClient(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -267,7 +268,7 @@ func TestOauthRestHandler_UpdateClientFailAdd(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -301,7 +302,7 @@ func TestOauthRestHandler_UpdateClientNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"clientId": 5, "secret":"testsecret", "name":"testname", "webSite": "testwebsite", "email": "testemail", "enabled": true, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -356,7 +357,7 @@ func TestOauthRestHandler_GetClient(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body client in test: ", string(body))
@@ -401,7 +402,7 @@ func TestOauthRestHandler_GetClientNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -445,7 +446,7 @@ func TestOauthRestHandler_GetClientBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -489,7 +490,7 @@ func TestOauthRestHandler_GetClientNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -543,7 +544,7 @@ func TestOauthRestHandler_GetClientAdmin(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientAdmin(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body client admin in test: ", string(body))
@@ -589,7 +590,7 @@ func TestOauthRestHandler_GetClientAdminNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientAdmin(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -634,7 +635,7 @@ func TestOauthRestHandler_GetClientAdminBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientAdmin(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -678,7 +679,7 @@ func TestOauthRestHandler_GetClientAdminNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientAdmin(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -726,7 +727,7 @@ func TestOauthRestHandler_GetClientlist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -772,7 +773,7 @@ func TestOauthRestHandler_GetClientListNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -810,7 +811,7 @@ func TestOauthRestHandler_GetSearchClientlist(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -820,7 +821,7 @@ func TestOauthRestHandler_GetSearchClientlist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientSearchList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -859,7 +860,7 @@ func TestOauthRestHandler_GetSearchClientlistBadName(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"", "webSite": "", "email": "", "enabled": false, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"", "webSite": "", "email": "", "enabled": false, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -869,7 +870,7 @@ func TestOauthRestHandler_GetSearchClientlistBadName(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientSearchList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -918,7 +919,7 @@ func TestOauthRestHandler_GetSearchClientlistBadBody(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientSearchList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -957,7 +958,7 @@ func TestOauthRestHandler_GetSearchClientlistBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -967,7 +968,7 @@ func TestOauthRestHandler_GetSearchClientlistBadMedia(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientSearchList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1006,7 +1007,7 @@ func TestOauthRestHandler_GetSearchClientlistNoAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"secret":"", "name":"testname", "webSite": "", "email": "", "enabled": false, "paid": false}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -1016,7 +1017,7 @@ func TestOauthRestHandler_GetSearchClientlistNoAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetClientSearchList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.Client
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1055,7 +1056,7 @@ func TestOauthRestHandler_DeleteClient(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1091,7 +1092,7 @@ func TestOauthRestHandler_DeleteClientFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1127,7 +1128,7 @@ func TestOauthRestHandler_DeleteClientNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1163,7 +1164,7 @@ func TestOauthRestHandler_DeleteClientBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -1199,7 +1200,7 @@ func TestOauthRestHandler_DeleteClientNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteClient(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

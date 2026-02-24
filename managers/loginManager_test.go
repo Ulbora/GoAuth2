@@ -3,7 +3,8 @@ package managers
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
+
 	"net/http"
 	"testing"
 
@@ -24,7 +25,7 @@ func TestOauthManagerLogin_UserLogin(t *testing.T) {
 	//ai := da.GetNew()
 
 	var res http.Response
-	res.Body = ioutil.NopCloser(bytes.NewBufferString(`{"valid":true, "code":"1"}`))
+	res.Body = io.NopCloser(bytes.NewBufferString(`{"valid":true, "code":"1"}`))
 	//gp.MockResp = &res
 	var man OauthManager
 	man.AuthService = da.GetNew()

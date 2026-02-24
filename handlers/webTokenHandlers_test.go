@@ -1,11 +1,12 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	//"html/template"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
+
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -50,7 +51,7 @@ func TestOauthWebHandlerToken_AuthCodeToken(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -95,15 +96,15 @@ func TestOauthWebHandlerToken_AuthCodeTokenBadGrant(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
 
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/oauthError?error=invalid_grant" {
+	if w.Code != 302 || loc != "/oauthError?error=invalid_grant" {
 		t.Fail()
 	}
 }
@@ -142,10 +143,10 @@ func TestOauthWebHandlerToken_AuthCodeTokenBadClient(t *testing.T) {
 
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/oauthError?error=invalid_grant" {
+	if w.Code != 302 || loc != "/oauthError?error=invalid_grant" {
 		t.Fail()
 	}
 }
@@ -186,7 +187,7 @@ func TestOauthWebHandlerToken_AuthCodeTokenFailed(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy TokenError
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -232,7 +233,7 @@ func TestOauthWebHandlerToken_PasswordToken(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -278,7 +279,7 @@ func TestOauthWebHandlerToken_PasswordTokenFailedLogin(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy TokenError
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -323,7 +324,7 @@ func TestOauthWebHandlerToken_CredentialsToken(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -368,7 +369,7 @@ func TestOauthWebHandlerToken_AuthCodeRefreshToken(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -413,7 +414,7 @@ func TestOauthWebHandlerToken_PasswordRefreshToken(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -459,7 +460,7 @@ func TestOauthWebHandlerToken_PasswordRefreshTokenCompressed(t *testing.T) {
 	h.Token(w, r)
 	fmt.Println("code: ", w.Code)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy *m.Token
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

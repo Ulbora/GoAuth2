@@ -1,10 +1,11 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 
 	m "github.com/Ulbora/GoAuth2/managers"
@@ -193,7 +194,7 @@ func TestOauthRestHandler_AddRole(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -228,7 +229,7 @@ func TestOauthRestHandler_AddRoleNoAssetControl(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -263,7 +264,7 @@ func TestOauthRestHandler_AddRoleBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -298,7 +299,7 @@ func TestOauthRestHandler_AddRoleAddFail(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -333,7 +334,7 @@ func TestOauthRestHandler_AddRoleNotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "role":"test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -416,7 +417,7 @@ func TestOauthRestHandler_GetRolelist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRoleList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.ClientRole
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body roles: ", string(body))
@@ -457,7 +458,7 @@ func TestOauthRestHandler_GetRoleListNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRoleList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientRole
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body roles: ", string(body))
@@ -497,7 +498,7 @@ func TestOauthRestHandler_GetRoleListBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRoleList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientRole
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -537,7 +538,7 @@ func TestOauthRestHandler_GetRoleListNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRoleList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientRole
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body roles: ", string(body))
@@ -575,7 +576,7 @@ func TestOauthRestHandler_DeleteRole(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRole(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -611,7 +612,7 @@ func TestOauthRestHandler_DeleteRoleFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRole(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -647,7 +648,7 @@ func TestOauthRestHandler_DeleteRoleNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRole(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -683,7 +684,7 @@ func TestOauthRestHandler_DeleteRoleBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRole(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -719,7 +720,7 @@ func TestOauthRestHandler_DeleteRoleNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRole(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

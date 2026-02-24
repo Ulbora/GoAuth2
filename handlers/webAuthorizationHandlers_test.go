@@ -1,4 +1,4 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
@@ -34,9 +34,9 @@ func TestOauthWebHandler_Authorize(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://tester.com/test?code=rr666&state=123" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://tester.com/test?code=rr666&state=123" {
 		t.Fail()
 	}
 }
@@ -63,9 +63,9 @@ func TestOauthWebHandler_AuthorizeNotAuth(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/authorizeApp" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/authorizeApp" {
 		t.Fail()
 	}
 }
@@ -92,9 +92,9 @@ func TestOauthWebHandler_AuthorizeAuthCodeFail(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/oauthError?error=access_denied" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/oauthError?error=access_denied" {
 		t.Fail()
 	}
 }
@@ -125,9 +125,9 @@ func TestOauthWebHandler_AuthorizeImplicit(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://tester.com/test?token=gjfldflkl&token_type=bearer&state=123" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://tester.com/test?token=gjfldflkl&token_type=bearer&state=123" {
 		t.Fail()
 	}
 }
@@ -159,9 +159,9 @@ func TestOauthWebHandler_AuthorizeImplicitCompressed(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://tester.com/test?token=eNpKz0rLSUnLyc4BBAAA//8SXAOx&token_type=bearer&state=123" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://tester.com/test?token=eNpKz0rLSUnLyc4BBAAA//8SXAOx&token_type=bearer&state=123" {
 		t.Fail()
 	}
 }
@@ -192,9 +192,9 @@ func TestOauthWebHandler_AuthorizeImplicitNotAuth(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/authorizeApp" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/authorizeApp" {
 		t.Fail()
 	}
 }
@@ -225,9 +225,9 @@ func TestOauthWebHandler_AuthorizeImplicitFailed(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/oauthError?error=access_denied" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/oauthError?error=access_denied" {
 		t.Fail()
 	}
 }
@@ -258,9 +258,9 @@ func TestOauthWebHandler_AuthorizeInvalidGrant(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/oauthError?error=invalid_grant" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/oauthError?error=invalid_grant" {
 		t.Fail()
 	}
 }
@@ -287,7 +287,7 @@ func TestOauthWebHandler_AuthorizeBadSession(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, nil)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 	//loc := w.HeaderMap["Location"]
 	if w.Code != 500 {
 		t.Fail()
@@ -316,9 +316,9 @@ func TestOauthWebHandler_AuthorizeNotLoggedIn(t *testing.T) {
 	s.Save(r, w)
 	h.Authorize(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "/login" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "/login" {
 		t.Fail()
 	}
 }
@@ -654,9 +654,9 @@ func TestOauthWebHandler_AuthorizeByUserCode(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?code=rr666&state=12eee" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://test.com/test?code=rr666&state=12eee" {
 		t.Fail()
 	}
 }
@@ -698,7 +698,7 @@ func TestOauthWebHandler_AuthorizeByUserCodeFailedAuth(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 
 	if w.Code != 200 {
 		t.Fail()
@@ -743,9 +743,9 @@ func TestOauthWebHandler_AuthorizeByUserToken(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?token=lllkldskldfk&token_type=bearer&state=12eee" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://test.com/test?token=lllkldskldfk&token_type=bearer&state=12eee" {
 		t.Fail()
 	}
 }
@@ -789,9 +789,9 @@ func TestOauthWebHandler_AuthorizeByUserTokenCompressed(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?token=eNrKycnJzkkpzs5JScsGBAAA//8gswT/&token_type=bearer&state=12eee" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://test.com/test?token=eNrKycnJzkkpzs5JScsGBAAA//8gswT/&token_type=bearer&state=12eee" {
 		t.Fail()
 	}
 }
@@ -834,7 +834,7 @@ func TestOauthWebHandler_AuthorizeByUserTokenFailedAuth(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 
 	if w.Code != 200 {
 		t.Fail()
@@ -879,9 +879,9 @@ func TestOauthWebHandler_AuthorizeByUserBadResponseType(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
-	if w.Code != 302 || loc[0] != "http://test.com/test?error=access_denied&state=12eee" {
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
+	if w.Code != 302 || loc != "http://test.com/test?error=access_denied&state=12eee" {
 		t.Fail()
 	}
 }
@@ -924,8 +924,7 @@ func TestOauthWebHandler_AuthorizeByUserTokenBadSession(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, nil)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-
+	fmt.Println("location: ", w.Header().Get("Location"))
 	if w.Code != 500 {
 		t.Fail()
 	}
@@ -969,7 +968,7 @@ func TestOauthWebHandler_AuthorizeByUserTokenNoInfo(t *testing.T) {
 	s.Save(r, w)
 	h.ApplicationAuthorizationByUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 
 	if w.Code != 200 {
 		t.Fail()
@@ -1014,7 +1013,7 @@ func TestOauthWebHandler_Error(t *testing.T) {
 	s.Save(r, w)
 	h.OauthError(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 
 	if w.Code != 200 {
 		t.Fail()

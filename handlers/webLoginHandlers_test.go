@@ -1,4 +1,4 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
@@ -69,10 +69,10 @@ func TestOauthWebHandlerLogin_LoginUser(t *testing.T) {
 
 	h.LoginUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/oauth/authorize?response_type=token&client_id=1234&redirect_uri=http://test.com/test&scope=web&state=12eee" {
+	if w.Code != 302 || loc != "/oauth/authorize?response_type=token&client_id=1234&redirect_uri=http://test.com/test&scope=web&state=12eee" {
 		t.Fail()
 	}
 }
@@ -107,10 +107,10 @@ func TestOauthWebHandlerLogin_LoginUserBadGrant(t *testing.T) {
 
 	h.LoginUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/oauthError?error=invalid_grant" {
+	if w.Code != 302 || loc != "/oauthError?error=invalid_grant" {
 		t.Fail()
 	}
 }
@@ -145,10 +145,10 @@ func TestOauthWebHandlerLogin_LoginUserFailLogin(t *testing.T) {
 
 	h.LoginUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/login?error=Login Failed" {
+	if w.Code != 302 || loc != "/login?error=Login Failed" {
 		t.Fail()
 	}
 }
@@ -183,10 +183,10 @@ func TestOauthWebHandlerLogin_LoginUserNoSessionInfo(t *testing.T) {
 
 	h.LoginUser(w, r)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
-	loc := w.HeaderMap["Location"]
+	fmt.Println("location: ", w.Header().Get("Location"))
+	loc := w.Header().Get("Location")
 
-	if w.Code != 302 || loc[0] != "/login?error=Login Failed" {
+	if w.Code != 302 || loc != "/login?error=Login Failed" {
 		t.Fail()
 	}
 }
@@ -221,7 +221,7 @@ func TestOauthWebHandlerLogin_LoginUserNoSession(t *testing.T) {
 
 	h.LoginUser(w, nil)
 	fmt.Println("code: ", w.Code)
-	fmt.Println("location: ", w.HeaderMap["Location"])
+	fmt.Println("location: ", w.Header().Get("Location"))
 
 	if w.Code != 500 {
 		t.Fail()

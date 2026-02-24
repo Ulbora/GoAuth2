@@ -1,11 +1,11 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"net/http"
 	"net/http/httptest"
@@ -42,7 +42,7 @@ func TestOauthRestHandlerRedectURI_AddRedirectURI(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -51,7 +51,7 @@ func TestOauthRestHandlerRedectURI_AddRedirectURI(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.AddRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ResponseID
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -82,7 +82,7 @@ func TestOauthRestHandlerRedectURI_AddRedirectURIBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -117,7 +117,7 @@ func TestOauthRestHandlerRedectURI_AddRedirectURIAddFail(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -152,7 +152,7 @@ func TestOauthRestHandlerRedectURI_AddRedirectURINotAuth(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"id":3, "uri":"/test", "clientId": 2}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -235,7 +235,7 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlist(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRedirectURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy []m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -276,7 +276,7 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistNotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRedirectURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -316,7 +316,7 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRedirectURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientAllowedURI
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -356,7 +356,7 @@ func TestOauthRestHandlerRedectURI_GetRedirectURIlistNoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.GetRedirectURIList(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy m.ClientGrantType
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -394,7 +394,7 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURI(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -430,7 +430,7 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURIFail(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -466,7 +466,7 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURINotAuth(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -502,7 +502,7 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURIBadParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -538,7 +538,7 @@ func TestOauthRestHandlerRedectURI_DeleteRedirectURINoParam(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.DeleteRedirectURI(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy Response
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))

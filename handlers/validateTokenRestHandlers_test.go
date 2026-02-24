@@ -1,11 +1,11 @@
-//Package handlers ...
+// Package handlers ...
 package handlers
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 
 	"net/http"
 	"net/http/httptest"
@@ -29,7 +29,7 @@ func TestOauthRestHandler_ValidateToken(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -38,7 +38,7 @@ func TestOauthRestHandler_ValidateToken(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.ValidateAccessToken(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ValidationResponse
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -64,7 +64,7 @@ func TestOauthRestHandler_ValidateTokenCompressed(t *testing.T) {
 	fmt.Println("compressed token in test", tkn)
 	fmt.Println("uncompressed token in test", jc.UnCompressJwt(tkn))
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"eNpUjFEKRDEIAy87JKD58/6w4NJHSwYcRVKkUKhJF4O87NDZ/rwx1+cedATAT/DnV6OVDj1BPb8AAAD//8ZtNs8=", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"accessToken":"eNpUjFEKRDEIAy87JKD58/6w4NJHSwYcRVKkUKhJF4O87NDZ/rwx1+cedATAT/DnV6OVDj1BPb8AAAD//8ZtNs8=", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -73,7 +73,7 @@ func TestOauthRestHandler_ValidateTokenCompressed(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.ValidateAccessToken(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ValidationResponse
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -93,7 +93,7 @@ func TestOauthRestHandler_ValidateTokenNotValid(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -102,7 +102,7 @@ func TestOauthRestHandler_ValidateTokenNotValid(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.ValidateAccessToken(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ValidationResponse
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -122,7 +122,7 @@ func TestOauthRestHandler_ValidateTokenBadMedia(t *testing.T) {
 
 	h := oh.GetNewRestHandler()
 
-	aJSON := ioutil.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
+	aJSON := io.NopCloser(bytes.NewBufferString(`{"accessToken":"someaccesstoken", "hashed": false, "userId":"someUser", "clientId": 2, "role": "someRole", "uri": "someUri", "scope":"someScope"}`))
 	//aJSON, _ := json.Marshal(robj)
 	//fmt.Println("aJSON: ", aJSON)
 	r, _ := http.NewRequest("POST", "/ffllist", aJSON)
@@ -131,7 +131,7 @@ func TestOauthRestHandler_ValidateTokenBadMedia(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.ValidateAccessToken(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ValidationResponse
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
@@ -160,7 +160,7 @@ func TestOauthRestHandler_ValidateTokenBadBody(t *testing.T) {
 	w := httptest.NewRecorder()
 	h.ValidateAccessToken(w, r)
 	resp := w.Result()
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, _ := io.ReadAll(resp.Body)
 	var bdy ValidationResponse
 	json.Unmarshal(body, &bdy)
 	fmt.Println("body: ", string(body))
