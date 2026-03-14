@@ -20,6 +20,6 @@ require (
 	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/magefile/mage v1.9.0 // indirect
-	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d // indirect
+	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 // indirect
 )
